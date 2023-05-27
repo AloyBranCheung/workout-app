@@ -1,4 +1,20 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin")
+
+const textShadowPlugin = plugin(({ matchUtilities, theme }) => {
+  matchUtilities(
+    {
+      "text-shadow": (value) => ({
+        textShadow: value,
+      }),
+    },
+    {
+      values: theme("textShadow"),
+    }
+  )
+})
+
 module.exports = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -21,7 +37,10 @@ module.exports = {
       boxShadow: {
         neobrutShadow: "4px 4px 0px #000000",
       },
+      textShadow: {
+        textShadow: "1px 1px 0px #000000",
+      },
     },
   },
-  plugins: [],
+  plugins: [textShadowPlugin],
 }

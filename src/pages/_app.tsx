@@ -1,15 +1,15 @@
 // nextjs
-import 'src/styles/globals.css'
-import 'react-toastify/dist/ReactToastify.css'
-import type { NextPage } from 'next'
-import type { AppProps } from 'next/app'
+import "src/styles/globals.css"
+import "react-toastify/dist/ReactToastify.css"
+import type { NextPage } from "next"
+import type { AppProps } from "next/app"
 // toastify
-import ReactToastContainer from 'src/components/ToastContainer'
+import ReactToastContainer from "src/components/ToastContainer"
 // react
-import { useState, ReactElement, ReactNode } from 'react'
+import { useState, ReactElement, ReactNode } from "react"
 // supabase-auth
-import { SessionContextProvider } from '@supabase/auth-helpers-react'
-import { createPagesBrowserClient } from '@supabase/auth-helpers-nextjs'
+import { SessionContextProvider } from "@supabase/auth-helpers-react"
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs"
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
