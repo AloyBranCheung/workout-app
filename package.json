@@ -1,5 +1,6 @@
 {
   "name": "workout-app",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -23,6 +24,7 @@
     "@trpc/server": "^10.28.0",
     "@types/lodash": "^4.14.195",
     "@types/node": "20.2.5",
+    "@types/prompt-sync": "^4.2.0",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
@@ -31,6 +33,7 @@
     "lodash": "^4.17.21",
     "next": "13.4.4",
     "postcss": "8.4.23",
+    "prompt-sync": "^4.2.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.44.1",
