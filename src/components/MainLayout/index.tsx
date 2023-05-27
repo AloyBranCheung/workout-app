@@ -1,10 +1,19 @@
-import React from "react";
-import PageGuard from "src/auth/PageGuard";
+import React from "react"
+// components
+import PageGuard from "src/auth/PageGuard"
+import TopNavbar from "./TopNavbar"
 
 interface MainLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
-  return <PageGuard>{children}</PageGuard>;
+  return (
+    <PageGuard>
+      <div className="flex flex-col">
+        <TopNavbar />
+        {children}
+      </div>
+    </PageGuard>
+  )
 }
