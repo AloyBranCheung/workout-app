@@ -2,6 +2,8 @@ import React from "react";
 // nextjs
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
+// hooks
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage";
 // react-hook-forms
 import { useForm } from "react-hook-form";
 // supabase
@@ -16,6 +18,8 @@ import Button from "src/components/UI/Button";
 
 export default function Login() {
   const router = useRouter();
+  const user = useUser();
+  const toastMessage = useToastMessage();
   const { handleSubmit, reset, control } = useForm<z.infer<typeof LoginSchema>>(
     {
       resolver: zodResolver(LoginSchema),
@@ -26,15 +30,25 @@ export default function Login() {
     }
   );
   const supabase = useSupabaseClient();
-  const user = useUser();
 
-  // TODO: if user router.redirect to protected pages
+  if (user) {
+    router.replace("/home");
+    return;
+  }
 
-  // TODO: Sign In Form
   const formSubmit = async (data: z.infer<typeof LoginSchema>) => {
     // https://supabase.com/docs/guides/auth/auth-helpers/nextjs
-    console.log("clicked");
-    console.log(data);
+    try {
+      const { error } = await supabase.auth.signInWithPassword(data);
+      if (error) {
+        toastMessage(error.message, ToastMessage.Error);
+        return;
+      }
+      reset();
+      router.replace("/home");
+    } catch (error) {
+      toastMessage("Oops, something went wrong.", ToastMessage.Error);
+    }
   };
 
   return (
