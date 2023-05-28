@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 // types/utils
 import { OffsetPosition, Position } from "src/types/PopupMenuTypes"
@@ -9,8 +9,10 @@ export interface PopupMenuProps {
   isOpen: boolean
   children: React.ReactNode
   anchorEl: React.MutableRefObject<HTMLDivElement | null>
+  popupRef: React.MutableRefObject<HTMLDivElement | null>
   position: Position
   popupTopOffset?: number
+  tailwindWidth?: string
 }
 
 export default function PopupMenu({
@@ -19,37 +21,38 @@ export default function PopupMenu({
   anchorEl,
   position,
   popupTopOffset,
+  popupRef,
+  tailwindWidth,
 }: PopupMenuProps) {
-  const offsetPosition: OffsetPosition = useMemo(() => {
-    if (!anchorEl.current) {
-      const defaultOffset = {
-        topOffset: 0,
-        leftOffset: 0,
-      }
+  const [offsetPosition, setOffsetPosition] = useState<OffsetPosition>({
+    [position]: {
+      topOffset: 0,
+      leftOffset: 0,
+    },
+  })
 
-      return {
-        [position]: defaultOffset,
-      }
-    }
+  useEffect(() => {
+    if (!anchorEl.current || !popupRef.current) return
     const { bottom, right, x } = anchorEl.current.getBoundingClientRect()
     const ANCHOR_EL_WIDTH = right - x
+    const ELEMENT_CENTER = popupRef.current.offsetWidth / 2
 
-    return {
+    setOffsetPosition({
       [Position.BottomLeft]: {
         topOffset: bottom + popupTopOffset!,
         leftOffset: 0,
       },
       [Position.BottomCenter]: {
         topOffset: bottom + popupTopOffset!,
-        leftOffset: ANCHOR_EL_WIDTH / 2 - ANCHOR_EL_WIDTH / 12,
+        leftOffset: ANCHOR_EL_WIDTH / 2 - ELEMENT_CENTER,
       },
-    }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [anchorEl.current, position, popupTopOffset])
+  }, [anchorEl.current, popupRef.current, position, popupTopOffset])
 
   return (
     <div
-      className={`absolute`}
+      className={`absolute w-full ${tailwindWidth}`}
       style={{
         top: pxToRem(offsetPosition[position].topOffset),
         left: pxToRem(offsetPosition[position].leftOffset),
@@ -72,4 +75,5 @@ export default function PopupMenu({
 
 PopupMenu.defaultProps = {
   popupTopOffset: 0,
+  tailwindWidth: undefined,
 }
