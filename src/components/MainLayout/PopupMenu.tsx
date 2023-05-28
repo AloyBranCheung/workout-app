@@ -32,6 +32,7 @@ export default function PopupMenu({
       }
     }
     const { bottom, right, x } = anchorEl.current.getBoundingClientRect()
+    const ANCHOR_EL_WIDTH = right - x
 
     return {
       [Position.BottomLeft]: {
@@ -40,7 +41,7 @@ export default function PopupMenu({
       },
       [Position.BottomCenter]: {
         topOffset: bottom + popupTopOffset!,
-        leftOffset: (right - x) / 2 + x / 2,
+        leftOffset: ANCHOR_EL_WIDTH / 2 - ANCHOR_EL_WIDTH / 12,
       },
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
