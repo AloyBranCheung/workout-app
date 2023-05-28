@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 // components
 import HamburgerIcon from "../UI/icons/HamburgerIcon"
 import PopupMenu from "./PopupMenu"
@@ -27,10 +28,32 @@ export default function TopNavbar() {
         isOpen={isMenuOpen}
       >
         <div ref={popupRef}>
-          <MenuItem>Workout Plan</MenuItem>
-          <MenuItem>Workout Routine</MenuItem>
-          <MenuItem>Exercises</MenuItem>
-          <MenuItem>Logout</MenuItem>
+          <AnimatePresence>
+            <motion.div
+              initial="hidden"
+              animate="show"
+              exit="hidden"
+              variants={{
+                hidden: {
+                  transition: {
+                    staggerChildren: 0.1,
+                    staggerDirection: -1, // Reverse the staggering direction
+                  },
+                },
+                show: {
+                  transition: {
+                    duration: 0.3,
+                    staggerChildren: 0.1,
+                  },
+                },
+              }}
+            >
+              <MenuItem>Workout Plan</MenuItem>
+              <MenuItem>Workout Routine</MenuItem>
+              <MenuItem>Exercises</MenuItem>
+              <MenuItem>Logout</MenuItem>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </PopupMenu>
     </div>
