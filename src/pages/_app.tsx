@@ -10,6 +10,8 @@ import { useState, ReactElement, ReactNode } from "react"
 // supabase-auth
 import { SessionContextProvider } from "@supabase/auth-helpers-react"
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs"
+// trpc
+import { trpc } from "src/utils/trpc"
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -19,7 +21,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const [supbabaseClient] = useState(() => createPagesBrowserClient())
 
   const getLayout = Component.getLayout ?? ((page) => page)
@@ -33,3 +35,5 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     </SessionContextProvider>
   )
 }
+
+export default trpc.withTRPC(App)

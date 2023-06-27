@@ -307,40 +307,41 @@
   dependencies:
     tslib "^2.4.0"
 
-"@tanstack/query-core@4.29.11":
-  version "4.29.11"
-  resolved "https://registry.npmjs.org/@tanstack/query-core/-/query-core-4.29.11.tgz"
-  integrity sha512-8C+hF6SFAb/TlFZyS9FItgNwrw4PMa7YeX+KQYe2ZAiEz6uzg6yIr+QBzPkUwZ/L0bXvGd1sufTm3wotoz+GwQ==
+"@tanstack/query-core@4.29.17":
+  version "4.29.17"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.29.17.tgz#bbef3a30190732ae3554187702f6e34c5caaefd8"
+  integrity sha512-iDbO8yZOpm1lqgq6L8mpxGbKaoiyZSjthxEB3WGU7mNPYss9q4H3Q67+e2xXGwkemEVmtEX/WwvtFitrvVU8TA==
 
-"@tanstack/react-query@^4.29.7":
-  version "4.29.11"
-  resolved "https://registry.npmjs.org/@tanstack/react-query/-/react-query-4.29.11.tgz"
-  integrity sha512-aLaOAhBnCr12YKPjDsZOc0fAtkyaW7f9KfVfw49oYpfe0H9EPXBUgDBIKJ8qdHF3uGzTVSMcmpiw1Za41BLZlw==
+"@tanstack/react-query@^4.29.17":
+  version "4.29.17"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.29.17.tgz#bfd5da849bb7fd1b66eb9d47853ee030864a435e"
+  integrity sha512-udOy/jgqiBHBAP93YPAU3QoVYO+Rtx9HT/10xGDQzC8iQU/wIxcIaT/usX+1NSzoUFYU5hUcPaNErPWZnR7XgA==
   dependencies:
-    "@tanstack/query-core" "4.29.11"
+    "@tanstack/query-core" "4.29.17"
+    client-only "0.0.1"
     use-sync-external-store "^1.2.0"
 
-"@trpc/client@^10.28.0":
-  version "10.28.0"
-  resolved "https://registry.npmjs.org/@trpc/client/-/client-10.28.0.tgz"
-  integrity sha512-Xhl2xdGI4PkI/a8xaTbsdpIXOy7PeOZaBBdvBgs2kpKiznNAI10qPrK+GLIDkSxvekLqDSnVYIhS0kU0FkhEXw==
+"@trpc/client@^10.32.0":
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.32.0.tgz#f1565d9d68fb1ab4beb5fd8e301a16a0691396db"
+  integrity sha512-hrj6XV84nE6DH5AmsPJ0JzIRcx3f6zU0tvS705DnZtNBOoMk7Lx+wX+KCDxj4DxLsTXC+roAxZxWwAB6/LGsXA==
 
-"@trpc/next@^10.28.0":
-  version "10.28.0"
-  resolved "https://registry.npmjs.org/@trpc/next/-/next-10.28.0.tgz"
-  integrity sha512-sD98gQu/vZhXhC4hEPqyQStWhUIgZCWQuE4N//eZodAtb8Lyosg/UUs/Mo6IFAcdjcXKuyMYlu27ZIRjaG3txw==
+"@trpc/next@^10.32.0":
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/@trpc/next/-/next-10.32.0.tgz#cac13d329b7e3b1ca9aed89ba70568ce8a3a7fe7"
+  integrity sha512-qJ3yvJDTVmiOOPW1x/FCpmOvtcMJXnP2t3EbcUFrqwgH+D1KdbU2Kk1iSa89Gwy/BBEmXUxaKkWoM3e4Id80gw==
   dependencies:
     react-ssr-prepass "^1.5.0"
 
-"@trpc/react-query@^10.28.0":
-  version "10.28.0"
-  resolved "https://registry.npmjs.org/@trpc/react-query/-/react-query-10.28.0.tgz"
-  integrity sha512-ssXaZbtNHrgvUW/bmwpiEttF1t1TMZAp/FQ98puXE7MqpodEi2aIum1Ou9Cb1w0lEc4mPwOwztzwuUSGsdCD6Q==
+"@trpc/react-query@^10.32.0":
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-10.32.0.tgz#5177f64e45b3738ce7a048165ca5f535dfd6b482"
+  integrity sha512-M4W1aGm3VAfQ9u4FJyK8M+pkcAV4lp32ZHxKnkRydxcsladhsqveZC9oqZqwklprEcYHtWU8v3R+jRGUjfCxpw==
 
-"@trpc/server@^10.28.0":
-  version "10.28.0"
-  resolved "https://registry.npmjs.org/@trpc/server/-/server-10.28.0.tgz"
-  integrity sha512-PrJ/VgRuujMCtNkgrldCPbqv3+yk1LKweKEfvQHTN2L0WIaKJPXzSsOTJS9PqNpFOTqzaK5mgDbypIFvq7SYow==
+"@trpc/server@^10.32.0":
+  version "10.32.0"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.32.0.tgz#15a32f251bdcab4536968aa98e2e397248f28051"
+  integrity sha512-C4HRHpaffw2pekpfNSHQtwlocq6kwAQq48mR9RIsUZGNbjXZbgvBC927vRP6QPAoG+n4oHPWyZ9G1hs3KMcPiw==
 
 "@types/json-schema@^7.0.9":
   version "7.0.12"
@@ -3037,7 +3038,12 @@ yocto-queue@^0.1.0:
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-zod@3.21.4, zod@^3.21.4:
+zod@3.21.4:
   version "3.21.4"
   resolved "https://registry.npmjs.org/zod/-/zod-3.21.4.tgz"
+  integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
+
+zod@^3.21.4:
+  version "3.21.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.21.4.tgz#10882231d992519f0a10b5dd58a38c9dabbb64db"
   integrity sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==
