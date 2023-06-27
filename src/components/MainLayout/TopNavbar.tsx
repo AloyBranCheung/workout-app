@@ -7,7 +7,11 @@ import MenuItem from "./MenuItem"
 // types
 import { Position } from "src/types/PopupMenuTypes"
 
-export default function TopNavbar() {
+interface TopNavbarProps {
+  onClickLogout: () => void
+}
+
+export default function TopNavbar({ onClickLogout }: TopNavbarProps) {
   const anchorEl = useRef<HTMLDivElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -54,7 +58,7 @@ export default function TopNavbar() {
               <MenuItem>Workout Plan</MenuItem>
               <MenuItem>Workout Routine</MenuItem>
               <MenuItem>Exercises</MenuItem>
-              <MenuItem>Logout</MenuItem>
+              <MenuItem onClick={onClickLogout}>Logout</MenuItem>
             </motion.div>
           </AnimatePresence>
         </div>
