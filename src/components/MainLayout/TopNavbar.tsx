@@ -15,10 +15,10 @@ export default function TopNavbar() {
   return (
     <div
       ref={anchorEl}
-      className="border-solid border-2 border-black shadow-neobrutShadow bg-tertiary flex items-center justify-center w-full"
+      className="border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full"
     >
       <div className="w-full max-w-7xl flex items-center justify-between px-5 py-3">
-        <h4 className="text-xl font-black">simplyworkouts</h4>
+        <h4 className="text-xl font-black cursor-pointer">simplyworkouts</h4>
         <HamburgerIcon onClick={() => setIsMenuOpen(!isMenuOpen)} />
       </div>
       <PopupMenu
@@ -30,17 +30,20 @@ export default function TopNavbar() {
         <div ref={popupRef}>
           <AnimatePresence>
             <motion.div
+              className="bg-background h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col"
               initial="hidden"
               animate="show"
               exit="hidden"
               variants={{
                 hidden: {
+                  clipPath: "circle(9.6% at 100% 0)",
                   transition: {
                     staggerChildren: 0.1,
                     staggerDirection: -1, // Reverse the staggering direction
                   },
                 },
                 show: {
+                  clipPath: "circle(141.5% at 100% 0)",
                   transition: {
                     duration: 0.3,
                     staggerChildren: 0.1,

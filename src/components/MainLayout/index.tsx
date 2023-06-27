@@ -10,7 +10,7 @@ interface MainLayoutProps {
 export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <PageGuard>
-      <div className="flex flex-col bg-background w-full h-screen">
+      <div className="flex flex-col bg-background w-full h-full min-h-screen">
         <TopNavbar />
         {children}
       </div>

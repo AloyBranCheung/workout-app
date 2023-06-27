@@ -33,6 +33,8 @@ module.exports = {
         background: "#cedafd",
         "primary-button": "#2f08a6",
         "secondary-button": "#f9ecfe",
+        "hover-secondary": "#c7b8cc",
+        tertiary: "#FFFFFF",
         accent: "#7e08a6",
       },
       boxShadow: {
