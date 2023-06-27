@@ -19,7 +19,7 @@ export default function TopNavbar({ onClickLogout }: TopNavbarProps) {
   return (
     <div
       ref={anchorEl}
-      className="border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full"
+      className="sticky top-0 border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full"
     >
       <div className="w-full max-w-7xl flex items-center justify-between px-5 py-3">
         <h4 className="text-xl font-black cursor-pointer">simplyworkouts</h4>

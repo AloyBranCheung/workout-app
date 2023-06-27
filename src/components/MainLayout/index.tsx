@@ -22,9 +22,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <PageGuard>
-      <div className="flex flex-col bg-background w-full h-full min-h-screen">
-        <TopNavbar onClickLogout={handleClickLogout} />
-        {children}
+      <div className="h-screen bg-background overflow-auto">
+        <div className="flex flex-col w-full h-full">
+          <TopNavbar onClickLogout={handleClickLogout} />
+          {children}
+        </div>
       </div>
     </PageGuard>
   )
