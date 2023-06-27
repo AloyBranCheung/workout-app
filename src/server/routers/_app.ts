@@ -1,18 +1,9 @@
-import { z } from "zod"
-import { tprocedure, trouter } from "../trpc"
+import { trouter } from "../trpc"
+// routers
+import helloWorldRouter from "./hello-world"
 
 export const appRouter = trouter({
-  hello: tprocedure
-    .input(
-      z.object({
-        text: z.string(),
-      })
-    )
-    .query((opts) => {
-      return {
-        greeting: `hello ${opts.input.text}`,
-      }
-    }),
+  helloWorld: helloWorldRouter,
 })
 
 // export type definition of API

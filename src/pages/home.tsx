@@ -4,15 +4,12 @@ import { useRouter } from "next/router"
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import MainLayout from "src/components/MainLayout"
 import GutterContainer from "src/components/UI/GutterContainer"
-// trpc
-import { trpc } from "src/utils/trpc"
 
 export default function Home() {
   const router = useRouter()
   const supabase = useSupabaseClient()
   const user = useUser()
-  const test = trpc.hello.useQuery({ text: "test client" })
-  console.log(test)
+
   return (
     <GutterContainer>
       <div>user: {user?.email}</div>
