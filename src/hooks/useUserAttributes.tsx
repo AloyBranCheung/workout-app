@@ -3,7 +3,7 @@ import { trpc } from "src/utils/trpc"
 
 export default function useUserAttributes() {
   const user = useUser()
-  if (!user) return null
+  if (!user) return { data: null }
 
   return trpc.user.userAttributes.useQuery()
 }

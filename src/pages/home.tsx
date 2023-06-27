@@ -11,7 +11,6 @@ export default function Home() {
   const supabase = useSupabaseClient()
   const user = useUser()
   const { data } = useUserAttributes()
-  console.log(data)
 
   return (
     <GutterContainer>
