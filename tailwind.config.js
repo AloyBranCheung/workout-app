@@ -29,10 +29,11 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        primary: "#F94892",
-        secondary: "#FF7F3F",
-        tertiary: "#FBDF07",
-        quartenary: "#89CFFD",
+        text: "#010718",
+        background: "#cedafd",
+        "primary-button": "#2f08a6",
+        "secondary-button": "#f9ecfe",
+        accent: "#7e08a6",
       },
       boxShadow: {
         neobrutShadow: "4px 4px 0px #000000",
