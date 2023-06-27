@@ -3,7 +3,7 @@ import { createTRPCNext } from "@trpc/next"
 import type { AppRouter } from "../server/routers/_app"
 import * as trpcNext from "@trpc/server/adapters/next"
 import { createPagesServerClient } from "@supabase/auth-helpers-nextjs"
-import { inferAsyncReturnType } from "@trpc/server"
+import { TRPCError, inferAsyncReturnType } from "@trpc/server"
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
@@ -52,13 +52,21 @@ export const createContextFn = async ({
   res,
 }: trpcNext.CreateNextContextOptions) => {
   const supabase = createPagesServerClient({ req, res })
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+  try {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
 
-  if (!session) return {}
+    if (!session) return {}
 
-  return { user: session.user, req, res }
+    return { user: session.user, req, res }
+  } catch (error) {
+    return new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Error getting session.",
+      cause: error,
+    })
+  }
 }
 
 export type Context = inferAsyncReturnType<typeof createContextFn>

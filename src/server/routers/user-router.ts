@@ -33,6 +33,7 @@ const userRouter = trouter({
       return new TRPCError({
         message: "Error fetching from user table.",
         code: "NOT_FOUND",
+        cause: error,
       })
     }
   }),
