@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { tProtectedProcedure, trouter } from "../trpc"
-import { createPagesServerClient } from "@supabase/auth-helpers-nextjs"
+import prisma from "src/utils/prisma"
 
 const userRouter = trouter({
   userAttributes: tProtectedProcedure.query(async (opts) => {
@@ -12,22 +12,21 @@ const userRouter = trouter({
         message: "No req or res",
         code: "INTERNAL_SERVER_ERROR",
       })
-    const supabase = createPagesServerClient({ req, res })
     try {
       const userUid = user.id
-      const userAttributes = await supabase
-        .from("User")
-        .select("*")
-        .eq("user_id", userUid)
-        .single()
+      const userAttributes = await prisma.user.findUnique({
+        where: {
+          user_id: userUid,
+        },
+      })
 
-      if (!userAttributes.data)
+      if (!userAttributes)
         return new TRPCError({
           code: "NOT_FOUND",
           message: "User not found.",
         })
 
-      return userAttributes.data
+      return userAttributes
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error("Error at userAttributes:", error)
