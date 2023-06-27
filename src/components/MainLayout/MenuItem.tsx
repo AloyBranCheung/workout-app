@@ -17,7 +17,7 @@ export default function MenuItem({ children, onClick }: MenuItemProps) {
       <motion.div variants={menuItemVariants}>
         <div
           onClick={onClick}
-          className="font-bold flex items-center justify-center bg-tertiary border-solid border-2 border-black shadow-neobrutShadow p-2"
+          className="font-bold flex items-center justify-center bg-secondary-button border-solid border-2 border-black shadow-neobrutShadow p-2 cursor-pointer"
         >
           {children}
         </div>

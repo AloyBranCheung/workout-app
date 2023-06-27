@@ -10,11 +10,11 @@ export default function Home() {
   const router = useRouter()
   const supabase = useSupabaseClient()
   const user = useUser()
-  const { data } = useUserAttributes()
+  const { data: userAttributes } = useUserAttributes()
 
   return (
     <GutterContainer>
-      <div>user: {user?.email}</div>
+      <div>user: {userAttributes?.name}</div>
       <Button
         type="button"
         label="logout"
