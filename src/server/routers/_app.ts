@@ -1,8 +1,11 @@
-import { trouter } from "../trpc"
+import { trouter, tprocedure } from "../trpc"
 // routers
 import helloWorldRouter from "./hello-world"
 
 export const appRouter = trouter({
+  health: tprocedure.query(() => ({
+    data: "Healthy",
+  })),
   helloWorld: helloWorldRouter,
 })
 

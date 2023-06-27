@@ -1,6 +1,9 @@
 import { httpBatchLink } from "@trpc/client"
 import { createTRPCNext } from "@trpc/next"
 import type { AppRouter } from "../server/routers/_app"
+import * as trpcNext from "@trpc/server/adapters/next"
+import { createPagesServerClient } from "@supabase/auth-helpers-nextjs"
+import { inferAsyncReturnType } from "@trpc/server"
 
 function getBaseUrl() {
   if (typeof window !== "undefined")
@@ -43,3 +46,19 @@ export const trpc = createTRPCNext<AppRouter>({
    **/
   ssr: false,
 })
+
+export const createContextFn = async ({
+  req,
+  res,
+}: trpcNext.CreateNextContextOptions) => {
+  const supabase = createPagesServerClient({ req, res })
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session) return {}
+
+  return { user: session.user }
+}
+
+export type Context = inferAsyncReturnType<typeof createContextFn>
