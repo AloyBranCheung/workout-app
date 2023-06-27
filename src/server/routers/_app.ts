@@ -1,12 +1,12 @@
 import { trouter, tprocedure } from "../trpc"
 // routers
-import helloWorldRouter from "./hello-world"
+import userRouter from "./user-router"
 
 export const appRouter = trouter({
   health: tprocedure.query(() => ({
     data: "Healthy",
   })),
-  helloWorld: helloWorldRouter,
+  user: userRouter,
 })
 
 // export type definition of API

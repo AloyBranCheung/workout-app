@@ -4,11 +4,14 @@ import { useRouter } from "next/router"
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 import MainLayout from "src/components/MainLayout"
 import GutterContainer from "src/components/UI/GutterContainer"
+import useUserAttributes from "src/hooks/useUserAttributes"
 
 export default function Home() {
   const router = useRouter()
   const supabase = useSupabaseClient()
   const user = useUser()
+  const { data } = useUserAttributes()
+  console.log(data)
 
   return (
     <GutterContainer>

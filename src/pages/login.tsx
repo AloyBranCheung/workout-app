@@ -1,25 +1,28 @@
-import React from "react";
+import React from "react"
 // nextjs
-import { useRouter } from "next/router";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/router"
+import { zodResolver } from "@hookform/resolvers/zod"
 // hooks
-import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage";
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // react-hook-forms
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 // supabase
-import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react"
 // components
-import Card from "src/components/UI/Card";
-import FormInput from "src/components/UI/FormInput";
+import Card from "src/components/UI/Card"
+import FormInput from "src/components/UI/FormInput"
 // types/utils/validators
-import { z } from "zod";
-import LoginSchema from "src/validators/loginSchema";
-import Button from "src/components/UI/Button";
+import { z } from "zod"
+import LoginSchema from "src/validators/loginSchema"
+import Button from "src/components/UI/Button"
 
 export default function Login() {
-  const router = useRouter();
-  const user = useUser();
-  const toastMessage = useToastMessage();
+  const router = useRouter()
+  const user = useUser()
+  if (user) {
+    router.push("/home")
+  }
+  const toastMessage = useToastMessage()
   const { handleSubmit, reset, control } = useForm<z.infer<typeof LoginSchema>>(
     {
       resolver: zodResolver(LoginSchema),
@@ -28,28 +31,28 @@ export default function Login() {
         password: "",
       },
     }
-  );
-  const supabase = useSupabaseClient();
+  )
+  const supabase = useSupabaseClient()
 
   if (user) {
-    router.replace("/home");
-    return;
+    router.replace("/home")
+    return
   }
 
   const formSubmit = async (data: z.infer<typeof LoginSchema>) => {
     // https://supabase.com/docs/guides/auth/auth-helpers/nextjs
     try {
-      const { error } = await supabase.auth.signInWithPassword(data);
+      const { error } = await supabase.auth.signInWithPassword(data)
       if (error) {
-        toastMessage(error.message, ToastMessage.Error);
-        return;
+        toastMessage(error.message, ToastMessage.Error)
+        return
       }
-      reset();
-      router.replace("/home");
+      reset()
+      router.replace("/home")
     } catch (error) {
-      toastMessage("Oops, something went wrong.", ToastMessage.Error);
+      toastMessage("Oops, something went wrong.", ToastMessage.Error)
     }
-  };
+  }
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -68,5 +71,5 @@ export default function Login() {
         </form>
       </Card>
     </div>
-  );
+  )
 }

@@ -58,7 +58,7 @@ export const createContextFn = async ({
 
   if (!session) return {}
 
-  return { user: session.user }
+  return { user: session.user, req, res }
 }
 
 export type Context = inferAsyncReturnType<typeof createContextFn>

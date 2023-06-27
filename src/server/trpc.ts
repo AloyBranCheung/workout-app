@@ -13,13 +13,17 @@ export const tprocedure = t.procedure
 // auth middleware
 const tmiddleware = t.middleware
 const isAuthed = tmiddleware((opts) => {
-  const { ctx } = opts
-  if (!ctx.user) {
+  const {
+    ctx: { user, req, res },
+  } = opts
+  if (!user) {
     throw new TRPCError({ code: "UNAUTHORIZED" })
   }
   return opts.next({
     ctx: {
-      user: ctx.user,
+      user: user,
+      req,
+      res,
     },
   })
 })
