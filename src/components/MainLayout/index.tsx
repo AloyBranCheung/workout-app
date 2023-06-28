@@ -20,11 +20,18 @@ export default function MainLayout({ children }: MainLayoutProps) {
     router.replace("/")
   }
 
+  const handleClickBrand = () => {
+    router.push("/home")
+  }
+
   return (
     <PageGuard>
       <div className="h-screen bg-background overflow-auto">
         <div className="flex flex-col w-full h-full">
-          <TopNavbar onClickLogout={handleClickLogout} />
+          <TopNavbar
+            onClickLogout={handleClickLogout}
+            onClickBrand={handleClickBrand}
+          />
           {children}
         </div>
       </div>

@@ -9,9 +9,13 @@ import { Position } from "src/types/PopupMenuTypes"
 
 interface TopNavbarProps {
   onClickLogout: () => void
+  onClickBrand: () => void
 }
 
-export default function TopNavbar({ onClickLogout }: TopNavbarProps) {
+export default function TopNavbar({
+  onClickLogout,
+  onClickBrand,
+}: TopNavbarProps) {
   const anchorEl = useRef<HTMLDivElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -22,7 +26,12 @@ export default function TopNavbar({ onClickLogout }: TopNavbarProps) {
       className="sticky top-0 border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full"
     >
       <div className="w-full max-w-7xl flex items-center justify-between px-5 py-3">
-        <h4 className="text-xl font-black cursor-pointer">simplyworkouts</h4>
+        <h4
+          className="text-xl font-black cursor-pointer"
+          onClick={onClickBrand}
+        >
+          simplyworkouts
+        </h4>
         <HamburgerIcon onClick={() => setIsMenuOpen(!isMenuOpen)} />
       </div>
       <PopupMenu
