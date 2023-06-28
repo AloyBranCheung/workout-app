@@ -4,7 +4,7 @@ import PrimaryButton from "../UI/PrimaryButton"
 // types
 import { UserAttributesOutput } from "src/types/trpc/user-router"
 import SecondaryButton from "../UI/SecondaryButton"
-
+import RecentActivity from "./RecentActivity"
 interface HomePageProps {
   userAttributes: UserAttributesOutput | undefined | null
 }
@@ -27,6 +27,7 @@ export default function HomePage({ userAttributes }: HomePageProps) {
         <SecondaryButton label="workouts" type="button" className="w-full" />
         <SecondaryButton label="runs" type="button" className="w-full" />
       </div>
+      <RecentActivity />
     </div>
   )
 }
