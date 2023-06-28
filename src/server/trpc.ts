@@ -13,15 +13,25 @@ export const tprocedure = t.procedure
 // auth middleware
 const tmiddleware = t.middleware
 const isAuthed = tmiddleware((opts) => {
-  const {
-    ctx: { user, req, res },
-  } = opts
+  const { ctx }: { ctx: Context } = opts
+
+  if (ctx instanceof TRPCError) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "createContextFn Error",
+      cause: ctx,
+    })
+  }
+
+  const { user, req, res } = ctx
+
   if (!user) {
     throw new TRPCError({ code: "UNAUTHORIZED" })
   }
+
   return opts.next({
     ctx: {
-      user: user,
+      user,
       req,
       res,
     },
