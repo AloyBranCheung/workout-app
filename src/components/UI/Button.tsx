@@ -1,5 +1,6 @@
 import React from "react"
 import { twMerge } from "tailwind-merge"
+import { motion } from "framer-motion"
 
 interface ButtonProps {
   label: string
@@ -15,16 +16,18 @@ export default function Button({
   className,
 }: ButtonProps) {
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       className={twMerge(
-        "border-solid border-black border-2 rounded-lg px-2",
+        "border-solid border-black border-2 rounded-lg px-2 ",
         className
       )}
       onClick={onClick}
       type={type}
     >
       <strong>{label}</strong>
-    </button>
+    </motion.button>
   )
 }
 

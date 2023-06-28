@@ -20,7 +20,10 @@ export default function SecondaryButton({
       label={label}
       onClick={onClick}
       type={type}
-      className={twMerge("bg-secondary-button text-black", className)}
+      className={twMerge(
+        "bg-secondary-button text-black hover:bg-hover-secondary",
+        className
+      )}
     />
   )
 }

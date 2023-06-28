@@ -32,6 +32,7 @@ module.exports = {
         text: "#010718",
         background: "#cedafd",
         "primary-button": "#2f08a6",
+        "hover-primary": "#491ad6",
         "secondary-button": "#f9ecfe",
         "hover-secondary": "#c7b8cc",
         tertiary: "#FFFFFF",

@@ -34,19 +34,22 @@ export default function TopNavbar({ onClickLogout }: TopNavbarProps) {
         <div ref={popupRef}>
           <AnimatePresence>
             <motion.div
-              className="bg-background h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col"
+              className="bg-secondary-button h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col z-20"
               initial="hidden"
               animate="show"
               exit="hidden"
               variants={{
                 hidden: {
                   clipPath: "circle(9.6% at 100% 0)",
+                  scale: 0,
                   transition: {
                     staggerChildren: 0.1,
                     staggerDirection: -1, // Reverse the staggering direction
                   },
                 },
                 show: {
+                  scale: 1,
+                  transformOrigin: "top right",
                   clipPath: "circle(141.5% at 100% 0)",
                   transition: {
                     duration: 0.3,
