@@ -5,6 +5,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -16,7 +17,12 @@
     "incremental": true,
     "paths": {
       "src/*": ["./src/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-moduleResolution"
+      }
+    ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
