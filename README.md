@@ -31,6 +31,8 @@
 2. Run `yarn install && npx prisma generate`
 3. Run `./dev.sh` (make sure have docker)
 
+<br />
+
 ## To-do list
 
 - [ ] Landing Page
