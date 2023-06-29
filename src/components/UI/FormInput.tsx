@@ -1,13 +1,13 @@
-import React from "react";
-import { UseControllerProps, Controller, FieldValues } from "react-hook-form";
-import { startCase } from "lodash";
+import React from "react"
+import { UseControllerProps, Controller, FieldValues } from "react-hook-form"
+import { startCase } from "lodash"
 
 interface FormInputProps<FV extends FieldValues> {
-  name: UseControllerProps<FV>["name"];
-  control: UseControllerProps<FV>["control"];
-  type?: React.InputHTMLAttributes<HTMLInputElement>["type"];
-  autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"];
-  required?: React.InputHTMLAttributes<HTMLInputElement>["required"];
+  name: UseControllerProps<FV>["name"]
+  control: UseControllerProps<FV>["control"]
+  type?: React.InputHTMLAttributes<HTMLInputElement>["type"]
+  autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"]
+  required?: React.InputHTMLAttributes<HTMLInputElement>["required"]
 }
 
 export default function FormInput<FV extends FieldValues>({
@@ -28,6 +28,7 @@ export default function FormInput<FV extends FieldValues>({
               <b>{startCase(name)}:</b>
             </label>
             <input
+              className="border-solid border-black border-2 rounded-2xl"
               required={required}
               autoComplete={autoComplete}
               type={type}
@@ -40,11 +41,11 @@ export default function FormInput<FV extends FieldValues>({
         </div>
       )}
     />
-  );
+  )
 }
 
 FormInput.defaultProps = {
   type: "text",
   autoComplete: "off",
   required: true,
-};
+}

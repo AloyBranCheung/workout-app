@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <Card>
+      <Card className="w-96 h-96">
         <form onSubmit={handleSubmit(formSubmit)}>
           <FormInput type="email" name="email" control={control} />
           <FormInput

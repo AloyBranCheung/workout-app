@@ -55,10 +55,10 @@ export default function TopNavbar({
                     staggerChildren: 0.1,
                     staggerDirection: -1, // Reverse the staggering direction
                   },
+                  transformOrigin: "top right",
                 },
                 show: {
                   scale: 1,
-                  transformOrigin: "top right",
                   clipPath: "circle(141.5% at 100% 0)",
                   transition: {
                     duration: 0.3,
