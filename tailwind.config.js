@@ -46,5 +46,5 @@ module.exports = {
       },
     },
   },
-  plugins: [textShadowPlugin],
+  plugins: [textShadowPlugin, "postcss-import"],
 }

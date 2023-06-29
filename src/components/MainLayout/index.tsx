@@ -26,13 +26,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <PageGuard>
-      <div className="h-screen bg-background overflow-auto">
+      <div className="h-full bg-background">
         <div className="flex flex-col w-full h-full">
           <TopNavbar
             onClickLogout={handleClickLogout}
             onClickBrand={handleClickBrand}
           />
-          {children}
+          <div className="h-full">{children}</div>
         </div>
       </div>
     </PageGuard>
