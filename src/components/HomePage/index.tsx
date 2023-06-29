@@ -2,14 +2,15 @@ import React from "react"
 // components
 import PrimaryButton from "../UI/PrimaryButton"
 // types
-import { UserAttributesOutput } from "src/types/trpc/router-types"
+import { StatsOutput, UserAttributesOutput } from "src/types/trpc/router-types"
 import SecondaryButton from "../UI/SecondaryButton"
 import RecentActivity from "./RecentActivity"
 interface HomePageProps {
   userAttributes: UserAttributesOutput | undefined
+  stats: StatsOutput | undefined
 }
 
-export default function HomePage({ userAttributes }: HomePageProps) {
+export default function HomePage({ userAttributes, stats }: HomePageProps) {
   return (
     <div
       className={`p-5 flex flex-col items-center justify-center gap-12 h-full`}
@@ -27,7 +28,7 @@ export default function HomePage({ userAttributes }: HomePageProps) {
         <SecondaryButton label="workouts" type="button" className="w-full" />
         <SecondaryButton label="runs" type="button" className="w-full" />
       </div>
-      <RecentActivity />
+      <RecentActivity recentActivities={stats?.recentActivity || []} />
     </div>
   )
 }
