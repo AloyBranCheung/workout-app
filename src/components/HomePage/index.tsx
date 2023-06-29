@@ -2,11 +2,11 @@ import React from "react"
 // components
 import PrimaryButton from "../UI/PrimaryButton"
 // types
-import { UserAttributesOutput } from "src/types/trpc/user-router"
+import { UserAttributesOutput } from "src/types/trpc/router-types"
 import SecondaryButton from "../UI/SecondaryButton"
 import RecentActivity from "./RecentActivity"
 interface HomePageProps {
-  userAttributes: UserAttributesOutput | undefined | null
+  userAttributes: UserAttributesOutput | undefined
 }
 
 export default function HomePage({ userAttributes }: HomePageProps) {
