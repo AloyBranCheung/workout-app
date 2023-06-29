@@ -15,10 +15,10 @@
 
 ## Workout App
 
-- [] Create your own workout plan
-- [] Add your own exercises
-- [] Track your workouts
-- [] Track your progress (BMI, weight etc.)
+- [ ] Create your own workout plan
+- [ ] Add your own exercises
+- [ ] Track your workouts
+- [ ] Track your progress (BMI, weight etc.)
 
 <br />
 
@@ -33,9 +33,9 @@
 
 ## To-do list
 
-- [] Landing Page
-- [] Login Page
-- [] Home Page
-- [] Workout Plan
-- [] Execute Workout Plan and track history/progress
-- [] Run Plan/History
+- [ ] Landing Page
+- [ ] Login Page
+- [ ] Home Page
+- [ ] Workout Plan
+- [ ] Execute Workout Plan and track history/progress
+- [ ] Run Plan/History
