@@ -11,8 +11,6 @@ export default function Home() {
   const { data: userAttributes, isLoading } = useUserAttributes()
   const { data: stats } = useStats()
 
-  console.log('stats', stats)
-
   return (
     <Fade>
       <GutterContainer>
