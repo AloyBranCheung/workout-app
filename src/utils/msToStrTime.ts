@@ -1,4 +1,4 @@
-class msToStrTime {
+class MsToStrTime {
   private ms: number
 
   constructor(ms: number) {
@@ -19,4 +19,4 @@ class msToStrTime {
   }
 }
 
-export default msToStrTime
+export default MsToStrTime

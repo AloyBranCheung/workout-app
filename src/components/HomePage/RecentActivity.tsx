@@ -1,11 +1,10 @@
 import React from "react"
 // components
 import SecondaryCard from "../UI/SecondaryCard"
-import Card from "../UI/Card"
-import Text1 from "../UI/typography/Text1"
+import ParentCard from "../UI/ParentCard"
 // types/utils
 import unixToIsoDate from "src/utils/unixToIsoDate"
-import msToStrTime from "src/utils/msToStrTime"
+import MsToStrTime from "src/utils/msToStrTime"
 import { IRecentActivity } from "src/types/home-page"
 
 interface RecentActivityProps {
@@ -26,7 +25,7 @@ export default function RecentActivity({
             <strong>{workoutName}</strong>
           </div>
           <div>
-            <strong>{new msToStrTime(workoutDuration).msToStrTime()}</strong>
+            <strong>{new MsToStrTime(workoutDuration).msToStrTime()}</strong>
           </div>
         </div>
       </SecondaryCard>
@@ -34,9 +33,8 @@ export default function RecentActivity({
   )
 
   return (
-    <Card className="flex flex-col gap-5 py-6 px-3">
-      <Text1 text="Recent Activity" bold />
+    <ParentCard cardTitle="Recent Activity">
       <div className="flex flex-col gap-7">{recentActivitiesCards}</div>
-    </Card>
+    </ParentCard>
   )
 }

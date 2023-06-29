@@ -1,4 +1,4 @@
-import { IRecentActivity } from "src/types/home-page"
+import { IRecentActivity, ITopStats, WeightLifted } from "src/types/home-page"
 
 const MOCK_RECENT_ACTIVITY: IRecentActivity[] = new Array(5)
   .fill(0)
@@ -12,3 +12,18 @@ const MOCK_RECENT_ACTIVITY: IRecentActivity[] = new Array(5)
   }))
 
 export default MOCK_RECENT_ACTIVITY
+
+const defaultWeight: WeightLifted = {
+  weight: 89,
+  unit: "kg",
+}
+
+export const MOCK_TOP_STATS: ITopStats = {
+  big3: {
+    squat: defaultWeight,
+    bench: defaultWeight,
+    deadlift: defaultWeight,
+  },
+  weightLiftedTotal: defaultWeight,
+  randomGraph: {},
+}

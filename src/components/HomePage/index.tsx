@@ -1,10 +1,27 @@
 import React from "react"
 // components
 import PrimaryButton from "../UI/PrimaryButton"
+import RecentActivity from "./RecentActivity"
+import TopStats from "./TopStats"
+import SecondaryButton from "../UI/SecondaryButton"
 // types
 import { StatsOutput, UserAttributesOutput } from "src/types/trpc/router-types"
-import SecondaryButton from "../UI/SecondaryButton"
-import RecentActivity from "./RecentActivity"
+import { ITopStats, WeightLifted } from "src/types/home-page"
+
+const defaultWeight: WeightLifted = {
+  weight: 0,
+  unit: "",
+}
+
+const defaultTopStats: ITopStats = {
+  big3: {
+    squat: defaultWeight,
+    bench: defaultWeight,
+    deadlift: defaultWeight,
+  },
+  weightLiftedTotal: defaultWeight,
+  randomGraph: {},
+}
 interface HomePageProps {
   userAttributes: UserAttributesOutput | undefined
   stats: StatsOutput | undefined
@@ -29,6 +46,7 @@ export default function HomePage({ userAttributes, stats }: HomePageProps) {
         <SecondaryButton label="runs" type="button" className="w-full" />
       </div>
       <RecentActivity recentActivities={stats?.recentActivity || []} />
+      <TopStats topStats={stats?.topStats || defaultTopStats} />
     </div>
   )
 }
