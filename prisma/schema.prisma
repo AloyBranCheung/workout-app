@@ -13,20 +13,21 @@ datasource db {
 
 // User Attributes Table
 model User {
-  id        Int        @unique @default(autoincrement())
-  userId    String     @unique
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @default(now()) @updatedAt
-  email     String     @unique
-  name      String
+  id           Int           @id @unique @default(autoincrement())
+  userId       String        @unique
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @default(now()) @updatedAt
+  email        String        @unique
+  name         String
   // relations
-  exercises Exercise[]
-  profile   Profile?
+  workoutPlans WorkoutPlan[]
+  exercises    Exercise[]
+  profile      Profile?
 }
 
 // Profile Model Table
 model Profile {
-  profileId String   @unique @default(uuid())
+  profileId String   @id @unique @default(uuid())
   updatedAt DateTime @default(now()) @updatedAt
   createdAt DateTime @default(now())
   BMI       Int
@@ -36,19 +37,20 @@ model Profile {
 
 // Exercises Table
 model Exercise {
-  exerciseId String    @unique @default(uuid()) @db.Uuid
-  updatedAt  DateTime  @default(now()) @updatedAt
-  createdAt  DateTime  @default(now())
-  name       String
+  exerciseId   String        @id @unique @default(uuid()) @db.Uuid
+  updatedAt    DateTime      @default(now()) @updatedAt
+  createdAt    DateTime      @default(now())
+  name         String
   // relations
-  user       User      @relation(fields: [userId], references: [userId])
-  userId     String
-  session    Session[]
+  user         User          @relation(fields: [userId], references: [userId])
+  userId       String
+  session      Session[]
+  workoutPlans WorkoutPlan[]
 }
 
 // Session Table for each workout 'session'
 model Session {
-  sessionId       String            @unique @default(uuid()) @db.Uuid
+  sessionId       String            @id @unique @default(uuid()) @db.Uuid
   updatedAt       DateTime          @default(now()) @updatedAt
   createdAt       DateTime          @default(now())
   // relations
@@ -60,7 +62,7 @@ model Session {
 
 // Exercise History Table
 model ExerciseHistory {
-  historyId String   @unique @default(uuid()) @db.Uuid
+  historyId String   @id @unique @default(uuid()) @db.Uuid
   updatedAt DateTime @default(now()) @updatedAt
   createdAt DateTime @default(now())
   weight    Int
@@ -73,7 +75,7 @@ model ExerciseHistory {
 
 // Set (For exercises) Table
 model Set {
-  setId     String          @unique @default(uuid()) @db.Uuid
+  setId     String          @id @unique @default(uuid()) @db.Uuid
   updatedAt DateTime        @default(now()) @updatedAt
   createdAt DateTime        @default(now())
   weight    Int
@@ -81,4 +83,12 @@ model Set {
   // relations
   history   ExerciseHistory @relation(fields: [historyId], references: [historyId])
   historyId String          @db.Uuid
+}
+
+model WorkoutPlan {
+  planId    String     @id @unique @default(uuid()) @db.Uuid
+  // relations
+  user      User       @relation(fields: [userId], references: [userId])
+  userId    String     @unique
+  exercises Exercise[]
 }
