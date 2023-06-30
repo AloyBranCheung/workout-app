@@ -31,33 +31,34 @@ model Profile {
   updatedAt DateTime @default(now()) @updatedAt
   createdAt DateTime @default(now())
   BMI       Int
-  user      User     @relation(fields: [userId], references: [userId])
-  userId    String   @unique
+
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String @unique
 }
 
 // Exercises Table
 model Exercise {
-  exerciseId   String        @id @unique @default(uuid()) @db.Uuid
-  updatedAt    DateTime      @default(now()) @updatedAt
-  createdAt    DateTime      @default(now())
-  name         String
+  exerciseId String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt  DateTime @default(now()) @updatedAt
+  createdAt  DateTime @default(now())
+  name       String
   // relations
-  user         User          @relation(fields: [userId], references: [userId])
-  userId       String
+  user       User     @relation(fields: [userId], references: [userId])
+  userId     String
+
   session      Session[]
   workoutPlans WorkoutPlan[]
 }
 
 // Session Table for each workout 'session'
 model Session {
-  sessionId       String            @id @unique @default(uuid()) @db.Uuid
-  updatedAt       DateTime          @default(now()) @updatedAt
-  createdAt       DateTime          @default(now())
+  sessionId       String           @id @unique @default(uuid()) @db.Uuid
+  updatedAt       DateTime         @default(now()) @updatedAt
+  createdAt       DateTime         @default(now())
   // relations
-  exercise        Exercise          @relation(fields: [exerciseId], references: [exerciseId])
-  exerciseId      String            @db.Uuid
-  exerciseHistory ExerciseHistory[]
-  historyId       String            @db.Uuid
+  exercise        Exercise[]
+  exerciseHistory ExerciseHistory?
+  historyId       String           @db.Uuid
 }
 
 // Exercise History Table
@@ -69,8 +70,9 @@ model ExerciseHistory {
   unit      String   @default("kg")
   // relations
   sets      Set[]
-  session   Session  @relation(fields: [sessionId], references: [sessionId])
-  sessionId String   @db.Uuid
+
+  session   Session @relation(fields: [sessionId], references: [sessionId])
+  sessionId String  @unique @db.Uuid
 }
 
 // Set (For exercises) Table
@@ -86,9 +88,10 @@ model Set {
 }
 
 model WorkoutPlan {
-  planId    String     @id @unique @default(uuid()) @db.Uuid
+  planId String @id @unique @default(uuid()) @db.Uuid
   // relations
-  user      User       @relation(fields: [userId], references: [userId])
-  userId    String     @unique
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String
+
   exercises Exercise[]
 }

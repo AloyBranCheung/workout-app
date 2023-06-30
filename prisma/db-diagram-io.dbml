@@ -1,0 +1,65 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+// User Attributes Table
+Table User {
+  id integer [pk, unique, increment]
+  userId string [unique, ref: < WorkoutPlan.userId, ref: < Exercise.userId, ref: - Profile.userId ]
+  createdAt timestamp [default: 'now()']
+  updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  email string [unique]
+  name string
+}
+
+// Profile Model Table
+Table Profile {
+  profileId string [pk, unique, default: 'uuid()']
+  createdAt timestamp [default: 'now()']
+  updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  BMI integer
+  userId string [unique]
+}
+
+// Exercises Table
+Table Exercise {
+  exerciseId string [pk, unique, default: 'uuid()', ref: <> Session.sessionId, ref: <> WorkoutPlan.planId]
+  createdAt timestamp [default: 'now()']
+  updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  name string
+  userId string
+}
+
+// Session Table for each workout 'session'
+Table Session {
+  sessionId string [pk, unique, default: 'uuid()', ref: - ExerciseHistory.sessionId]
+  createdAt timestamp [default: 'now()']
+  updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  exerciseId string
+  historyId string 
+}
+
+// Exercise History Table
+Table ExerciseHistory {
+  historyId string [pk, unique, default: 'uuid()']
+  createdAt timestamp [default: 'now()']
+  updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  weight integer
+  unit string [default: 'kg']
+  sessionId string 
+}
+
+// Set (For exercises) Table
+Table Set {
+  setId string [pk, unique, default: 'uuid()']
+  createdAt timestamp [default: 'now()']
+  updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  weight integer
+  reps integer
+  historyId string
+}
+
+Table WorkoutPlan {
+  planId string [pk, unique, default: 'uuid()']
+  userId string [unique]
+}
+
