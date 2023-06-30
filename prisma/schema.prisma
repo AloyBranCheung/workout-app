@@ -1,6 +1,7 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 // Documentation Tool: https://dbdiagram.io/home
+// tables are Singular 
 
 generator client {
   provider = "prisma-client-js"
@@ -23,14 +24,20 @@ model User {
   workoutPlans WorkoutPlan[]
   exercises    Exercise[]
   profile      Profile?
+  runPlan      RunPlan[]
 }
 
 // Profile Model Table
 model Profile {
-  profileId String   @id @unique @default(uuid())
-  updatedAt DateTime @default(now()) @updatedAt
-  createdAt DateTime @default(now())
-  BMI       Int
+  profileId   String   @id @unique @default(uuid())
+  updatedAt   DateTime @default(now()) @updatedAt
+  createdAt   DateTime @default(now())
+  height      Int?
+  heightUnits String?  @default("cm")
+  weight      Int?
+  weightUnits String?  @default("kg")
+  BMI         Int?
+  avatar      String?
 
   user   User   @relation(fields: [userId], references: [userId])
   userId String @unique
@@ -38,60 +45,104 @@ model Profile {
 
 // Exercises Table
 model Exercise {
-  exerciseId String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt  DateTime @default(now()) @updatedAt
-  createdAt  DateTime @default(now())
-  name       String
+  exerciseId  String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt   DateTime @default(now()) @updatedAt
+  createdAt   DateTime @default(now())
+  name        String
+  targetSets  Int
+  targetReps  Int
+  description String?
+  url         String?
   // relations
-  user       User     @relation(fields: [userId], references: [userId])
-  userId     String
+  user        User     @relation(fields: [userId], references: [userId])
+  userId      String
 
-  session      Session[]
   workoutPlans WorkoutPlan[]
+  sets         Set[]
 }
 
 // Session Table for each workout 'session'
 model Session {
-  sessionId       String           @id @unique @default(uuid()) @db.Uuid
-  updatedAt       DateTime         @default(now()) @updatedAt
-  createdAt       DateTime         @default(now())
+  sessionId String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
   // relations
-  exercise        Exercise[]
-  exerciseHistory ExerciseHistory?
-  historyId       String           @db.Uuid
+  sets      Set[]
+
+  workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId])
+  planId      String      @db.Uuid
 }
 
 // Exercise History Table
-model ExerciseHistory {
+model Set {
   historyId String   @id @unique @default(uuid()) @db.Uuid
   updatedAt DateTime @default(now()) @updatedAt
   createdAt DateTime @default(now())
   weight    Int
   unit      String   @default("kg")
-  // relations
-  sets      Set[]
-
-  session   Session @relation(fields: [sessionId], references: [sessionId])
-  sessionId String  @unique @db.Uuid
-}
-
-// Set (For exercises) Table
-model Set {
-  setId     String          @id @unique @default(uuid()) @db.Uuid
-  updatedAt DateTime        @default(now()) @updatedAt
-  createdAt DateTime        @default(now())
-  weight    Int
   reps      Int
+  note      String?
+
   // relations
-  history   ExerciseHistory @relation(fields: [historyId], references: [historyId])
-  historyId String          @db.Uuid
+  session   Session @relation(fields: [sessionId], references: [sessionId])
+  sessionId String  @db.Uuid
+
+  exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId])
+  exerciseId String   @db.Uuid
 }
 
 model WorkoutPlan {
-  planId String @id @unique @default(uuid()) @db.Uuid
+  planId    String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
   // relations
-  user   User   @relation(fields: [userId], references: [userId])
-  userId String
+  user      User     @relation(fields: [userId], references: [userId])
+  userId    String
 
   exercises Exercise[]
+  sessions  Session[]
+}
+
+model RunPlan {
+  planId    String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+
+  // relations
+  runExercises RunExercise[]
+
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String
+}
+
+model RunExercise {
+  exerciseId          String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt           DateTime @default(now()) @updatedAt
+  createdAt           DateTime @default(now())
+  targetDistance      Int
+  targetDistanceUnits String   @default("km")
+  isCompleted         Boolean
+
+  // relations
+  runPlan RunPlan @relation(fields: [planId], references: [planId])
+  planId  String  @db.Uuid
+
+  run Run[]
+}
+
+model Run {
+  runId               String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt           DateTime @default(now()) @updatedAt
+  createdAt           DateTime @default(now())
+  duration            Int // milliseconds
+  speed               Int
+  speedUnits          String   @default("km")
+  speedPerTimeUnit    String   @default("hour")
+  actualDistance      Int
+  actualDistanceUnits String   @default("km")
+  note                String?
+
+  // relation
+  runExercise RunExercise @relation(fields: [exerciseId], references: [exerciseId])
+  exerciseId  String      @db.Uuid
 }
