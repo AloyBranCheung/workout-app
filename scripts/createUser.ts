@@ -54,10 +54,11 @@ const getUuid = async () => {
 const main = async () => {
   const details = await getUuid()
   try {
-    if (!details?.email || !details?.user_id || !details?.name) return
+    if (!details || !details?.email || !details?.user_id || !details?.name)
+      return
     await prisma.user.create({
       data: {
-        user_id: details?.user_id,
+        userId: details?.user_id,
         email: details?.email,
         name: details?.name,
       },

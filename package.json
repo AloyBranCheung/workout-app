@@ -51,6 +51,7 @@
     "eslint-config-prettier": "^8.8.0",
     "postcss-import": "^15.1.0",
     "prettier": "^2.8.8",
+    "prettier-plugin-prisma": "^4.13.0",
     "prisma": "4.14.1",
     "typescript-plugin-css-modules": "^5.0.1"
   }

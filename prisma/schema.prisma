@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Documentation Tool: https://dbdiagram.io/home
 
 generator client {
   provider = "prisma-client-js"
@@ -10,11 +11,74 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// User Attributes Table
 model User {
-  id Int @id @default(autoincrement())
-  user_id String @unique @db.Uuid
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-  email String @unique
-  name String
+  id        Int        @unique @default(autoincrement())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now()) @updatedAt
+  email     String     @unique
+  name      String
+  // relations
+  exercises Exercise[]
+  profile   Profile?
+}
+
+// Profile Model Table
+model Profile {
+  profileId String   @unique @default(uuid())
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  BMI       Int
+  user      User     @relation(fields: [userId], references: [userId])
+  userId    String   @unique
+}
+
+// Exercises Table
+model Exercise {
+  exerciseId String    @unique @default(uuid()) @db.Uuid
+  updatedAt  DateTime  @default(now()) @updatedAt
+  createdAt  DateTime  @default(now())
+  name       String
+  // relations
+  user       User      @relation(fields: [userId], references: [userId])
+  userId     String
+  session    Session[]
+}
+
+// Session Table for each workout 'session'
+model Session {
+  sessionId       String            @unique @default(uuid()) @db.Uuid
+  updatedAt       DateTime          @default(now()) @updatedAt
+  createdAt       DateTime          @default(now())
+  // relations
+  exercise        Exercise          @relation(fields: [exerciseId], references: [exerciseId])
+  exerciseId      String            @db.Uuid
+  exerciseHistory ExerciseHistory[]
+  historyId       String            @db.Uuid
+}
+
+// Exercise History Table
+model ExerciseHistory {
+  historyId String   @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  weight    Int
+  unit      String   @default("kg")
+  // relations
+  sets      Set[]
+  session   Session  @relation(fields: [sessionId], references: [sessionId])
+  sessionId String   @db.Uuid
+}
+
+// Set (For exercises) Table
+model Set {
+  setId     String          @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime        @default(now()) @updatedAt
+  createdAt DateTime        @default(now())
+  weight    Int
+  reps      Int
+  // relations
+  history   ExerciseHistory @relation(fields: [historyId], references: [historyId])
+  historyId String          @db.Uuid
 }
