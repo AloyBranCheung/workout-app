@@ -24,7 +24,8 @@ model User {
   workoutPlans WorkoutPlan[]
   exercises    Exercise[]
   profile      Profile?
-  runPlan      RunPlan[]
+  runPlans     RunPlan[]
+  activities   Activity[]
 }
 
 // Profile Model Table
@@ -41,6 +42,19 @@ model Profile {
 
   user   User   @relation(fields: [userId], references: [userId])
   userId String @unique
+}
+
+// Activity Table 
+model Activity {
+  activityId  String       @id @unique @default(uuid()) @db.Uuid
+  updatedAt   DateTime     @default(now()) @updatedAt
+  createdAt   DateTime     @default(now())
+  // relations
+  sessionId   Session?
+  runExercise RunExercise?
+
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String
 }
 
 // Exercises Table
@@ -71,6 +85,9 @@ model Session {
 
   workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId])
   planId      String      @db.Uuid
+
+  activity   Activity @relation(fields: [activityId], references: [activityId])
+  activityId String   @unique @db.Uuid
 }
 
 // Exercise History Table
@@ -128,6 +145,9 @@ model RunExercise {
   planId  String  @db.Uuid
 
   run Run[]
+
+  activity   Activity @relation(fields: [activityId], references: [activityId])
+  activityId String   @unique @db.Uuid
 }
 
 model Run {
