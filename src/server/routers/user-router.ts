@@ -16,7 +16,7 @@ const userRouter = trouter({
       const userUid = user.id
       const userAttributes = await prisma.user.findUnique({
         where: {
-          user_id: userUid,
+          userId: userUid,
         },
       })
 

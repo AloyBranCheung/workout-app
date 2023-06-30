@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useState } from "react"
 // nextjs
 import { useRouter } from "next/router"
 // components
 import PageGuard from "src/auth/PageGuard"
 import TopNavbar from "./TopNavbar"
+import Fade from "../UI/transitions/Fade"
 // supabase
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 
@@ -12,6 +13,8 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   const supabase = useSupabaseClient()
   const router = useRouter()
 
@@ -21,7 +24,13 @@ export default function MainLayout({ children }: MainLayoutProps) {
   }
 
   const handleClickBrand = () => {
+    setIsMenuOpen(false)
     router.push("/home")
+  }
+
+  const handleClickPlan = () => {
+    setIsMenuOpen(false)
+    router.push("/workouts")
   }
 
   return (
@@ -29,10 +38,15 @@ export default function MainLayout({ children }: MainLayoutProps) {
       <div className="h-full bg-background">
         <div className="flex flex-col w-full h-full">
           <TopNavbar
+            isMenuOpen={isMenuOpen}
+            onToggleMenu={() => setIsMenuOpen(!isMenuOpen)}
+            onClickPlan={handleClickPlan}
             onClickLogout={handleClickLogout}
             onClickBrand={handleClickBrand}
           />
-          <div className="h-full">{children}</div>
+          <div className="h-full">
+            <Fade>{children}</Fade>
+          </div>
         </div>
       </div>
     </PageGuard>

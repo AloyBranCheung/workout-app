@@ -33,6 +33,14 @@
 
 <br />
 
+## Notes to self
+
+- index.tsx is the 'container'
+- wrap logic in hooks where possible
+- kebab-case for non-react file names
+- PascalCase for class files
+- camelCase by default
+
 ## To-do list
 
 - [ ] Landing Page

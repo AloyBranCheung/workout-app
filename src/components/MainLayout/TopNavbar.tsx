@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useRef } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 // components
 import HamburgerIcon from "../UI/icons/HamburgerIcon"
@@ -10,15 +10,20 @@ import { Position } from "src/types/PopupMenuTypes"
 interface TopNavbarProps {
   onClickLogout: () => void
   onClickBrand: () => void
+  onClickPlan: () => void
+  onToggleMenu: () => void
+  isMenuOpen: boolean
 }
 
 export default function TopNavbar({
   onClickLogout,
   onClickBrand,
+  onClickPlan,
+  isMenuOpen,
+  onToggleMenu,
 }: TopNavbarProps) {
   const anchorEl = useRef<HTMLDivElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
     <div
@@ -32,7 +37,7 @@ export default function TopNavbar({
         >
           simplyworkouts
         </h4>
-        <HamburgerIcon onClick={() => setIsMenuOpen(!isMenuOpen)} />
+        <HamburgerIcon onClick={onToggleMenu} />
       </div>
       <PopupMenu
         position={Position.BottomCenter}
@@ -43,7 +48,7 @@ export default function TopNavbar({
         <div ref={popupRef}>
           <AnimatePresence>
             <motion.div
-              className="bg-secondary-button h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col z-20"
+              className="bg-background h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col z-20"
               initial="hidden"
               animate="show"
               exit="hidden"
@@ -67,10 +72,16 @@ export default function TopNavbar({
                 },
               }}
             >
-              <MenuItem>Workout Plan</MenuItem>
-              <MenuItem>Workout Routine</MenuItem>
-              <MenuItem>Exercises</MenuItem>
-              <MenuItem onClick={onClickLogout}>Logout</MenuItem>
+              <MenuItem
+                className="bg-primary-button text-white"
+                onClick={onClickPlan}
+              >
+                workouts
+              </MenuItem>
+              <MenuItem className="bg-primary-button text-white">
+                exercises
+              </MenuItem>
+              <MenuItem onClick={onClickLogout}>logout</MenuItem>
             </motion.div>
           </AnimatePresence>
         </div>
