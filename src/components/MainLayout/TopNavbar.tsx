@@ -3,7 +3,8 @@ import { AnimatePresence, motion } from "framer-motion"
 // components
 import HamburgerIcon from "../UI/icons/HamburgerIcon"
 import PopupMenu from "./PopupMenu"
-import MenuItem from "./MenuItem"
+import PrimaryButton from "../UI/PrimaryButton"
+import SecondaryButton from "../UI/SecondaryButton"
 // types
 import { Position } from "src/types/PopupMenuTypes"
 
@@ -72,16 +73,18 @@ export default function TopNavbar({
                 },
               }}
             >
-              <MenuItem
-                className="bg-primary-button text-white"
+              <PrimaryButton
+                label="workouts"
+                type="button"
                 onClick={onClickPlan}
-              >
-                workouts
-              </MenuItem>
-              <MenuItem className="bg-primary-button text-white">
-                exercises
-              </MenuItem>
-              <MenuItem onClick={onClickLogout}>logout</MenuItem>
+              />
+              <PrimaryButton label="exercises" type="button" />
+              <PrimaryButton label="runs" type="button" />
+              <SecondaryButton
+                label="logout"
+                type="button"
+                onClick={onClickLogout}
+              />
             </motion.div>
           </AnimatePresence>
         </div>
