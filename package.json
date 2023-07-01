@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "db-sync": "prisma db push",
-    "prisma-migrate": "npx prisma migrate dev --name init"
+    "prisma-migrate": "npx prisma migrate dev --name init",
+    "jest": "jest --watch"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.0",
@@ -47,8 +48,14 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/jest": "^29.5.2",
     "@typescript-eslint/eslint-plugin": "^5.59.7",
     "eslint-config-prettier": "^8.8.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "postcss-import": "^15.1.0",
     "prettier": "^2.8.8",
     "prettier-plugin-prisma": "^4.13.0",
