@@ -31,6 +31,10 @@
 2. Run `yarn install && npx prisma generate`
 3. Run `./dev.sh` (make sure have docker)
 
+## Resources
+
+- [Figma](https://www.figma.com/file/R0i3v0IsjhkOhDSYITeWHU/Workout-App?type=design&node-id=0%3A1&mode=design&t=4R5sghDXxfNWkufE-1)
+
 <br />
 
 ## Notes to self

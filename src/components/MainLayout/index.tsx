@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import PageGuard from "src/auth/PageGuard"
 import TopNavbar from "./TopNavbar"
 import Fade from "../UI/transitions/Fade"
+import GutterContainer from "../UI/GutterContainer"
 // supabase
 import { useSupabaseClient } from "@supabase/auth-helpers-react"
 
@@ -45,7 +46,11 @@ export default function MainLayout({ children }: MainLayoutProps) {
             onClickBrand={handleClickBrand}
           />
           <div className="h-full">
-            <Fade>{children}</Fade>
+            <Fade>
+              <GutterContainer>
+                <div className="p-5 h-full">{children}</div>
+              </GutterContainer>
+            </Fade>
           </div>
         </div>
       </div>

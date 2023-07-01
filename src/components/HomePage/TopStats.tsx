@@ -25,13 +25,13 @@ export default function TopStats({ topStats }: TopStatsProps) {
       <div className="flex flex-col gap-8">
         <SecondaryCard className="flex flex-col gap-3">
           <p>
-            <strong>big 3</strong>
+            <strong>Big 3</strong>
           </p>
           <div className="flex flex-col gap-2">{big3Lifts}</div>
         </SecondaryCard>
         <SecondaryCard>
           <p>
-            <strong>total kg lifted this week</strong>
+            <strong>Total kg Lifted This Week</strong>
           </p>
           <div className="flex items-center justify-center">
             <p className="p-8">

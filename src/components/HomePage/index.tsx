@@ -32,9 +32,7 @@ export default function HomePage({ userAttributes, stats }: HomePageProps) {
   const router = useRouter()
 
   return (
-    <div
-      className={`p-5 flex flex-col items-center justify-center gap-12 h-full`}
-    >
+    <div className={`flex flex-col items-center justify-center gap-12 `}>
       <h1 className="text-4xl">{`Hey ${
         userAttributes?.name ?? "{Error: Name not found.}"
       }. Let's have a good workout today :)`}</h1>
