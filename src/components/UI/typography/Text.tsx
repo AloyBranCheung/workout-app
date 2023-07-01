@@ -12,7 +12,7 @@ export enum Typography {
 
 interface TextProps {
   text: string
-  typography: Typography
+  typography?: Typography
   className?: string
   bold?: boolean
   testId?: string

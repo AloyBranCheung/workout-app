@@ -67,6 +67,7 @@ Table WorkoutPlan {
   planId string [pk, unique, default: 'uuid()', ref: < Session.planId]
   createdAt timestamp [default: 'now()']
   updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  name string
   userId string [unique]
 }
 
