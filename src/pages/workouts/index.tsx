@@ -1,13 +1,12 @@
 import React from "react"
 import MainLayout from "src/components/MainLayout"
+import Workouts from "src/components/Workouts"
+// hooks
+import useWorkoutPlans from "src/hooks/useWorkoutPlans"
 
 export default function WorkoutsPage() {
-  return (
-    <div>
-      <div>create a workout</div>
-      <div>list available workouts</div>
-    </div>
-  )
+  const { data: plans } = useWorkoutPlans()
+  return <Workouts plans={plans} />
 }
 
 WorkoutsPage.getLayout = function getLayout(page: React.ReactElement) {
