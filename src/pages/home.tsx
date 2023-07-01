@@ -6,8 +6,11 @@ import LoadingSpinner from "src/components/UI/LoadingSpinner"
 import HomePage from "src/components/HomePage"
 
 export default function Home() {
-  const { data: userAttributes, isLoading } = useUserAttributes()
-  const { data: stats } = useStats()
+  const { data: userAttributes, isLoading: userAttributesIsLoading } =
+    useUserAttributes()
+  const { data: stats, isLoading: statsIsLoading } = useStats()
+
+  const isLoading = userAttributesIsLoading || statsIsLoading
 
   return isLoading ? (
     <LoadingSpinner className="h-screen" />

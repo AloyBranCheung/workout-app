@@ -26,17 +26,27 @@ export default function Workouts({ plans }: WorkoutsProps) {
         className="w-full"
       />
       <div className="flex flex-col gap-5">
-        <Text text="My Workouts" typography={Typography.h3} />
+        <Text
+          text="My Workouts"
+          typography={Typography.h3}
+          className="text-h3"
+        />
         <ParentCard cardTitle="">
           {plans && plans.workoutPlans.length > 1 ? (
             plans.workoutPlans.map(({ id, duration, lastWorkout, name }) => (
               <SecondaryCard key={id}>
-                <Text text={name} typography={Typography.p2} bold />
+                <Text
+                  text={name}
+                  typography={Typography.p2}
+                  bold
+                  className="text-p2"
+                />
                 <div>
                   <Text
                     testId={`last-workout-${id}`}
                     text={`Last Workout: ${unixToIsoDate(lastWorkout)}`}
                     typography={Typography.p3}
+                    className="text-p3"
                   />
                   <Text
                     testId={`workout-duration-${id}`}
@@ -44,6 +54,7 @@ export default function Workouts({ plans }: WorkoutsProps) {
                       duration
                     ).msToStrTime()}`}
                     typography={Typography.p3}
+                    className="text-p3"
                   />
                 </div>
               </SecondaryCard>

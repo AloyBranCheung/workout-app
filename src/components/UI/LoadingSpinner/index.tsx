@@ -10,7 +10,7 @@ export default function LoadingSpinner({ className }: LoadingSpinnerProps) {
   return (
     <div
       className={twMerge(
-        "flex items-center justify-center w-full h-full",
+        "flex items-center justify-center w-full h-screen",
         className
       )}
     >

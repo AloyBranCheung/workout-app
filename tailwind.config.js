@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('tailwindcss').Config} */
+const pxToRem = require("./src/utils/pxToRem")
 const plugin = require("tailwindcss/plugin")
 
 const textShadowPlugin = plugin(({ matchUtilities, theme }) => {
@@ -23,6 +24,14 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        h1: pxToRem(57),
+        h2: pxToRem(45),
+        h3: pxToRem(36),
+        p1: pxToRem(22),
+        p2: pxToRem(16),
+        p3: pxToRem(14),
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
