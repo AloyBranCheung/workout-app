@@ -41,7 +41,7 @@ export default function Text({
   }
 
   return (
-    <p className={twMerge(fontSize(), className)} data-testId={testId}>
+    <p className={twMerge(fontSize(), className)} data-testid={testId}>
       {bold ? <strong>{text}</strong> : text}
     </p>
   )

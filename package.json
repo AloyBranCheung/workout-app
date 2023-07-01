@@ -10,7 +10,8 @@
     "lint": "next lint",
     "db-sync": "prisma db push",
     "prisma-migrate": "npx prisma migrate dev --name init",
-    "jest": "jest --watch"
+    "jest": "jest --watch",
+    "jest-ci": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.0",
