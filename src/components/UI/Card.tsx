@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge"
 
 interface CardProps {
   children: React.ReactNode
-  onClick?: () => void
+  onClick?: React.MouseEventHandler<HTMLDivElement>
   className?: string
 }
 

@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 // react-hook-forms
 import { useForm } from "react-hook-form"
 // dnd
@@ -13,12 +13,17 @@ import FormInput from "../UI/FormInput"
 import PrimaryButton from "../UI/PrimaryButton"
 import SecondaryButton from "../UI/SecondaryButton"
 import ExerciseCard from "./ExerciseCard"
+import Modal from "../UI/Modal"
+import AddExercise from "./AddExercise"
 
 export default function CreateWorkout() {
+  const [isAddExercise, setIsAddExercise] = useState(false)
   const { items, handleDragEnd } = useDragSorting(["0", "2"])
   const { handleSubmit, reset, control } = useForm()
 
   const handleSubmitForm = (formData) => console.log("formdata", formData)
+
+  const handleCloseModal = () => setIsAddExercise(false)
 
   return (
     <div className="flex flex-col justify-center gap-5">
@@ -31,7 +36,11 @@ export default function CreateWorkout() {
           <div>
             <FormInput control={control} name="name" />
           </div>
-          <SecondaryButton label="Add Exercise" type="button" />
+          <SecondaryButton
+            label="Add Exercise"
+            type="button"
+            onClick={() => setIsAddExercise(true)}
+          />
           <div className="flex flex-col gap-7 p-4 border-2 border-solid border-black rounded-2xl">
             <DragSortable
               items={items}
@@ -60,6 +69,13 @@ export default function CreateWorkout() {
           </div>
         </form>
       </ParentCard>
+      <Modal
+        isOpen={isAddExercise}
+        onClose={handleCloseModal}
+        cardTitle="Add Exercise"
+      >
+        <AddExercise />
+      </Modal>
     </div>
   )
 }
