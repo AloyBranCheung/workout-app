@@ -1,7 +1,12 @@
 import React from "react"
 // react-hook-forms
 import { useForm } from "react-hook-form"
+// dnd
+import { verticalListSortingStrategy } from "@dnd-kit/sortable"
+// hooks
+import useDragSorting from "src/hooks/useDragSorting"
 // components
+import DragSortable from "../UI/DragSortable"
 import Text from "../UI/typography/Text"
 import ParentCard from "../UI/ParentCard"
 import FormInput from "../UI/FormInput"
@@ -10,6 +15,7 @@ import SecondaryButton from "../UI/SecondaryButton"
 import ExerciseCard from "./ExerciseCard"
 
 export default function CreateWorkout() {
+  const { items, handleDragEnd } = useDragSorting(["0", "2"])
   const { handleSubmit, reset, control } = useForm()
 
   const handleSubmitForm = (formData) => console.log("formdata", formData)
@@ -27,13 +33,22 @@ export default function CreateWorkout() {
           </div>
           <SecondaryButton label="Add Exercise" type="button" />
           <div className="flex flex-col gap-7 p-4 border-2 border-solid border-black rounded-2xl">
-            <div>hello world</div>
-            <ExerciseCard
-              control={control}
-              exerciseName="test"
-              setsName="test"
-              repsName="test"
-            />
+            <DragSortable
+              items={items}
+              sortingStrategy={verticalListSortingStrategy}
+              onDragEnd={handleDragEnd}
+            >
+              {items.map((itemId) => (
+                <ExerciseCard
+                  exerciseId={itemId.toString()}
+                  key={itemId}
+                  control={control}
+                  exerciseName={`test${itemId}`}
+                  setsName={`test${itemId}`}
+                  repsName={`test${itemId}`}
+                />
+              ))}
+            </DragSortable>
           </div>
           <div className="flex items-center justify-end gap-3">
             <SecondaryButton

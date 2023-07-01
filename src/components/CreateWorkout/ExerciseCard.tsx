@@ -1,5 +1,8 @@
 import React from "react"
+// react-hook-form
 import { Control, FieldValues } from "react-hook-form"
+// dnd
+import { useSortable } from "@dnd-kit/sortable"
 // components
 import DragIcon from "../UI/icons/DragIcon"
 import SecondaryCard from "../UI/SecondaryCard"
@@ -7,6 +10,7 @@ import Text from "../UI/typography/Text"
 import FormInput from "../UI/FormInput"
 
 interface ExerciseCardProps {
+  exerciseId: string
   exerciseName: string
   control: Control<FieldValues>
   setsName: string
@@ -14,33 +18,49 @@ interface ExerciseCardProps {
 }
 
 export default function ExerciseCard({
+  exerciseId,
   exerciseName,
   control,
   setsName,
   repsName,
 }: ExerciseCardProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: exerciseId })
+
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0) scaleX(${
+          transform.scaleX - 0.05
+        }) scaleY(${transform.scaleY - 0.05})`
+      : undefined,
+    transition,
+    touchAction: "none",
+  }
+
   return (
-    <SecondaryCard className="p-3 flex items-center gap-4">
-      <DragIcon />
-      <div className="flex flex-col gap-3">
-        <Text text={`Name: ${exerciseName}`} bold />
-        <div className="flex items-center gap-4">
-          <FormInput
-            control={control}
-            label="Sets"
-            name={setsName}
-            type="number"
-            inputClassName="text-center"
-          />
-          <FormInput
-            control={control}
-            label="Reps"
-            name={repsName}
-            type="number"
-            inputClassName="text-center"
-          />
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <SecondaryCard className="p-3 flex items-center gap-4">
+        <DragIcon />
+        <div className="flex flex-col gap-3">
+          <Text text={`Name: ${exerciseName}`} bold />
+          <div className="flex items-center gap-4">
+            <FormInput
+              control={control}
+              label="Sets"
+              name={setsName}
+              type="number"
+              inputClassName="text-center"
+            />
+            <FormInput
+              control={control}
+              label="Reps"
+              name={repsName}
+              type="number"
+              inputClassName="text-center"
+            />
+          </div>
         </div>
-      </div>
-    </SecondaryCard>
+      </SecondaryCard>
+    </div>
   )
 }
