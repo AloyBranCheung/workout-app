@@ -7,6 +7,7 @@ import ParentCard from "../UI/ParentCard"
 import FormInput from "../UI/FormInput"
 import PrimaryButton from "../UI/PrimaryButton"
 import SecondaryButton from "../UI/SecondaryButton"
+import ExerciseCard from "./ExerciseCard"
 
 export default function CreateWorkout() {
   const { handleSubmit, reset, control } = useForm()
@@ -25,6 +26,15 @@ export default function CreateWorkout() {
             <FormInput control={control} name="name" />
           </div>
           <SecondaryButton label="Add Exercise" type="button" />
+          <div className="flex flex-col gap-7 p-4 border-2 border-solid border-black rounded-2xl">
+            <div>hello world</div>
+            <ExerciseCard
+              control={control}
+              exerciseName="test"
+              setsName="test"
+              repsName="test"
+            />
+          </div>
           <div className="flex items-center justify-end gap-3">
             <SecondaryButton
               label="Cancel"

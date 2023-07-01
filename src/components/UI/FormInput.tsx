@@ -1,10 +1,13 @@
 import React from "react"
 import { UseControllerProps, Controller, FieldValues } from "react-hook-form"
 import { startCase } from "lodash"
+import { twMerge } from "tailwind-merge"
 
 interface FormInputProps<FV extends FieldValues> {
   name: UseControllerProps<FV>["name"]
   control: UseControllerProps<FV>["control"]
+  label?: string
+  inputClassName?: string
   type?: React.InputHTMLAttributes<HTMLInputElement>["type"]
   autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"]
   required?: React.InputHTMLAttributes<HTMLInputElement>["required"]
@@ -16,6 +19,8 @@ export default function FormInput<FV extends FieldValues>({
   type,
   autoComplete,
   required,
+  inputClassName,
+  label,
 }: FormInputProps<FV>) {
   return (
     <Controller
@@ -25,10 +30,13 @@ export default function FormInput<FV extends FieldValues>({
         <div className="flex flex-col gap-1">
           <div className="flex justify-between items-center w-full gap-2">
             <label htmlFor={name}>
-              <b>{startCase(name)}:</b>
+              <b>{label || startCase(name)}:</b>
             </label>
             <input
-              className="border-solid border-black border-2 rounded-2xl"
+              className={twMerge(
+                "border-solid border-black border-2 rounded-2xl w-full",
+                inputClassName
+              )}
               required={required}
               autoComplete={autoComplete}
               type={type}
