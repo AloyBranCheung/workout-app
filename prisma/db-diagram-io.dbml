@@ -43,6 +43,8 @@ Table Session {
   sessionId string [pk, unique, default: 'uuid()', ref: < Set.sessionId]
   createdAt timestamp [default: 'now()']
   updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  duration integer
+  exerciseOrder "integer[]"
   planId string
   activityId string [unique]
 }

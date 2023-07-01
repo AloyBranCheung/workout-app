@@ -77,11 +77,13 @@ model Exercise {
 
 // Session Table for each workout 'session'
 model Session {
-  sessionId String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt DateTime @default(now()) @updatedAt
-  createdAt DateTime @default(now())
+  sessionId     String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt     DateTime @default(now()) @updatedAt
+  createdAt     DateTime @default(now())
+  duration      Int
+  exerciseOrder Int // array of integers Exercise.exerciseId 
   // relations
-  sets      Set[]
+  sets          Set[]
 
   workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId])
   planId      String      @db.Uuid
