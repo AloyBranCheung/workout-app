@@ -34,10 +34,12 @@ export default function Workouts({ plans }: WorkoutsProps) {
                 <Text text={name} typography={Typography.p2} bold />
                 <div>
                   <Text
+                    testId={`last-workout-${id}`}
                     text={`Last Workout: ${unixToIsoDate(lastWorkout)}`}
                     typography={Typography.p3}
                   />
                   <Text
+                    testId={`workout-duration-${id}`}
                     text={`Duration: ${new MsToStrTime(
                       duration
                     ).msToStrTime()}`}

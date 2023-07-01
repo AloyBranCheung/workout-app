@@ -15,9 +15,16 @@ interface TextProps {
   typography: Typography
   className?: string
   bold?: boolean
+  testId?: string
 }
 
-export default function Text({ text, className, bold, typography }: TextProps) {
+export default function Text({
+  text,
+  className,
+  bold,
+  typography,
+  testId,
+}: TextProps) {
   const fontSize = () => {
     switch (typography) {
       case Typography.h3:
@@ -34,7 +41,7 @@ export default function Text({ text, className, bold, typography }: TextProps) {
   }
 
   return (
-    <p className={twMerge(fontSize(), className)}>
+    <p className={twMerge(fontSize(), className)} data-testId={testId}>
       {bold ? <strong>{text}</strong> : text}
     </p>
   )

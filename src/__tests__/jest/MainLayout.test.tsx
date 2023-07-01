@@ -4,11 +4,20 @@ import userEvent from "@testing-library/user-event"
 // component
 import TopNavbar from "src/components/MainLayout/TopNavbar"
 
-jest.mock("next/router", () => require("next-router-mock"))
 const mockFn = jest.fn()
 
-describe("TopNavbar", () => {
-  it("renders a topnavbar", async () => {
+const topNavbar = async () => {
+  const heading = await screen.getByRole("heading", {
+    name: /simplyworkouts/i,
+  })
+  const hamburgerIcon = await screen.getByRole("img", {
+    name: /navbar-menu-icon/i,
+  })
+  return { heading, hamburgerIcon }
+}
+
+describe("test MainLayout's TopNavbar", () => {
+  it("should render a topnavbar", async () => {
     render(
       <TopNavbar
         isMenuOpen={false}
@@ -19,18 +28,17 @@ describe("TopNavbar", () => {
       />
     )
 
-    const heading = await screen.getByRole("heading", {
-      name: /simplyworkouts/i,
-    })
-    const hamburgerIcon = await screen.getByRole("img", {
-      name: /navbar-menu-icon/i,
-    })
+    const { heading, hamburgerIcon } = await topNavbar()
+
+    const logoutBtn = await screen.queryByRole("button", { name: /logout/i })
+    expect(logoutBtn).not.toBeInTheDocument()
 
     expect(heading).toBeInTheDocument()
     expect(hamburgerIcon).toBeInTheDocument()
   })
 
-  it("shows dropdown menu", async () => {
+  it("should show a dropdown menu", async () => {
+    const user = userEvent.setup()
     render(
       <TopNavbar
         onClickLogout={mockFn}
@@ -40,13 +48,14 @@ describe("TopNavbar", () => {
         isMenuOpen={true}
       />
     )
-    const user = userEvent.setup()
-    await hamburgerIcon = await screen.getByRole('img', {  name: /navbar\-menu\-icon/i})
-    
-    // expect mockFn toHaveBeenCalled
+    const { hamburgerIcon, heading } = await topNavbar()
+    expect(heading).toBeInTheDocument()
+    expect(hamburgerIcon).toBeInTheDocument()
 
-    const logoutBtn = screen.getByRole("button", { name: /logout/i })
+    await user.click(hamburgerIcon)
+    expect(mockFn).toHaveBeenCalled()
 
-    screen.debug()
+    const logoutBtn = await screen.getByRole("button", { name: /logout/i })
+    expect(logoutBtn).toBeInTheDocument()
   })
 })
