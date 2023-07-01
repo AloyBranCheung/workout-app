@@ -5,9 +5,11 @@ import PrimaryButton from "../UI/PrimaryButton"
 import Text, { Typography } from "../UI/typography/Text"
 import SecondaryCard from "../UI/SecondaryCard"
 import ParentCard from "../UI/ParentCard"
-// types
+// types/utils
+import MsToStrTime from "src/utils/msToStrTime"
 import { WorkoutGetPlansOutput } from "src/types/trpc/router-types"
 import SecondaryButton from "../UI/SecondaryButton"
+import unixToIsoDate from "src/utils/unixToIsoDate"
 
 interface WorkoutsProps {
   plans: WorkoutGetPlansOutput | undefined
@@ -16,7 +18,7 @@ interface WorkoutsProps {
 export default function Workouts({ plans }: WorkoutsProps) {
   const router = useRouter()
   return (
-    <div className="flex flex-col justify-center w-full h-full gap-10">
+    <div className="flex flex-col justify-center w-full h-full gap-8">
       <PrimaryButton
         onClick={() => router.push("/workouts/create-workout")}
         label="create a plan"
@@ -28,7 +30,21 @@ export default function Workouts({ plans }: WorkoutsProps) {
         <ParentCard cardTitle="">
           {plans && plans.workoutPlans.length > 1 ? (
             plans.workoutPlans.map(({ id, duration, lastWorkout, name }) => (
-              <SecondaryCard key={id}>hello world</SecondaryCard>
+              <SecondaryCard key={id}>
+                <Text text={name} typography={Typography.p2} bold />
+                <div>
+                  <Text
+                    text={`Last Workout: ${unixToIsoDate(lastWorkout)}`}
+                    typography={Typography.p3}
+                  />
+                  <Text
+                    text={`Duration: ${new MsToStrTime(
+                      duration
+                    ).msToStrTime()}`}
+                    typography={Typography.p3}
+                  />
+                </div>
+              </SecondaryCard>
             ))
           ) : (
             <SecondaryButton

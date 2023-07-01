@@ -6,6 +6,8 @@ const px = (px: number) => `text-[${px}px]`
 export enum Typography {
   h3 = "h3",
   p1 = "p1",
+  p2 = "p2",
+  p3 = "p3",
 }
 
 interface TextProps {
@@ -22,6 +24,10 @@ export default function Text({ text, className, bold, typography }: TextProps) {
         return px(36)
       case Typography.p1:
         return px(22)
+      case Typography.p2:
+        return px(16)
+      case Typography.p3:
+        return px(14)
       default:
         return px(16)
     }
