@@ -44,7 +44,7 @@ Table Session {
   createdAt timestamp [default: 'now()']
   updatedAt timestamp [default: 'now()', note: '@updatedAt']
   duration integer
-  exerciseOrder "integer[]"
+  exerciseOrder "string[]"
   planId string
   activityId string [unique]
 }
@@ -67,6 +67,7 @@ Table WorkoutPlan {
   planId string [pk, unique, default: 'uuid()', ref: < Session.planId]
   createdAt timestamp [default: 'now()']
   updatedAt timestamp [default: 'now()', note: '@updatedAt']
+  exerciseOrder "string[]"
   name string
   userId string [unique]
 }

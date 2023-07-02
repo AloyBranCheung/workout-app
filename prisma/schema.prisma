@@ -81,7 +81,7 @@ model Session {
   updatedAt     DateTime @default(now()) @updatedAt
   createdAt     DateTime @default(now())
   duration      Int
-  exerciseOrder Int // array of integers Exercise.exerciseId 
+  exerciseOrder String[] // array of integers Exercise.exerciseId 
   // relations
   sets          Set[]
 
@@ -111,13 +111,14 @@ model Set {
 }
 
 model WorkoutPlan {
-  planId    String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt DateTime @default(now()) @updatedAt
-  createdAt DateTime @default(now())
-  name      String
+  planId        String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt     DateTime @default(now()) @updatedAt
+  createdAt     DateTime @default(now())
+  name          String
+  exerciseOrder String[]
   // relations
-  user      User     @relation(fields: [userId], references: [userId])
-  userId    String
+  user          User     @relation(fields: [userId], references: [userId])
+  userId        String
 
   exercises Exercise[]
   sessions  Session[]
