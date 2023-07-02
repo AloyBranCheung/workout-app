@@ -129,7 +129,10 @@ export default function Exercises({ exercises }: ExercisesProps) {
         isOpen={viewExercise}
         onClose={() => setViewExercise(false)}
       >
-        <ViewExercise />
+        <ViewExercise
+          exercise={exerciseHashmap[selectedExerciseId]}
+          onClose={() => setViewExercise(false)}
+        />
       </Modal>
       <Modal
         cardTitle={`Editing ${exerciseName}`}
