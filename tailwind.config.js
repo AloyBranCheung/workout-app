@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /** @type {import('tailwindcss').Config} */
-const pxToRem = require("./src/utils/pxToRem")
+const pxToRem = require("./src/utils/px-to-rem")
 const plugin = require("tailwindcss/plugin")
 
 const textShadowPlugin = plugin(({ matchUtilities, theme }) => {
