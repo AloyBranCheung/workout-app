@@ -12,6 +12,8 @@ import Modal from "../UI/Modal"
 import InspectIcon from "../UI/icons/InspectIcon"
 import Confirmation from "../UI/Confirmation"
 import AddExerciseForm from "./AddExerciseForm"
+import ViewExercise from "./ViewExercise"
+import EditExercise from "./EditExercise"
 // hooks
 import useMutationDeleteExercise from "src/hooks/useMutationDeleteExercise"
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
@@ -24,6 +26,8 @@ interface ExercisesProps {
 }
 
 export default function Exercises({ exercises }: ExercisesProps) {
+  const [viewExercise, setViewExercise] = useState(false)
+  const [editExercise, setEditExercise] = useState(false)
   const [isAddExercise, setIsAddExercise] = useState(false)
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
   const [selectedExerciseId, setSelectedExerciseId] = useState<string>("")
@@ -40,6 +44,8 @@ export default function Exercises({ exercises }: ExercisesProps) {
   )
 
   const exerciseHashmap = useMemo(() => exerciseHash(exercises), [exercises])
+
+  const exerciseName = exerciseHashmap[selectedExerciseId]?.name ?? ""
 
   const handleCloseAddExercise = () => setIsAddExercise(false)
   const handleCloseConfirmDelete = () => setIsConfirmDelete(false)
@@ -71,12 +77,22 @@ export default function Exercises({ exercises }: ExercisesProps) {
               >
                 <Text text={name} className="text-p2" bold />
                 <div className="flex gap-2 items-center justify-end">
-                  <InspectIcon onClick={() => console.log("clicked")} />
-                  <EditIcon onClick={() => console.log("clicked")} />
+                  <InspectIcon
+                    onClick={() => {
+                      setSelectedExerciseId(exerciseId)
+                      setViewExercise(true)
+                    }}
+                  />
+                  <EditIcon
+                    onClick={() => {
+                      setSelectedExerciseId(exerciseId)
+                      setEditExercise(true)
+                    }}
+                  />
                   <TrashIcon
                     onClick={() => {
-                      setIsConfirmDelete(true)
                       setSelectedExerciseId(exerciseId)
+                      setIsConfirmDelete(true)
                     }}
                   />
                 </div>
@@ -104,9 +120,23 @@ export default function Exercises({ exercises }: ExercisesProps) {
       >
         <Confirmation
           onClickDecline={handleCloseConfirmDelete}
-          description={`You are about to delete '${exerciseHashmap[selectedExerciseId]?.name}'. This action cannot be undone.`}
+          description={`You are about to delete '${exerciseName}'. This action cannot be undone.`}
           onClickConfirm={handleClickConfirm}
         />
+      </Modal>
+      <Modal
+        cardTitle={`Viewing ${exerciseName}`}
+        isOpen={viewExercise}
+        onClose={() => setViewExercise(false)}
+      >
+        <ViewExercise />
+      </Modal>
+      <Modal
+        cardTitle={`Editing ${exerciseName}`}
+        isOpen={editExercise}
+        onClose={() => setEditExercise(false)}
+      >
+        <EditExercise />
       </Modal>
     </div>
   )
