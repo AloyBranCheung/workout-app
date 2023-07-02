@@ -29,7 +29,7 @@ export default function FormTextarea<FV extends FieldValues>({
             value={value}
             className="border-2 border-solid border-black rounded-2xl p-2"
           />
-          <FormErrorMsg text={error?.message || ""} />
+          {error && <FormErrorMsg text={error?.message || ""} />}
         </div>
       )}
     />

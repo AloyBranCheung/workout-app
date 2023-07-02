@@ -45,7 +45,7 @@ export default function FormInput<FV extends FieldValues>({
               name={name}
             />
           </div>
-          <p className="text-red-500 text-xs">{error?.message}</p>
+          {error && <p className="text-red-500 text-xs">{error.message}</p>}
         </div>
       )}
     />

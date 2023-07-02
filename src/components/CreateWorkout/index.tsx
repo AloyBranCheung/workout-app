@@ -18,6 +18,7 @@ import Modal from "../UI/Modal"
 import AddExercise from "./AddExercise"
 import { GetExercisesOutput } from "src/types/trpc/router-types"
 import exerciseHash from "src/utils/exercises-hashmap"
+import BorderCard from "../UI/BorderCard"
 
 interface CreateWorkoutProps {
   exercises: GetExercisesOutput | undefined
@@ -64,7 +65,7 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
             onClick={() => setIsAddExercise(true)}
           />
           {items.length > 0 && (
-            <div className="flex flex-col gap-7 p-4 border-2 border-solid border-black rounded-2xl">
+            <BorderCard>
               <DragSortable
                 items={items}
                 sortingStrategy={verticalListSortingStrategy}
@@ -76,12 +77,12 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
                     key={itemId}
                     control={control}
                     exerciseName={exercisesHashmap[itemId].name}
-                    setsName={`test${itemId}`}
-                    repsName={`test${itemId}`}
+                    setsName={`${itemId}-sets`}
+                    repsName={`${itemId}-reps`}
                   />
                 ))}
               </DragSortable>
-            </div>
+            </BorderCard>
           )}
 
           <div className="flex items-center justify-end gap-3">
