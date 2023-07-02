@@ -4,6 +4,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 // react-hook-forms
 import { useForm, FieldValues } from "react-hook-form"
+import { ErrorMessage } from "@hookform/error-message"
 // dnd
 import { verticalListSortingStrategy } from "@dnd-kit/sortable"
 // hooks
@@ -11,6 +12,7 @@ import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 import useDragSorting from "src/hooks/useDragSorting"
 import useMutationAddWorkoutPlan from "src/hooks/useMutationAddWorkoutPlan"
 // components
+import FormErrMsg from "../UI/FormErrorMsg"
 import DragSortable from "../UI/DragSortable"
 import Text from "../UI/typography/Text"
 import ParentCard from "../UI/ParentCard"
@@ -35,9 +37,12 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   const toastMessage = useToastMessage()
   const [isAddExercise, setIsAddExercise] = useState(false)
   const { items, handleDragEnd, setItems } = useDragSorting([])
-  const { handleSubmit, reset, control } = useForm<
-    z.infer<typeof WorkoutPlanSchema> & FieldValues
-  >({
+  const {
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<z.infer<typeof WorkoutPlanSchema> & FieldValues>({
     defaultValues: {
       name: "",
       exercises: {},
@@ -50,6 +55,7 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
       toastMessage("Successfully added workout plan.", ToastMessage.Success)
       reset()
       setItems([])
+      router.push("/workouts")
     },
     () => {
       toastMessage("Failed to add workout plan.", ToastMessage.Error)
@@ -113,7 +119,13 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
               </DragSortable>
             </BorderCard>
           )}
-
+          <ErrorMessage
+            errors={errors}
+            name="exerciseOrder"
+            render={({ message }) => (
+              <FormErrMsg className="self-end" text={message} />
+            )}
+          />
           <div className="flex items-center justify-end gap-3">
             <SecondaryButton
               label="Cancel"

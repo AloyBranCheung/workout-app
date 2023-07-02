@@ -12,7 +12,9 @@ const WorkoutPlanSchema = z
         })
         .required()
     ),
-    exerciseOrder: z.array(z.string()),
+    exerciseOrder: z
+      .array(z.string())
+      .min(1, { message: "At least one exercise required." }),
   })
   .required()
 
