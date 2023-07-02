@@ -13,6 +13,8 @@ interface TopNavbarProps {
   onClickBrand: () => void
   onClickPlan: () => void
   onToggleMenu: () => void
+  onClickExercises: () => void
+  onClickRuns: () => void
   isMenuOpen: boolean
 }
 
@@ -22,6 +24,8 @@ export default function TopNavbar({
   onClickPlan,
   isMenuOpen,
   onToggleMenu,
+  onClickExercises,
+  onClickRuns,
 }: TopNavbarProps) {
   const anchorEl = useRef<HTMLDivElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
@@ -78,8 +82,12 @@ export default function TopNavbar({
                 type="button"
                 onClick={onClickPlan}
               />
-              <PrimaryButton label="exercises" type="button" />
-              <PrimaryButton label="runs" type="button" />
+              <PrimaryButton
+                onClick={onClickExercises}
+                label="exercises"
+                type="button"
+              />
+              <PrimaryButton onClick={onClickRuns} label="runs" type="button" />
               <SecondaryButton
                 label="logout"
                 type="button"

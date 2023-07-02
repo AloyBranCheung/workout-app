@@ -1,61 +1,19 @@
 import "@testing-library/jest-dom"
 import { render, screen } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
-// component
-import TopNavbar from "src/components/MainLayout/TopNavbar"
+// components
+import MainLayout from "src/components/MainLayout"
 
-const mockFn = jest.fn()
+jest.mock("next/router", () => require("next-router-mock"))
 
-const topNavbar = async () => {
-  const heading = await screen.getByRole("heading", {
-    name: /simplyworkouts/i,
-  })
-  const hamburgerIcon = await screen.getByRole("img", {
-    name: /navbar-menu-icon/i,
-  })
-  return { heading, hamburgerIcon }
-}
-
-describe("test MainLayout's TopNavbar", () => {
-  it("should render a topnavbar", async () => {
+describe("test MainLayout", () => {
+  it("should render 404 page", async () => {
     render(
-      <TopNavbar
-        isMenuOpen={false}
-        onClickLogout={mockFn}
-        onClickBrand={mockFn}
-        onClickPlan={mockFn}
-        onToggleMenu={mockFn}
-      />
+      <MainLayout>
+        <div>hello world</div>
+      </MainLayout>
     )
-
-    const { heading, hamburgerIcon } = await topNavbar()
-
-    const logoutBtn = await screen.queryByRole("button", { name: /logout/i })
-    expect(logoutBtn).not.toBeInTheDocument()
-
-    expect(heading).toBeInTheDocument()
-    expect(hamburgerIcon).toBeInTheDocument()
-  })
-
-  it("should show a dropdown menu", async () => {
-    const user = userEvent.setup()
-    render(
-      <TopNavbar
-        onClickLogout={mockFn}
-        onClickBrand={mockFn}
-        onClickPlan={mockFn}
-        onToggleMenu={mockFn}
-        isMenuOpen={true}
-      />
-    )
-    const { hamburgerIcon, heading } = await topNavbar()
-    expect(heading).toBeInTheDocument()
-    expect(hamburgerIcon).toBeInTheDocument()
-
-    await user.click(hamburgerIcon)
-    expect(mockFn).toHaveBeenCalled()
-
-    const logoutBtn = await screen.getByRole("button", { name: /logout/i })
-    expect(logoutBtn).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /Go to login/i }))
+    expect(screen.getByText(/page not found/i))
+    expect(screen.queryByText(/hello world/i)).not.toBeInTheDocument()
   })
 })

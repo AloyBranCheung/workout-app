@@ -34,6 +34,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
     router.push("/workouts")
   }
 
+  const handleClickExercises = () => router.push("/exercises")
+  const handleClickRuns = () => router.push("/running")
+
   return (
     <PageGuard>
       <div className="h-full bg-background">
@@ -44,6 +47,8 @@ export default function MainLayout({ children }: MainLayoutProps) {
             onClickPlan={handleClickPlan}
             onClickLogout={handleClickLogout}
             onClickBrand={handleClickBrand}
+            onClickExercises={handleClickExercises}
+            onClickRuns={handleClickRuns}
           />
           <div className="h-full">
             <Fade>

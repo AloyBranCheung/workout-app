@@ -49,8 +49,18 @@ export default function HomePage({ userAttributes, stats }: HomePageProps) {
           type="button"
           className="w-full"
         />
-        <SecondaryButton label="exercises" type="button" className="w-full" />
-        <SecondaryButton label="runs" type="button" className="w-full" />
+        <SecondaryButton
+          onClick={() => router.push("/exercises")}
+          label="exercises"
+          type="button"
+          className="w-full"
+        />
+        <SecondaryButton
+          onClick={() => router.push("running")}
+          label="runs"
+          type="button"
+          className="w-full"
+        />
       </div>
       <RecentActivity recentActivities={stats?.recentActivity || []} />
       <TopStats topStats={stats?.topStats || defaultTopStats} />
