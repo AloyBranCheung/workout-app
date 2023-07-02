@@ -5,10 +5,10 @@ import SecondaryButton from "./SecondaryButton"
 interface YesNoBtnGroupProps {
   confirmText?: string
   confirmBtnType?: "button" | "submit" | "reset"
-  onClickConfirm: () => void
+  onClickConfirm?: () => void
   declineText?: string
   declineBtnType?: "button" | "submit" | "reset"
-  onClickDecline: () => void
+  onClickDecline?: () => void
 }
 
 export default function YesNoBtnGroup({

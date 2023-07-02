@@ -139,7 +139,10 @@ export default function Exercises({ exercises }: ExercisesProps) {
         isOpen={editExercise}
         onClose={() => setEditExercise(false)}
       >
-        <EditExercise />
+        <EditExercise
+          exercise={exerciseHashmap[selectedExerciseId]}
+          onClose={() => setEditExercise(false)}
+        />
       </Modal>
     </div>
   )
