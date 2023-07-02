@@ -6,10 +6,10 @@ import Text, { Typography } from "../UI/typography/Text"
 import SecondaryCard from "../UI/SecondaryCard"
 import ParentCard from "../UI/ParentCard"
 // types/utils
-import MsToStrTime from "src/utils/msToStrTime"
+import MsToStrTime from "src/utils/MsToStrTime"
 import { WorkoutGetPlansOutput } from "src/types/trpc/router-types"
 import SecondaryButton from "../UI/SecondaryButton"
-import unixToIsoDate from "src/utils/unixToIsoDate"
+import unixToIsoDate from "src/utils/unix-to-ISO-date"
 
 interface WorkoutsProps {
   plans: WorkoutGetPlansOutput | undefined

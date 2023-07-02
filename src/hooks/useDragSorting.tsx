@@ -19,5 +19,5 @@ export default function useDragSorting(startingItems: Array<number | string>) {
     }
   }
 
-  return { items, handleDragEnd }
+  return { items, handleDragEnd, setItems }
 }

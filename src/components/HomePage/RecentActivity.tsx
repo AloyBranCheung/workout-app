@@ -3,8 +3,8 @@ import React from "react"
 import SecondaryCard from "../UI/SecondaryCard"
 import ParentCard from "../UI/ParentCard"
 // types/utils
-import unixToIsoDate from "src/utils/unixToIsoDate"
-import MsToStrTime from "src/utils/msToStrTime"
+import unixToIsoDate from "src/utils/unix-to-ISO-date"
+import MsToStrTime from "src/utils/MsToStrTime"
 import { IRecentActivity } from "src/types/home-page"
 
 interface RecentActivityProps {

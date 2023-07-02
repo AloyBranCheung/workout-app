@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 // react-hook-forms
 import { useForm } from "react-hook-form"
@@ -16,16 +16,45 @@ import SecondaryButton from "../UI/SecondaryButton"
 import ExerciseCard from "./ExerciseCard"
 import Modal from "../UI/Modal"
 import AddExercise from "./AddExercise"
+import { GetExercisesOutput } from "src/types/trpc/router-types"
+import exerciseHash from "src/utils/exercises-hashmap"
 
-export default function CreateWorkout() {
+interface CreateWorkoutProps {
+  exercises: GetExercisesOutput | undefined
+}
+
+export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   const router = useRouter()
   const [isAddExercise, setIsAddExercise] = useState(false)
-  const { items, handleDragEnd } = useDragSorting(["0", "2"])
+  const { items, handleDragEnd, setItems } = useDragSorting([])
   const { handleSubmit, reset, control } = useForm()
+
+  const exercisesHashmap = useMemo(() => exerciseHash(exercises), [exercises])
 
   const handleSubmitForm = (formData) => console.log("formdata", formData)
 
   const handleCloseModal = () => setIsAddExercise(false)
+
+  useEffect(() => {
+    // append an exercise to current items without resetting current item order
+    if (exercises && exercises.length > 0) {
+      const currItemsHash: { [key: string | number]: boolean } = {}
+      for (const item of items) {
+        if (!(item in currItemsHash)) {
+          currItemsHash[item] = true
+        }
+      }
+      const exerciseIdArr = exercises.map((exercise) => exercise.exerciseId)
+      const newItemsArr: (string | number)[] = [...items]
+      for (const exerciseId of exerciseIdArr) {
+        if (!(exerciseId in currItemsHash)) {
+          newItemsArr.push(exerciseId)
+        }
+      }
+      setItems(newItemsArr)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setItems, exercises])
 
   return (
     <div className="flex flex-col justify-center gap-5">
@@ -54,7 +83,7 @@ export default function CreateWorkout() {
                   exerciseId={itemId.toString()}
                   key={itemId}
                   control={control}
-                  exerciseName={`test${itemId}`}
+                  exerciseName={exercisesHashmap[itemId].name}
                   setsName={`test${itemId}`}
                   repsName={`test${itemId}`}
                 />

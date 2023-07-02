@@ -8,7 +8,8 @@ import SecondaryCard from "../UI/SecondaryCard"
 import EditIcon from "../UI/icons/EditIcon"
 import TrashIcon from "../UI/icons/TrashIcon"
 import Modal from "../UI/Modal"
-// types
+// types/utils
+import exerciseHash from "src/utils/exercises-hashmap"
 import { GetExercisesOutput } from "src/types/trpc/router-types"
 import InspectIcon from "../UI/icons/InspectIcon"
 import AddExercise from "../CreateWorkout/AddExercise"
@@ -37,16 +38,7 @@ export default function Exercises({ exercises }: ExercisesProps) {
     }
   )
 
-  const exerciseHashmap = useMemo(() => {
-    if (!exercises) return {}
-    const hashmap: { [key: string]: GetExercisesOutput[number] } = {}
-    for (const exercise of exercises) {
-      if (!(exercise.exerciseId in hashmap)) {
-        hashmap[exercise.exerciseId] = exercise
-      }
-    }
-    return hashmap
-  }, [exercises])
+  const exerciseHashmap = useMemo(() => exerciseHash(exercises), [exercises])
 
   const handleCloseAddExercise = () => setIsAddExercise(false)
   const handleCloseConfirmDelete = () => setIsConfirmDelete(false)
