@@ -81,8 +81,12 @@ model Target {
   createdAt  DateTime @default(now())
   targetReps Int
   targetSets Int
+  // relations
   exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId], onDelete: Cascade)
   exerciseId String   @unique @db.Uuid
+
+  workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId], onDelete: Cascade)
+  planId      String      @db.Uuid
 }
 
 // Session Table for each workout 'session'
@@ -134,6 +138,7 @@ model WorkoutPlan {
 
   exercises Exercise[]
   sessions  Session[]
+  targets   Target[]
 }
 
 model RunPlan {

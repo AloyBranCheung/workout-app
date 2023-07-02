@@ -44,6 +44,7 @@ Table Target {
   targetSets integer
   targetReps integer
   exerciseId string [unique]
+  planId string [unique]
 }
 
 // Session Table for each workout 'session'
@@ -72,7 +73,7 @@ Table Set {
 
 
 Table WorkoutPlan {
-  planId string [pk, unique, default: 'uuid()', ref: < Session.planId]
+  planId string [pk, unique, default: 'uuid()', ref: < Session.planId, ref: < Target.planId]
   createdAt timestamp [default: 'now()']
   updatedAt timestamp [default: 'now()', note: '@updatedAt']
   exerciseOrder "string[]"
