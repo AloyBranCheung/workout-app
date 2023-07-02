@@ -1,5 +1,6 @@
 import React from "react"
 import { useRouter } from "next/router"
+import dayjs from "dayjs"
 // components
 import PrimaryButton from "../UI/PrimaryButton"
 import Text, { Typography } from "../UI/typography/Text"
@@ -9,7 +10,6 @@ import ParentCard from "../UI/ParentCard"
 import MsToStrTime from "src/utils/MsToStrTime"
 import { GetWorkoutPlansOutput } from "src/types/trpc/router-types"
 import SecondaryButton from "../UI/SecondaryButton"
-import unixToIsoDate from "src/utils/unix-to-ISO-date"
 
 interface WorkoutsProps {
   plans: GetWorkoutPlansOutput | undefined
@@ -46,7 +46,7 @@ export default function Workouts({ plans }: WorkoutsProps) {
                     testId={`last-workout-${planId}`}
                     text={`Last Workout: ${
                       lastWorkout
-                        ? unixToIsoDate(lastWorkout)
+                        ? dayjs(lastWorkout).format("YYYY-MM-DD")
                         : "Get Started :)"
                     }`}
                     typography={Typography.p3}
