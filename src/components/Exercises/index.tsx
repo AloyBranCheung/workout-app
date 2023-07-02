@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react"
+import { z } from "zod"
 // components
 import PrimaryButton from "../UI/PrimaryButton"
 import SecondaryButton from "../UI/SecondaryButton"
@@ -8,15 +9,15 @@ import SecondaryCard from "../UI/SecondaryCard"
 import EditIcon from "../UI/icons/EditIcon"
 import TrashIcon from "../UI/icons/TrashIcon"
 import Modal from "../UI/Modal"
+import InspectIcon from "../UI/icons/InspectIcon"
+import Confirmation from "../UI/Confirmation"
+import AddExerciseForm from "./AddExerciseForm"
+// hooks
+import useMutationDeleteExercise from "src/hooks/useMutationDeleteExercise"
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // types/utils
 import exerciseHash from "src/utils/exercises-hashmap"
 import { GetExercisesOutput } from "src/types/trpc/router-types"
-import InspectIcon from "../UI/icons/InspectIcon"
-import AddExercise from "../CreateWorkout/AddExercise"
-import Confirmation from "../UI/Confirmation"
-import useMutationDeleteExercise from "src/hooks/useMutationDeleteExercise"
-import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
-import { z } from "zod"
 
 interface ExercisesProps {
   exercises: GetExercisesOutput | undefined
@@ -91,7 +92,10 @@ export default function Exercises({ exercises }: ExercisesProps) {
         </ParentCard>
       </div>
       <Modal isOpen={isAddExercise} onClose={handleCloseAddExercise}>
-        <AddExercise onClickCancel={handleCloseAddExercise} />
+        <AddExerciseForm
+          onClickCancel={handleCloseAddExercise}
+          onSubmitSuccess={() => handleCloseAddExercise()}
+        />
       </Modal>
       <Modal
         cardTitle="Are you sure?"
