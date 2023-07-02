@@ -5,10 +5,10 @@ import MainLayout from "src/components/MainLayout"
 import Workouts from "src/components/Workouts"
 import Fade from "src/components/UI/transitions/Fade"
 // hooks
-import useWorkoutPlans from "src/hooks/useWorkoutPlans"
+import useGetWorkoutPlans from "src/hooks/useGetWorkoutPlans"
 
 export default function WorkoutsPage() {
-  const { data: plans, isLoading } = useWorkoutPlans()
+  const { data: plans, isLoading } = useGetWorkoutPlans()
   return isLoading ? (
     <LoadingSpinner />
   ) : (

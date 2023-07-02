@@ -7,12 +7,12 @@ import SecondaryCard from "../UI/SecondaryCard"
 import ParentCard from "../UI/ParentCard"
 // types/utils
 import MsToStrTime from "src/utils/MsToStrTime"
-import { WorkoutGetPlansOutput } from "src/types/trpc/router-types"
+import { GetWorkoutPlansOutput } from "src/types/trpc/router-types"
 import SecondaryButton from "../UI/SecondaryButton"
 import unixToIsoDate from "src/utils/unix-to-ISO-date"
 
 interface WorkoutsProps {
-  plans: WorkoutGetPlansOutput | undefined
+  plans: GetWorkoutPlansOutput | undefined
 }
 
 export default function Workouts({ plans }: WorkoutsProps) {
@@ -32,9 +32,9 @@ export default function Workouts({ plans }: WorkoutsProps) {
           className="text-h3"
         />
         <ParentCard cardTitle="">
-          {plans && plans.workoutPlans.length > 1 ? (
-            plans.workoutPlans.map(({ id, duration, lastWorkout, name }) => (
-              <SecondaryCard key={id}>
+          {plans && plans.length > 0 ? (
+            plans.map(({ planId, name, lastWorkout, duration }) => (
+              <SecondaryCard key={planId}>
                 <Text
                   text={name}
                   typography={Typography.p2}
@@ -43,16 +43,22 @@ export default function Workouts({ plans }: WorkoutsProps) {
                 />
                 <div>
                   <Text
-                    testId={`last-workout-${id}`}
-                    text={`Last Workout: ${unixToIsoDate(lastWorkout)}`}
+                    testId={`last-workout-${planId}`}
+                    text={`Last Workout: ${
+                      lastWorkout
+                        ? unixToIsoDate(lastWorkout)
+                        : "Get Started :)"
+                    }`}
                     typography={Typography.p3}
                     className="text-p3"
                   />
                   <Text
-                    testId={`workout-duration-${id}`}
-                    text={`Duration: ${new MsToStrTime(
+                    testId={`workout-duration-${planId}`}
+                    text={`Duration: ${
                       duration
-                    ).msToStrTime()}`}
+                        ? new MsToStrTime(duration).msToStrTime()
+                        : "Get Started :)"
+                    } `}
                     typography={Typography.p3}
                     className="text-p3"
                   />

@@ -14,6 +14,6 @@ export type StatsOutput = RouterOutput["stats"]["getStats"]
 /*                               Workouts Router                              */
 /* -------------------------------------------------------------------------- */
 
-export type WorkoutGetPlansOutput = RouterOutput["workouts"]["getPlans"]
+export type GetWorkoutPlansOutput = RouterOutput["workouts"]["getWorkoutPlans"]
 
 export type GetExercisesOutput = RouterOutput["workouts"]["getExercises"]

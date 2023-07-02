@@ -111,13 +111,15 @@ model Set {
 }
 
 model WorkoutPlan {
-  planId        String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt     DateTime @default(now()) @updatedAt
-  createdAt     DateTime @default(now())
+  planId        String    @id @unique @default(uuid()) @db.Uuid
+  updatedAt     DateTime  @default(now()) @updatedAt
+  createdAt     DateTime  @default(now())
   name          String
   exerciseOrder String[]
+  lastWorkout   DateTime?
+  duration      Int?
   // relations
-  user          User     @relation(fields: [userId], references: [userId])
+  user          User      @relation(fields: [userId], references: [userId])
   userId        String
 
   exercises Exercise[]
