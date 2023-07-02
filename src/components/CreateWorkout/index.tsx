@@ -1,11 +1,15 @@
 import React, { useMemo, useState } from "react"
 import { useRouter } from "next/router"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 // react-hook-forms
-import { useForm } from "react-hook-form"
+import { useForm, FieldValues } from "react-hook-form"
 // dnd
 import { verticalListSortingStrategy } from "@dnd-kit/sortable"
 // hooks
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 import useDragSorting from "src/hooks/useDragSorting"
+import useMutationAddWorkoutPlan from "src/hooks/useMutationAddWorkoutPlan"
 // components
 import DragSortable from "../UI/DragSortable"
 import Text from "../UI/typography/Text"
@@ -19,6 +23,8 @@ import AddExercise from "./AddExercise"
 import { GetExercisesOutput } from "src/types/trpc/router-types"
 import exerciseHash from "src/utils/exercises-hashmap"
 import BorderCard from "../UI/BorderCard"
+// types
+import WorkoutPlanSchema from "src/validators/add-workout-schema"
 
 interface CreateWorkoutProps {
   exercises: GetExercisesOutput | undefined
@@ -26,9 +32,29 @@ interface CreateWorkoutProps {
 
 export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   const router = useRouter()
+  const toastMessage = useToastMessage()
   const [isAddExercise, setIsAddExercise] = useState(false)
   const { items, handleDragEnd, setItems } = useDragSorting([])
-  const { handleSubmit, reset, control } = useForm()
+  const { handleSubmit, reset, control } = useForm<
+    z.infer<typeof WorkoutPlanSchema> & FieldValues
+  >({
+    defaultValues: {
+      name: "",
+      exercises: {},
+      exerciseOrder: [],
+    },
+    resolver: zodResolver(WorkoutPlanSchema),
+  })
+  const { mutate } = useMutationAddWorkoutPlan(
+    () => {
+      toastMessage("Successfully added workout plan.", ToastMessage.Success)
+      reset()
+      setItems([])
+    },
+    () => {
+      toastMessage("Failed to add workout plan.", ToastMessage.Error)
+    }
+  )
 
   const exercisesHashmap = useMemo(() => exerciseHash(exercises), [exercises])
   const itemsHash = useMemo(() => {
@@ -41,7 +67,10 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
     return hash
   }, [items])
 
-  const handleSubmitForm = (formData) => console.log("formdata", formData)
+  const handleSubmitForm = (formData: z.infer<typeof WorkoutPlanSchema>) => {
+    formData.exerciseOrder = items as string[]
+    mutate(formData)
+  }
 
   const handleCloseModal = () => setIsAddExercise(false)
 
@@ -77,8 +106,8 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
                     key={itemId}
                     control={control}
                     exerciseName={exercisesHashmap[itemId].name}
-                    setsName={`${itemId}-sets`}
-                    repsName={`${itemId}-reps`}
+                    setsName={`exercises.${itemId}.sets`}
+                    repsName={`exercises.${itemId}.reps`}
                   />
                 ))}
               </DragSortable>

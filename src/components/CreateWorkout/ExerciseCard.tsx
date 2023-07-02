@@ -8,11 +8,13 @@ import DragIcon from "../UI/icons/DragIcon"
 import SecondaryCard from "../UI/SecondaryCard"
 import Text from "../UI/typography/Text"
 import FormInput from "../UI/FormInput"
+import WorkoutPlanSchema from "src/validators/add-workout-schema"
+import { z } from "zod"
 
 interface ExerciseCardProps {
   exerciseId: string
   exerciseName: string
-  control: Control<FieldValues>
+  control: Control<FieldValues & z.infer<typeof WorkoutPlanSchema>>
   setsName: string
   repsName: string
 }
