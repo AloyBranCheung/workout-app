@@ -45,7 +45,7 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
     },
     resolver: zodResolver(WorkoutPlanSchema),
   })
-  const { mutate } = useMutationAddWorkoutPlan(
+  const { mutate, isLoading } = useMutationAddWorkoutPlan(
     () => {
       toastMessage("Successfully added workout plan.", ToastMessage.Success)
       reset()
@@ -121,7 +121,12 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
               className="py-2 px-3"
               onClick={() => router.back()}
             />
-            <PrimaryButton label="Submit" type="submit" className="py-2 px-3" />
+            <PrimaryButton
+              label="Submit"
+              type="submit"
+              className="py-2 px-3"
+              isLoading={isLoading}
+            />
           </div>
         </form>
       </ParentCard>

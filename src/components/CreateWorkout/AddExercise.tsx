@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 // components
 import Text from "../UI/typography/Text"
 import PrimaryButton from "../UI/PrimaryButton"
@@ -42,18 +43,26 @@ export default function AddExercise({
         <div className="flex flex-col gap-4">
           {exercises.length > 0 ? (
             exercises.map(({ exerciseId, name }) => (
-              <SecondaryCard
-                key={exerciseId}
-                className="flex items-center justify-between"
-              >
-                <Text text={name} />
-                <PrimaryButton
-                  label="Add"
-                  type="button"
-                  className="p-2 py-0"
-                  onClick={() => onClickAdd(exerciseId)}
-                />
-              </SecondaryCard>
+              <AnimatePresence key={exerciseId}>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <SecondaryCard
+                    key={exerciseId}
+                    className="flex items-center justify-between"
+                  >
+                    <Text text={name} />
+                    <PrimaryButton
+                      label="Add"
+                      type="button"
+                      className="p-2 py-0"
+                      onClick={() => onClickAdd(exerciseId)}
+                    />
+                  </SecondaryCard>
+                </motion.div>
+              </AnimatePresence>
             ))
           ) : (
             <Text
