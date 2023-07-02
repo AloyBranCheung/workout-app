@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useRouter } from "next/router"
 // react-hook-forms
 import { useForm } from "react-hook-form"
 // dnd
@@ -17,6 +18,7 @@ import Modal from "../UI/Modal"
 import AddExercise from "./AddExercise"
 
 export default function CreateWorkout() {
+  const router = useRouter()
   const [isAddExercise, setIsAddExercise] = useState(false)
   const { items, handleDragEnd } = useDragSorting(["0", "2"])
   const { handleSubmit, reset, control } = useForm()
@@ -27,7 +29,7 @@ export default function CreateWorkout() {
 
   return (
     <div className="flex flex-col justify-center gap-5">
-      <Text text="Create a Workout Plan" className="text-p1" />
+      <Text text="Create a Workout Plan" className="text-p1" bold />
       <ParentCard>
         <form
           onSubmit={handleSubmit(handleSubmitForm)}
@@ -64,6 +66,7 @@ export default function CreateWorkout() {
               label="Cancel"
               type="button"
               className="py-2 px-3"
+              onClick={() => router.back()}
             />
             <PrimaryButton label="Submit" type="submit" className="py-2 px-3" />
           </div>
