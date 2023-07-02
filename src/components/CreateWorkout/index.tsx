@@ -77,7 +77,7 @@ export default function CreateWorkout() {
         onClose={handleCloseModal}
         cardTitle="Add Exercise"
       >
-        <AddExercise />
+        <AddExercise onClickCancel={() => setIsAddExercise(false)} />
       </Modal>
     </div>
   )

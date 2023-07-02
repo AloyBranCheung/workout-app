@@ -63,8 +63,8 @@ model Exercise {
   updatedAt   DateTime @default(now()) @updatedAt
   createdAt   DateTime @default(now())
   name        String
-  targetSets  Int
-  targetReps  Int
+  targetSets  Int?
+  targetReps  Int?
   description String?
   url         String?
   // relations

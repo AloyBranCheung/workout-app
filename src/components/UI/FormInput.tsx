@@ -34,7 +34,7 @@ export default function FormInput<FV extends FieldValues>({
             </label>
             <input
               className={twMerge(
-                "border-solid border-black border-2 rounded-2xl w-full",
+                "border-solid border-black border-2 rounded-2xl w-full px-2",
                 inputClassName
               )}
               required={required}

@@ -13,7 +13,7 @@ import Card from "src/components/UI/Card"
 import FormInput from "src/components/UI/FormInput"
 // types/utils/validators
 import { z } from "zod"
-import LoginSchema from "src/validators/loginSchema"
+import LoginSchema from "src/validators/login-schema"
 import Button from "src/components/UI/Button"
 
 export default function Login() {

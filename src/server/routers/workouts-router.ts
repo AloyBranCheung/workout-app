@@ -1,15 +1,11 @@
-import { tProtectedProcedure, trouter } from "../trpc"
-import { MOCK_WORKOUT_PLANS } from "src/mocks/workouts"
+import { trouter } from "../trpc"
+// procedures
+import getPlans from "../procedures/workouts-procedures/get-plans"
+import addExercise from "../procedures/workouts-procedures/add-exercise"
 
 const workoutsRouter = trouter({
-  getPlans: tProtectedProcedure.query(async () => {
-    // const {
-    //   ctx: { user },
-    // } = opts
-
-    // const userId = user.id
-    return { workoutPlans: MOCK_WORKOUT_PLANS }
-  }),
+  getPlans,
+  addExercise,
 })
 
 export default workoutsRouter
