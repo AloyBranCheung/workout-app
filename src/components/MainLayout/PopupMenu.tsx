@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 // types/utils
 import { OffsetPosition, Position } from "src/types/PopupMenuTypes"
-import pxToRem from "src/utils/pxToRem"
+import pxToRem from "src/utils/px-to-rem"
 
 export interface PopupMenuProps {
   isOpen: boolean

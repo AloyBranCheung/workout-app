@@ -17,9 +17,9 @@ const isAuthed = tmiddleware((opts) => {
 
   if (ctx instanceof TRPCError) {
     throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
-      message: "createContextFn Error",
-      cause: ctx,
+      code: ctx.code,
+      message: ctx.message,
+      cause: ctx.cause,
     })
   }
 

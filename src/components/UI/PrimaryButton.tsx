@@ -7,6 +7,7 @@ interface PrimaryButtonProps {
   onClick?: () => void
   type: "button" | "submit" | "reset"
   className?: string
+  isLoading?: boolean
 }
 
 export default function PrimaryButton({
@@ -14,8 +15,11 @@ export default function PrimaryButton({
   onClick,
   type,
   className,
+  isLoading,
 }: PrimaryButtonProps) {
-  return (
+  return isLoading ? (
+    <div className="flex items-center">Loading...</div>
+  ) : (
     <Button
       label={label}
       onClick={onClick}

@@ -18,7 +18,7 @@ const main = async () => {
   try {
     const deletedUser = await prisma.user.delete({
       where: {
-        user_id: validatedUuid,
+        userId: validatedUuid,
       },
     })
     await prisma.$disconnect()

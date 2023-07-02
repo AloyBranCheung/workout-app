@@ -1,0 +1,13 @@
+name: Jest Tests
+on:
+  pull_request:
+    branches: [main, master]
+jobs:
+  Jest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install node_modules
+        run: yarn install
+      - name: Run Jest Tests
+        run: yarn jest-ci

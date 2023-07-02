@@ -20,7 +20,7 @@ function getBaseUrl() {
 }
 
 export const trpc = createTRPCNext<AppRouter>({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   config(opts) {
     return {
       links: [
@@ -58,12 +58,12 @@ export const createContextFn = async ({
     } = await supabase.auth.getSession()
 
     if (!session)
-      return new TRPCError({ code: "UNAUTHORIZED", message: "No session." })
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "No session." })
 
     return { user: session.user, req, res }
   } catch (error) {
-    return new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
       message: "Error getting session.",
       cause: error,
     })
