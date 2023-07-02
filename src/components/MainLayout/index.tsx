@@ -34,8 +34,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
     router.push("/workouts")
   }
 
-  const handleClickExercises = () => router.push("/exercises")
-  const handleClickRuns = () => router.push("/running")
+  const handleClickExercises = () => {
+    setIsMenuOpen(false)
+    router.push("/exercises")
+  }
+  const handleClickRuns = () => {
+    setIsMenuOpen(false)
+    router.push("/running")
+  }
 
   return (
     <PageGuard>

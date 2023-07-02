@@ -8,6 +8,9 @@ const getExercises = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       where: {
         userId: user.id,
       },
+      orderBy: {
+        name: "asc",
+      },
     })
     return exercises
   } catch (error) {
