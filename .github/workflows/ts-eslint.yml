@@ -1,8 +1,8 @@
 name: Typescript Eslint Recommended
 on:
   pull_request:
-    branches:
-      - master
+    branches: [main, master]
+
 jobs:
   ESLint:
     runs-on: ubuntu-latest
