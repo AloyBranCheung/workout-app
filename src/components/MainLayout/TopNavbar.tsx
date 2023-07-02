@@ -33,7 +33,7 @@ export default function TopNavbar({
   return (
     <div
       ref={anchorEl}
-      className="sticky top-0 border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full z-[99999999]"
+      className="sticky top-0 border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full z-[100]"
     >
       <div className="w-full max-w-7xl flex items-center justify-between px-5 py-3">
         <h4

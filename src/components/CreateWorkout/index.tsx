@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useMemo, useState } from "react"
 import { useRouter } from "next/router"
 // react-hook-forms
 import { useForm } from "react-hook-form"
@@ -30,31 +30,22 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   const { handleSubmit, reset, control } = useForm()
 
   const exercisesHashmap = useMemo(() => exerciseHash(exercises), [exercises])
+  const itemsHash = useMemo(() => {
+    const hash: { [key: string]: boolean } = {}
+    for (const item of items) {
+      if (!(item in items)) {
+        hash[item] = true
+      }
+    }
+    return hash
+  }, [items])
 
   const handleSubmitForm = (formData) => console.log("formdata", formData)
 
   const handleCloseModal = () => setIsAddExercise(false)
 
-  useEffect(() => {
-    // append an exercise to current items without resetting current item order
-    if (exercises && exercises.length > 0) {
-      const currItemsHash: { [key: string | number]: boolean } = {}
-      for (const item of items) {
-        if (!(item in currItemsHash)) {
-          currItemsHash[item] = true
-        }
-      }
-      const exerciseIdArr = exercises.map((exercise) => exercise.exerciseId)
-      const newItemsArr: (string | number)[] = [...items]
-      for (const exerciseId of exerciseIdArr) {
-        if (!(exerciseId in currItemsHash)) {
-          newItemsArr.push(exerciseId)
-        }
-      }
-      setItems(newItemsArr)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setItems, exercises])
+  const handleClickAdd = (exerciseId: string) =>
+    setItems([...items, exerciseId])
 
   return (
     <div className="flex flex-col justify-center gap-5">
@@ -72,24 +63,27 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
             type="button"
             onClick={() => setIsAddExercise(true)}
           />
-          <div className="flex flex-col gap-7 p-4 border-2 border-solid border-black rounded-2xl">
-            <DragSortable
-              items={items}
-              sortingStrategy={verticalListSortingStrategy}
-              onDragEnd={handleDragEnd}
-            >
-              {items.map((itemId) => (
-                <ExerciseCard
-                  exerciseId={itemId.toString()}
-                  key={itemId}
-                  control={control}
-                  exerciseName={exercisesHashmap[itemId].name}
-                  setsName={`test${itemId}`}
-                  repsName={`test${itemId}`}
-                />
-              ))}
-            </DragSortable>
-          </div>
+          {items.length > 0 && (
+            <div className="flex flex-col gap-7 p-4 border-2 border-solid border-black rounded-2xl">
+              <DragSortable
+                items={items}
+                sortingStrategy={verticalListSortingStrategy}
+                onDragEnd={handleDragEnd}
+              >
+                {items.map((itemId) => (
+                  <ExerciseCard
+                    exerciseId={itemId.toString()}
+                    key={itemId}
+                    control={control}
+                    exerciseName={exercisesHashmap[itemId].name}
+                    setsName={`test${itemId}`}
+                    repsName={`test${itemId}`}
+                  />
+                ))}
+              </DragSortable>
+            </div>
+          )}
+
           <div className="flex items-center justify-end gap-3">
             <SecondaryButton
               label="Cancel"
@@ -106,7 +100,15 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
         onClose={handleCloseModal}
         cardTitle="Add Exercise"
       >
-        <AddExercise onClickCancel={handleCloseModal} />
+        <AddExercise
+          exercises={
+            exercises?.filter(
+              (exercise) => !(exercise.exerciseId in itemsHash)
+            ) || []
+          }
+          onClickCancel={handleCloseModal}
+          onClickAdd={handleClickAdd}
+        />
       </Modal>
     </div>
   )
