@@ -63,7 +63,7 @@ export const createContextFn = async ({
     return { user: session.user, req, res }
   } catch (error) {
     throw new TRPCError({
-      code: "INTERNAL_SERVER_ERROR",
+      code: "UNAUTHORIZED",
       message: "Error getting session.",
       cause: error,
     })
