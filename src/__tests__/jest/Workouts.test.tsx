@@ -9,14 +9,14 @@ jest.mock("next/router", () => require("next-router-mock"))
 
 describe("test Workouts Page", () => {
   it("should render 'get started'", async () => {
-    render(<Workouts plans={{ workoutPlans: [] }} />)
+    render(<Workouts plans={[]} />)
     expect(
       screen.getByRole("button", { name: /Get Started/i })
     ).toBeInTheDocument()
   })
 
   it("should render three workout templates", async () => {
-    render(<Workouts plans={{ workoutPlans: MOCK_WORKOUT_PLANS }} />)
+    render(<Workouts plans={MOCK_WORKOUT_PLANS} />)
     expect(
       screen.queryByRole("button", { name: /Get Started/i })
     ).not.toBeInTheDocument()
