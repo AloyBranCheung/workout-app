@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 // hooks
 import useMutationAddExercise from "src/hooks/useMutationAddExercise"
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // components
 import FormInput from "../UI/FormInput"
 import PrimaryButton from "../UI/PrimaryButton"
@@ -18,8 +19,10 @@ interface AddExerciseProps {
 }
 
 export default function AddExercise({ onClickCancel }: AddExerciseProps) {
-  const { mutate } = useMutationAddExercise()
-  const { handleSubmit, control } = useForm<z.infer<typeof AddExerciseSchema>>({
+  const toastMessage = useToastMessage()
+  const { handleSubmit, control, reset } = useForm<
+    z.infer<typeof AddExerciseSchema>
+  >({
     resolver: zodResolver(AddExerciseSchema),
     defaultValues: {
       name: "",
@@ -27,9 +30,21 @@ export default function AddExercise({ onClickCancel }: AddExerciseProps) {
       url: undefined,
     },
   })
+  const { mutate, isLoading } = useMutationAddExercise(
+    // onSuccess
+    () => {
+      reset()
+      onClickCancel()
+      toastMessage("Successfully added exercise.", ToastMessage.Success)
+    },
+    // onError
+    () => {
+      toastMessage("Error adding exercise.", ToastMessage.Error)
+    }
+  )
 
-  const handleSubmitForm = async (data: z.infer<typeof AddExerciseSchema>) => {
-    await mutate(data)
+  const handleSubmitForm = (data: z.infer<typeof AddExerciseSchema>) => {
+    mutate(data)
   }
 
   return (
@@ -47,7 +62,12 @@ export default function AddExercise({ onClickCancel }: AddExerciseProps) {
           onClick={onClickCancel}
           className="py-2 px-3"
         />
-        <PrimaryButton label="Submit" type="submit" className="py-2 px-3" />
+        <PrimaryButton
+          label="Submit"
+          type="submit"
+          className="py-2 px-3"
+          isLoading={isLoading}
+        />
       </div>
     </form>
   )

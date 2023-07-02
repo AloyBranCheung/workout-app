@@ -58,11 +58,11 @@ export const createContextFn = async ({
     } = await supabase.auth.getSession()
 
     if (!session)
-      return new TRPCError({ code: "UNAUTHORIZED", message: "No session." })
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "No session." })
 
     return { user: session.user, req, res }
   } catch (error) {
-    return new TRPCError({
+    throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
       message: "Error getting session.",
       cause: error,

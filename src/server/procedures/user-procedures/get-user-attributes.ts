@@ -4,13 +4,9 @@ import prisma from "src/utils/prisma"
 
 const getUserAttributes = tProtectedProcedure.query(async (opts) => {
   const {
-    ctx: { req, res, user },
+    ctx: { user },
   } = opts
-  if (!req || !res)
-    return new TRPCError({
-      message: "No req or res",
-      code: "INTERNAL_SERVER_ERROR",
-    })
+
   try {
     const userUid = user.id
     const userAttributes = await prisma.user.findUnique({
@@ -20,7 +16,7 @@ const getUserAttributes = tProtectedProcedure.query(async (opts) => {
     })
 
     if (!userAttributes)
-      return new TRPCError({
+      throw new TRPCError({
         code: "NOT_FOUND",
         message: "User not found.",
       })
@@ -29,7 +25,7 @@ const getUserAttributes = tProtectedProcedure.query(async (opts) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error("Error at userAttributes:", error)
-    return new TRPCError({
+    throw new TRPCError({
       message: "Error fetching from user table.",
       code: "NOT_FOUND",
       cause: error,
