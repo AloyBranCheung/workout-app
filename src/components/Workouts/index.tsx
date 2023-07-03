@@ -23,6 +23,7 @@ export default function Workouts({ plans }: WorkoutsProps) {
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isEdit, setIsEdit] = useState(false)
   const router = useRouter()
+
   const plansHashmap = useMemo(() => {
     if (!plans) return {}
     const hash: {
@@ -37,6 +38,8 @@ export default function Workouts({ plans }: WorkoutsProps) {
     }
     return hash
   }, [plans])
+
+  const handleCloseEdit = () => setIsEdit(false)
   return (
     <div className="flex flex-col justify-center w-full h-full gap-8">
       <PrimaryButton
@@ -108,8 +111,11 @@ export default function Workouts({ plans }: WorkoutsProps) {
           )}
         </ParentCard>
       </div>
-      <Modal isOpen={isEdit} onClose={() => setIsEdit(false)}>
-        <EditWorkoutPlan workoutPlan={plansHashmap[selectedPlanId]} />
+      <Modal isOpen={isEdit} onClose={handleCloseEdit}>
+        <EditWorkoutPlan
+          workoutPlan={plansHashmap[selectedPlanId]}
+          onClose={handleCloseEdit}
+        />
       </Modal>
     </div>
   )

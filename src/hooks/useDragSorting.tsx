@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { DragEndEvent } from "@dnd-kit/core"
-import { arrayMove } from "@dnd-kit/sortable"
+import { arrayMove, verticalListSortingStrategy } from "@dnd-kit/sortable"
 
 export default function useDragSorting(startingItems: Array<number | string>) {
   const [items, setItems] = useState<Array<number | string>>(startingItems)
@@ -19,5 +19,5 @@ export default function useDragSorting(startingItems: Array<number | string>) {
     }
   }
 
-  return { items, handleDragEnd, setItems }
+  return { items, handleDragEnd, setItems, verticalListSortingStrategy }
 }
