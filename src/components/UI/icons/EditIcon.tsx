@@ -2,7 +2,7 @@ import React from "react"
 import IconBase from "./IconBase"
 
 interface EditIconProps {
-  onClick: () => void
+  onClick?: () => void
 }
 
 export default function EditIcon({ onClick }: EditIconProps) {

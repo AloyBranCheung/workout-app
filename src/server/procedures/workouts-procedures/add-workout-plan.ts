@@ -1,7 +1,7 @@
 import { TRPCError } from "@trpc/server"
 import { tProtectedProcedure } from "src/server/trpc"
 import prisma from "src/utils/prisma"
-import WorkoutPlanSchema from "src/validators/add-workout-schema"
+import WorkoutPlanSchema from "src/validators/workout-schema"
 
 const addWorkoutPlan = tProtectedProcedure
   .input(WorkoutPlanSchema)

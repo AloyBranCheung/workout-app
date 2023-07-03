@@ -26,7 +26,7 @@ import { GetExercisesOutput } from "src/types/trpc/router-types"
 import exerciseHash from "src/utils/exercises-hashmap"
 import BorderCard from "../UI/BorderCard"
 // types
-import WorkoutPlanSchema from "src/validators/add-workout-schema"
+import WorkoutPlanSchema from "src/validators/workout-schema"
 
 interface CreateWorkoutProps {
   exercises: GetExercisesOutput | undefined

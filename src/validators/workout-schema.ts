@@ -19,3 +19,7 @@ const WorkoutPlanSchema = z
   .required()
 
 export default WorkoutPlanSchema
+
+export const UpdatePlanSchema = WorkoutPlanSchema.extend({
+  planId: z.string().uuid(),
+})
