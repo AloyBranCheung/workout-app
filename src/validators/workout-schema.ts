@@ -9,6 +9,7 @@ const WorkoutPlanSchema = z
         .object({
           reps: z.string(),
           sets: z.string(),
+          targetId: z.string().uuid(),
         })
         .required()
     ),

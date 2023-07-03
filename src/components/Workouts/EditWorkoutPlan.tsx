@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 // hooks
 import useDragSorting from "src/hooks/useDragSorting"
+import useMutationUpdateWorkoutPlan from "src/hooks/useMutationUpdateWorkoutPlan"
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // types/utils
 import { GetWorkoutPlansOutput } from "src/types/trpc/router-types"
 import { UpdatePlanSchema } from "src/validators/workout-schema"
@@ -32,15 +34,18 @@ export default function EditWorkoutPlan({
     exerciseHashmap,
   } = useMemo(() => {
     const exerciseHashmap = exerciseHash(
-      workoutPlan.targets.map((target) => target.exercise)
+      workoutPlan.targets.map(({ exercise, targetId }) => ({
+        ...exercise,
+        targetId,
+      }))
     )
-    const exerciseOrder = []
+    const exerciseOrder = workoutPlan.exerciseOrder
     const exerciseObj: z.infer<typeof UpdatePlanSchema>["exercises"] = {}
     for (const target of workoutPlan.targets) {
-      exerciseOrder.push(target.exerciseId)
       exerciseObj[target.exerciseId] = {
         reps: target.targetReps.toString(),
         sets: target.targetSets.toString(),
+        targetId: target.targetId,
       }
     }
     return { exerciseOrder, exerciseObj, exerciseHashmap }
@@ -56,13 +61,24 @@ export default function EditWorkoutPlan({
     defaultValues: {
       name: workoutPlan.name,
       planId: workoutPlan.planId,
-      exerciseOrder,
+      exerciseOrder: [],
       exercises,
     },
   })
+  const toastMessage = useToastMessage()
+
+  const { mutate, isLoading } = useMutationUpdateWorkoutPlan(
+    () => {
+      toastMessage("Successfully updated workout plan.", ToastMessage.Success)
+      onClose()
+    },
+    () => {
+      toastMessage("Failed to update workout plan.", ToastMessage.Error)
+    }
+  )
 
   const handleSubmitForm = (data: z.infer<typeof UpdatePlanSchema>) =>
-    console.log("data", data)
+    mutate(data)
 
   useEffect(() => {
     setValue("exerciseOrder", items as string[])
@@ -99,6 +115,7 @@ export default function EditWorkoutPlan({
             declineText="Cancel"
             declineBtnType="button"
             onClickDecline={onClose}
+            isLoading={isLoading}
           />
         </BorderCard>
       </form>
