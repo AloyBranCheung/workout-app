@@ -1,0 +1,13 @@
+name: Prisma Migrate Deploy
+on:
+  push:
+    branches: [main, master]
+jobs:
+  Prisma:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install node_modules
+        run: yarn install
+      - name: Prisma Migrate Deploy
+        run: yarn prisma migrate deploy

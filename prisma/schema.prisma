@@ -71,7 +71,7 @@ model Exercise {
 
   workoutPlans WorkoutPlan[]
   sets         Set[]
-  target       Target?
+  target       Target[]
 }
 
 // Exercise Targets for Workout
@@ -83,7 +83,7 @@ model Target {
   targetSets Int
   // relations
   exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId], onDelete: Cascade)
-  exerciseId String   @unique @db.Uuid
+  exerciseId String   @db.Uuid
 
   workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId], onDelete: Cascade)
   planId      String      @db.Uuid

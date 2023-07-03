@@ -2,7 +2,7 @@ import React from "react"
 import IconBase from "./IconBase"
 
 interface TrashIconProps {
-  onClick: () => void
+  onClick?: () => void
 }
 
 export default function TrashIcon({ onClick }: TrashIconProps) {

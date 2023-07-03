@@ -1,6 +1,6 @@
 import React from "react"
 // react-hook-form
-import { Control, FieldValues } from "react-hook-form"
+import { Control, FieldValues, Path } from "react-hook-form"
 // dnd
 import { useSortable } from "@dnd-kit/sortable"
 // components
@@ -8,24 +8,30 @@ import DragIcon from "../UI/icons/DragIcon"
 import SecondaryCard from "../UI/SecondaryCard"
 import Text from "../UI/typography/Text"
 import FormInput from "../UI/FormInput"
-import WorkoutPlanSchema from "src/validators/add-workout-schema"
+import WorkoutPlanSchema, {
+  UpdatePlanSchema,
+} from "src/validators/workout-schema"
 import { z } from "zod"
 
-interface ExerciseCardProps {
+interface ExerciseCardProps<
+  T extends z.infer<typeof UpdatePlanSchema> | z.infer<typeof WorkoutPlanSchema>
+> {
   exerciseId: string
   exerciseName: string
-  control: Control<FieldValues & z.infer<typeof WorkoutPlanSchema>>
-  setsName: string
-  repsName: string
+  control: Control<FieldValues & T>
+  setsName: Path<FieldValues & T>
+  repsName: Path<FieldValues & T>
 }
 
-export default function ExerciseCard({
+export default function ExerciseCard<
+  T extends z.infer<typeof UpdatePlanSchema> | z.infer<typeof WorkoutPlanSchema>
+>({
   exerciseId,
   exerciseName,
   control,
   setsName,
   repsName,
-}: ExerciseCardProps) {
+}: ExerciseCardProps<T>) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: exerciseId })
 

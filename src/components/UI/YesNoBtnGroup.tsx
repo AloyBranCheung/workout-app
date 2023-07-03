@@ -9,6 +9,7 @@ interface YesNoBtnGroupProps {
   declineText?: string
   declineBtnType?: "button" | "submit" | "reset"
   onClickDecline?: () => void
+  isLoading?: boolean
 }
 
 export default function YesNoBtnGroup({
@@ -18,6 +19,7 @@ export default function YesNoBtnGroup({
   declineText,
   declineBtnType,
   onClickDecline,
+  isLoading,
 }: YesNoBtnGroupProps) {
   return (
     <div className="flex gap-2 justify-end">
@@ -32,6 +34,7 @@ export default function YesNoBtnGroup({
         label={confirmText || "Yes"}
         type={confirmBtnType || "button"}
         onClick={onClickConfirm}
+        isLoading={isLoading}
       />
     </div>
   )

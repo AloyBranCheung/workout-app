@@ -8,7 +8,15 @@ const getWorkoutPlans = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       where: {
         userId: user.id,
       },
+      include: {
+        targets: {
+          include: {
+            exercise: true,
+          },
+        },
+      },
     })
+
     return workoutPlans
   } catch (error) {
     console.error("Error getting workoutplans")
