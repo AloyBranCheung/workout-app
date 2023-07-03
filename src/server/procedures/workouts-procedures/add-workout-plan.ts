@@ -25,21 +25,19 @@ const addWorkoutPlan = tProtectedProcedure
           },
         })
 
-        const updateExercise = async (exerciseId: string) => {
-          const updatedExerciseObj = await prisma.exercise.update({
-            where: {
-              exerciseId,
-            },
+        const targetExercise = async (exerciseId: string) => {
+          await prisma.target.create({
             data: {
-              targetSets: Number(exercises[exerciseId].sets),
               targetReps: Number(exercises[exerciseId].reps),
+              targetSets: Number(exercises[exerciseId].sets),
+              exerciseId,
+              planId: workoutPlan.planId,
             },
           })
-          return updatedExerciseObj
         }
 
         const updatedExercises = await Promise.all(
-          exerciseIdArr.map((exerciseId) => updateExercise(exerciseId))
+          exerciseIdArr.map((exerciseId) => targetExercise(exerciseId))
         )
 
         return { workoutPlan, updatedExercises }

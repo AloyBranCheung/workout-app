@@ -129,14 +129,20 @@ export default function Exercises({ exercises }: ExercisesProps) {
         isOpen={viewExercise}
         onClose={() => setViewExercise(false)}
       >
-        <ViewExercise />
+        <ViewExercise
+          exercise={exerciseHashmap[selectedExerciseId]}
+          onClose={() => setViewExercise(false)}
+        />
       </Modal>
       <Modal
         cardTitle={`Editing ${exerciseName}`}
         isOpen={editExercise}
         onClose={() => setEditExercise(false)}
       >
-        <EditExercise />
+        <EditExercise
+          exercise={exerciseHashmap[selectedExerciseId]}
+          onClose={() => setEditExercise(false)}
+        />
       </Modal>
     </div>
   )

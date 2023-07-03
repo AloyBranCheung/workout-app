@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { useRouter } from "next/router"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -42,6 +42,7 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
     reset,
     control,
     formState: { errors },
+    setValue,
   } = useForm<z.infer<typeof WorkoutPlanSchema> & FieldValues>({
     defaultValues: {
       name: "",
@@ -74,7 +75,7 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   }, [items])
 
   const handleSubmitForm = (formData: z.infer<typeof WorkoutPlanSchema>) => {
-    formData.exerciseOrder = items as string[]
+    // formData.exerciseOrder = items as string[]
     mutate(formData)
   }
 
@@ -82,6 +83,11 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
 
   const handleClickAdd = (exerciseId: string) =>
     setItems([...items, exerciseId])
+
+  // fixes validation error for min 1 required onSubmit
+  useEffect(() => {
+    setValue("exerciseOrder", items as string[])
+  }, [items, setValue])
 
   return (
     <div className="flex flex-col justify-center gap-5">
