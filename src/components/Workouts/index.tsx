@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from "react"
 import { useRouter } from "next/router"
 import dayjs from "dayjs"
+// hooks
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
+import useMutationDeleteWorkoutPlan from "src/hooks/useMutationDeleteWorkoutPlan"
 // types/utils
 import MsToStrTime from "src/utils/MsToStrTime"
 import { GetWorkoutPlansOutput } from "src/types/trpc/router-types"
@@ -14,6 +17,7 @@ import EditIcon from "../UI/icons/EditIcon"
 import TrashIcon from "../UI/icons/TrashIcon"
 import Modal from "../UI/Modal"
 import EditWorkoutPlan from "./EditWorkoutPlan"
+import YesNoBtnGroup from "../UI/YesNoBtnGroup"
 
 interface WorkoutsProps {
   plans: GetWorkoutPlansOutput | undefined
@@ -22,7 +26,13 @@ interface WorkoutsProps {
 export default function Workouts({ plans }: WorkoutsProps) {
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isEdit, setIsEdit] = useState(false)
+  const [isConfirmDelete, setIsConfirmDelete] = useState(false)
   const router = useRouter()
+  const toastMessage = useToastMessage()
+  const { mutate } = useMutationDeleteWorkoutPlan(
+    () => toastMessage("Successfully deleted workout.", ToastMessage.Success),
+    () => toastMessage("Error deleting workout.", ToastMessage.Error)
+  )
 
   const plansHashmap = useMemo(() => {
     if (!plans) return {}
@@ -40,6 +50,8 @@ export default function Workouts({ plans }: WorkoutsProps) {
   }, [plans])
 
   const handleCloseEdit = () => setIsEdit(false)
+
+  const handleDeleteWorkout = (planId: string) => mutate(planId)
   return (
     <div className="flex flex-col justify-center w-full h-full gap-8">
       <PrimaryButton
@@ -98,7 +110,12 @@ export default function Workouts({ plans }: WorkoutsProps) {
                       setIsEdit(true)
                     }}
                   />
-                  <TrashIcon />
+                  <TrashIcon
+                    onClick={() => {
+                      setSelectedPlanId(planId)
+                      setIsConfirmDelete(true)
+                    }}
+                  />
                 </div>
               </SecondaryCard>
             ))
@@ -115,6 +132,23 @@ export default function Workouts({ plans }: WorkoutsProps) {
         <EditWorkoutPlan
           workoutPlan={plansHashmap[selectedPlanId]}
           onClose={handleCloseEdit}
+        />
+      </Modal>
+      <Modal
+        cardTitle="Are you sure?"
+        isOpen={isConfirmDelete}
+        onClose={() => setIsConfirmDelete(false)}
+      >
+        <p>
+          You are about to delete{" "}
+          {<strong>{plansHashmap[selectedPlanId]?.name}</strong>}. Are you sure?
+        </p>
+        <YesNoBtnGroup
+          onClickConfirm={() => {
+            handleDeleteWorkout(selectedPlanId)
+            setIsConfirmDelete(false)
+          }}
+          onClickDecline={() => setIsConfirmDelete(false)}
         />
       </Modal>
     </div>
