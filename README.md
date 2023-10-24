@@ -29,7 +29,14 @@
    - Copy `Project URL` to `DATABASE_URL` and `NEXT_PUBLIC_SUPABASE_URL`
    - Copy `Project API Keys: anon/public key` to `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 2. Run `yarn install && npx prisma generate`
-3. Run `./dev.sh` (make sure have docker)
+3. Run `./reset_db.sh`
+4. Run `./dev.sh` (make sure have docker)
+5. Disable email confirmation under Authentication > Providers > Email in Supabase UI
+6. run `create_user.sh` in `scripts` folder
+
+Debugging:
+
+- make sure you are not ip banned on the supabase admin dashboard (if you failed to login)
 
 ## Resources
 
