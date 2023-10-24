@@ -12,6 +12,8 @@ import { SessionContextProvider } from "@supabase/auth-helpers-react"
 import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs"
 // trpc
 import { trpc } from "src/utils/trpc"
+// react-query devTools
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -31,6 +33,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       initialSession={pageProps.initialSession}
     >
       {getLayout(<Component {...pageProps} />)}
+      <ReactQueryDevtools initialIsOpen={false} />
       <ReactToastContainer />
     </SessionContextProvider>
   )
