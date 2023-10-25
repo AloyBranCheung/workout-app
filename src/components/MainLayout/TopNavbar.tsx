@@ -7,6 +7,7 @@ import PrimaryButton from "../UI/PrimaryButton"
 import SecondaryButton from "../UI/SecondaryButton"
 // types
 import { Position } from "src/types/PopupMenuTypes"
+import GutterContainer from "../UI/GutterContainer"
 
 interface TopNavbarProps {
   onClickLogout: () => void
@@ -35,68 +36,76 @@ export default function TopNavbar({
       ref={anchorEl}
       className="sticky top-0 border-solid border-2 border-black shadow-neobrutShadow bg-background flex items-center justify-center w-full z-[100]"
     >
-      <div className="w-full max-w-7xl flex items-center justify-between px-5 py-3">
-        <h4
-          className="text-xl font-black cursor-pointer"
-          onClick={onClickBrand}
-        >
-          simplyworkouts
-        </h4>
-        <HamburgerIcon onClick={onToggleMenu} />
-      </div>
-      <PopupMenu
-        position={Position.BottomCenter}
-        anchorEl={anchorEl}
-        popupRef={popupRef}
-        isOpen={isMenuOpen}
-      >
-        <div ref={popupRef}>
-          <AnimatePresence>
-            <motion.div
-              className="bg-background h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col z-20"
-              initial="hidden"
-              animate="show"
-              exit="hidden"
-              variants={{
-                hidden: {
-                  clipPath: "circle(9.6% at 100% 0)",
-                  scale: 0,
-                  transition: {
-                    staggerChildren: 0.1,
-                    staggerDirection: -1, // Reverse the staggering direction
-                  },
-                  transformOrigin: "top right",
-                },
-                show: {
-                  scale: 1,
-                  clipPath: "circle(141.5% at 100% 0)",
-                  transition: {
-                    duration: 0.3,
-                    staggerChildren: 0.1,
-                  },
-                },
-              }}
-            >
-              <PrimaryButton
-                label="workouts"
-                type="button"
-                onClick={onClickPlan}
-              />
-              <PrimaryButton
-                onClick={onClickExercises}
-                label="exercises"
-                type="button"
-              />
-              <PrimaryButton onClick={onClickRuns} label="runs" type="button" />
-              <SecondaryButton
-                label="logout"
-                type="button"
-                onClick={onClickLogout}
-              />
-            </motion.div>
-          </AnimatePresence>
+      <GutterContainer>
+        <div className="w-full max-w-7xl flex items-center justify-between px-5 py-3">
+          <h4
+            className="text-xl font-black cursor-pointer"
+            onClick={onClickBrand}
+          >
+            simplyworkouts
+          </h4>
+          <HamburgerIcon onClick={onToggleMenu} />
         </div>
-      </PopupMenu>
+        <PopupMenu
+          position={Position.BottomCenter}
+          anchorEl={anchorEl}
+          popupRef={popupRef}
+          isOpen={isMenuOpen}
+        >
+          <div ref={popupRef}>
+            <GutterContainer>
+              <AnimatePresence>
+                <motion.div
+                  className="bg-background h-screen p-2 border-2 border-solid border-black shadow-neobrutShadow flex gap-3 flex-col z-20"
+                  initial="hidden"
+                  animate="show"
+                  exit="hidden"
+                  variants={{
+                    hidden: {
+                      clipPath: "circle(9.6% at 100% 0)",
+                      scale: 0,
+                      transition: {
+                        staggerChildren: 0.1,
+                        staggerDirection: -1, // Reverse the staggering direction
+                      },
+                      transformOrigin: "top right",
+                    },
+                    show: {
+                      scale: 1,
+                      clipPath: "circle(141.5% at 100% 0)",
+                      transition: {
+                        duration: 0.3,
+                        staggerChildren: 0.1,
+                      },
+                    },
+                  }}
+                >
+                  <PrimaryButton
+                    label="workouts"
+                    type="button"
+                    onClick={onClickPlan}
+                  />
+                  <PrimaryButton
+                    onClick={onClickExercises}
+                    label="exercises"
+                    type="button"
+                  />
+                  <PrimaryButton
+                    onClick={onClickRuns}
+                    label="runs"
+                    type="button"
+                  />
+                  <SecondaryButton
+                    label="logout"
+                    type="button"
+                    onClick={onClickLogout}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </GutterContainer>
+          </div>
+        </PopupMenu>
+      </GutterContainer>
     </div>
   )
 }
