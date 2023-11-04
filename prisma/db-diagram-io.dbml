@@ -79,6 +79,7 @@ Table WorkoutPlan {
   exerciseOrder "string[]"
   name string
   userId string [unique]
+  gymLocation string [unique]
 }
 
 Table RunPlan {

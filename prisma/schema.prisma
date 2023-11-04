@@ -130,6 +130,7 @@ model WorkoutPlan {
   createdAt     DateTime  @default(now())
   name          String
   exerciseOrder String[]
+  gymLocation   String    @unique
   lastWorkout   DateTime?
   duration      Int?
   // relations
