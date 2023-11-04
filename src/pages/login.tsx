@@ -15,6 +15,8 @@ import FormInput from "src/components/UI/FormInput"
 import { z } from "zod"
 import LoginSchema from "src/validators/login-schema"
 import Button from "src/components/UI/Button"
+import GutterContainer from "src/components/UI/GutterContainer"
+import CopyIcon from "src/components/UI/CopyIcon"
 
 export default function Login() {
   const router = useRouter()
@@ -55,21 +57,34 @@ export default function Login() {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Card className="w-96 h-96">
-        <form onSubmit={handleSubmit(formSubmit)}>
-          <FormInput type="email" name="email" control={control} />
-          <FormInput
-            autoComplete="current-password"
-            name="password"
-            control={control}
-            type="password"
-          />
-          <div className="flex w-full items-center justify-center">
-            <Button type="submit" label="Login" />
+    <GutterContainer>
+      <div className="flex items-center justify-center h-screen">
+        <Card className="w-96 h-96 flex flex-col items-center justify-center gap-2 p-5">
+          <h1 className="text-4xl font-extrabold mb-4 w-full text-center">
+            SimplyWorkouts
+          </h1>
+          <form
+            onSubmit={handleSubmit(formSubmit)}
+            className="flex flex-col gap-2 w-full"
+          >
+            <FormInput type="email" name="email" control={control} />
+            <FormInput
+              autoComplete="current-password"
+              name="password"
+              control={control}
+              type="password"
+            />
+            <div className="flex w-full items-center justify-center">
+              <Button type="submit" label="Login" />
+            </div>
+          </form>
+          <div className="flex flex-col w-full">
+            <h2 className="text-lg">Demo Account</h2>
+            <CopyIcon label="user: demo@demo.com" value="demo@demo.com" />
+            <CopyIcon label="pass: " value="" />
           </div>
-        </form>
-      </Card>
-    </div>
+        </Card>
+      </div>
+    </GutterContainer>
   )
 }
