@@ -97,9 +97,7 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
           onSubmit={handleSubmit(handleSubmitForm)}
           className="flex flex-col gap-6 justify-center"
         >
-          <div>
-            <FormInput control={control} name="name" />
-          </div>
+          <FormInput control={control} name="name" />
           <SecondaryButton
             label="Add Exercise"
             type="button"

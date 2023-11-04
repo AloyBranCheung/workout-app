@@ -42,6 +42,8 @@ https://www.prisma.io/docs/concepts/components/prisma-migrate/mental-model
 
 `prisma migrate deploy` for deployment (PRD) environment
 
+- Edit the DBML documentation before editing the schema
+
 ## Resources
 
 - [Figma](https://www.figma.com/file/R0i3v0IsjhkOhDSYITeWHU/Workout-App?type=design&node-id=0%3A1&mode=design&t=4R5sghDXxfNWkufE-1)
