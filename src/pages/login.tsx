@@ -81,7 +81,10 @@ export default function Login() {
           <div className="flex flex-col w-full">
             <h2 className="text-lg">Demo Account</h2>
             <CopyIcon label="user: demo@demo.com" value="demo@demo.com" />
-            <CopyIcon label="pass: " value="" />
+            <CopyIcon
+              label="pass: <rtP8YgSI=VSHGrdWRx)"
+              value="<rtP8YgSI=VSHGrdWRx)"
+            />
           </div>
         </Card>
       </div>
