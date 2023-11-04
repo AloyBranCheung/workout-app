@@ -120,8 +120,9 @@ Table Activity {
 }
 
 Table GymLocation {
-  gymId string [pk, unique, default: 'uuid()', ref: - WorkoutPlan.planId]
-  name string [unique]
+  gymId string [pk, unique, default: 'uuid()', ref: > User.userId]
+  name string
+  description string 
 }
 
 
