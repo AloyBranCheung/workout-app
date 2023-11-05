@@ -13,13 +13,16 @@ import Modal from "../UI/Modal"
 import SecondaryButton from "../UI/SecondaryButton"
 import CRUDCard from "../UI/CRUDCard"
 import Warning from "../UI/Warning"
+import EditGymLocationModal from "./EditGymLocationModal"
 
 interface GymLocationsProps {
   gymLocations: GetGymLocationsOutput | undefined
 }
 
 export default function GymLocations({ gymLocations }: GymLocationsProps) {
+  const [editGymId, setEditGymId] = useState("")
   const [isWarning, setIsWarning] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
   const toastMessage = useToastMessage()
   const { mutate } = useMutationDeleteGymLocation(
     () => {
@@ -43,6 +46,18 @@ export default function GymLocations({ gymLocations }: GymLocationsProps) {
           >
             <AddGymLocationModal onSuccessAdd={() => setIsCreate(false)} />
           </Modal>
+          <Modal
+            isOpen={isEdit}
+            onClose={() => {
+              setIsEdit(false)
+            }}
+            cardTitle="Edit Gym Location"
+          >
+            <EditGymLocationModal
+              editGymId={editGymId}
+              onClickDecline={() => setIsEdit(false)}
+            />
+          </Modal>
         </>
       }
       secondaryCards={
@@ -50,7 +65,10 @@ export default function GymLocations({ gymLocations }: GymLocationsProps) {
           gymLocations.map(({ gymId, description, name }) => (
             <CRUDCard
               key={gymId}
-              onClickEdit={() => console.log("clicked edit")}
+              onClickEdit={() => {
+                setIsEdit(true)
+                setEditGymId(gymId)
+              }}
               onClickDelete={() => setIsWarning(true)}
             >
               <div>

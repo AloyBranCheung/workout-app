@@ -1,6 +1,5 @@
 import Modal from "./Modal"
-import PrimaryButton from "./PrimaryButton"
-import SecondaryButton from "./SecondaryButton"
+import YesNoBtnGroup from "./YesNoBtnGroup"
 import Text from "./typography/Text"
 
 interface WarningProps {
@@ -29,20 +28,7 @@ export default function Warning({
       <div className="w-full flex flex-col gap-2">
         <Text text={warningMsg} />
         <Text text="Are you sure?" />
-        <div className="w-full flex gap-2 items-center justify-end">
-          <SecondaryButton
-            className="w-10"
-            type="button"
-            label="No"
-            onClick={onCancel}
-          />
-          <PrimaryButton
-            className="w-10"
-            type="button"
-            label="Yes"
-            onClick={onConfirm}
-          />
-        </div>
+        <YesNoBtnGroup onClickConfirm={onConfirm} onClickDecline={onCancel} />
       </div>
     </Modal>
   )
