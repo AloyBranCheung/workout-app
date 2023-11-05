@@ -11,3 +11,5 @@ jobs:
         run: yarn install
       - name: Prisma Migrate Deploy
         run: yarn prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
