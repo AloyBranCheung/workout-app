@@ -55,6 +55,10 @@ export default function MainLayout({ children }: MainLayoutProps) {
             onClickBrand={handleClickBrand}
             onClickExercises={handleClickExercises}
             onClickRuns={handleClickRuns}
+            onClickGymLocation={() => {
+              setIsMenuOpen(false)
+              router.push("/gym-locations")
+            }}
           />
           <div className="h-full">
             <Fade>

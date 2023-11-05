@@ -29,12 +29,12 @@ export default function FormInput<FV extends FieldValues>({
       render={({ field: { onChange, value, name }, fieldState: { error } }) => (
         <div className="flex flex-col gap-1">
           <div className="flex justify-between items-center w-full gap-2">
-            <label htmlFor={name}>
+            <label htmlFor={name} className="w-full basis-1/4">
               <b>{label || startCase(name)}:</b>
             </label>
             <input
               className={twMerge(
-                "border-solid border-black border-2 rounded-2xl w-full px-2",
+                "border-solid border-black border-2 rounded-2xl w-full px-2 basis-3/4",
                 inputClassName
               )}
               required={required}

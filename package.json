@@ -16,11 +16,12 @@
     "@dnd-kit/sortable": "^7.0.2",
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.1.0",
-    "@prisma/client": "4.14.1",
+    "@prisma/client": "^5.4.2",
     "@supabase/auth-helpers-nextjs": "^0.7.0",
     "@supabase/auth-helpers-react": "^0.4.0",
     "@supabase/supabase-js": "^2.23.0",
     "@tanstack/react-query": "^4.29.17",
+    "@tanstack/react-query-devtools": "^5.1.0",
     "@trpc/client": "^10.32.0",
     "@trpc/next": "^10.32.0",
     "@trpc/react-query": "^10.32.0",
@@ -62,7 +63,7 @@
     "postcss-import": "^15.1.0",
     "prettier": "^2.8.8",
     "prettier-plugin-prisma": "^4.13.0",
-    "prisma": "4.14.1",
+    "prisma": "^5.4.2",
     "typescript-plugin-css-modules": "^5.0.1"
   }
 }

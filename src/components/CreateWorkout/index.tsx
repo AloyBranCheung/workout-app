@@ -11,6 +11,8 @@ import { verticalListSortingStrategy } from "@dnd-kit/sortable"
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 import useDragSorting from "src/hooks/useDragSorting"
 import useMutationAddWorkoutPlan from "src/hooks/useMutationAddWorkoutPlan"
+// types
+import WorkoutPlanSchema from "src/validators/workout-schema"
 // components
 import FormErrMsg from "../UI/FormErrorMsg"
 import DragSortable from "../UI/DragSortable"
@@ -25,17 +27,23 @@ import AddExercise from "./AddExercise"
 import { GetExercisesOutput } from "src/types/trpc/router-types"
 import exerciseHash from "src/utils/exercises-hashmap"
 import BorderCard from "../UI/BorderCard"
-// types
-import WorkoutPlanSchema from "src/validators/workout-schema"
+import FormSelect from "../UI/FormSelect"
+import AddGymLocationModal from "./AddGymLocationModal"
+import { GetGymLocationsOutput } from "src/types/trpc/router-types"
 
 interface CreateWorkoutProps {
   exercises: GetExercisesOutput | undefined
+  gymLocations: GetGymLocationsOutput | undefined
 }
 
-export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
+export default function CreateWorkout({
+  exercises,
+  gymLocations,
+}: CreateWorkoutProps) {
   const router = useRouter()
   const toastMessage = useToastMessage()
   const [isAddExercise, setIsAddExercise] = useState(false)
+  const [isAddGymLocation, setIsAddGymLocation] = useState(false)
   const { items, handleDragEnd, setItems } = useDragSorting([])
   const {
     handleSubmit,
@@ -43,9 +51,11 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<z.infer<typeof WorkoutPlanSchema> & FieldValues>({
     defaultValues: {
       name: "",
+      gymLocation: "",
       exercises: {},
       exerciseOrder: [],
     },
@@ -80,7 +90,10 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   }
 
   const handleCloseModal = () => setIsAddExercise(false)
-
+  const handleCloseAddGymLocation = () => {
+    setIsAddGymLocation(false)
+    setValue("gymLocation", "")
+  }
   const handleClickAdd = (exerciseId: string) =>
     setItems([...items, exerciseId])
 
@@ -88,6 +101,16 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
   useEffect(() => {
     setValue("exerciseOrder", items as string[])
   }, [items, setValue])
+
+  // if addGymLocation is selected then open popup dialog
+  useEffect(() => {
+    const subscription = watch((value) => {
+      if (value.gymLocation === "addGymLocation") {
+        setIsAddGymLocation(true)
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   return (
     <div className="flex flex-col justify-center gap-5">
@@ -97,9 +120,18 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
           onSubmit={handleSubmit(handleSubmitForm)}
           className="flex flex-col gap-6 justify-center"
         >
-          <div>
-            <FormInput control={control} name="name" />
-          </div>
+          <FormInput control={control} name="name" />
+          <FormSelect
+            name="gymLocation"
+            control={control}
+            menuOptions={
+              gymLocations?.map(({ gymId, name }) => ({
+                id: gymId,
+                name: name,
+                value: gymId,
+              })) || []
+            }
+          />
           <SecondaryButton
             label="Add Exercise"
             type="button"
@@ -161,6 +193,18 @@ export default function CreateWorkout({ exercises }: CreateWorkoutProps) {
           }
           onClickCancel={handleCloseModal}
           onClickAdd={handleClickAdd}
+        />
+      </Modal>
+      <Modal
+        isOpen={isAddGymLocation}
+        onClose={handleCloseAddGymLocation}
+        cardTitle="Add Gym Location"
+      >
+        <AddGymLocationModal
+          onSuccessAdd={(gymLocation) => {
+            setValue("gymLocation", gymLocation)
+            setIsAddGymLocation(false)
+          }}
         />
       </Modal>
     </div>

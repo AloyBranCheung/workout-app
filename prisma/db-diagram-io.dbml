@@ -79,6 +79,7 @@ Table WorkoutPlan {
   exerciseOrder "string[]"
   name string
   userId string [unique]
+  gymLocationId string [unique]
 }
 
 Table RunPlan {
@@ -119,5 +120,14 @@ Table Activity {
   userId string 
 }
 
+Table GymLocation {
+  gymId string [pk, unique, default: 'uuid()', ref: > User.userId, ref: < WorkoutPlan.gymLocationId]
+  name string
+  description string [note: 'optional']
+}
 
 
+
+
+
+Ref: "WorkoutPlan"."planId" < "WorkoutPlan"."exerciseOrder"

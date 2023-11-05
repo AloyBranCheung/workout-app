@@ -11,16 +11,12 @@
   <img alt="prisma" width="60" src="https://logowik.com/content/uploads/images/prisma2244.jpg">
 </div>
 
-<br />
-
 ## Workout App
 
 - [ ] Create your own workout plan
 - [ ] Add your own exercises
 - [ ] Track your workouts
 - [ ] Track your progress (BMI, weight etc.)
-
-<br />
 
 ## Getting Started
 
@@ -29,13 +25,28 @@
    - Copy `Project URL` to `DATABASE_URL` and `NEXT_PUBLIC_SUPABASE_URL`
    - Copy `Project API Keys: anon/public key` to `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 2. Run `yarn install && npx prisma generate`
-3. Run `./dev.sh` (make sure have docker)
+3. Run `./reset_db.sh`
+4. Run `./dev.sh` (make sure have docker)
+5. Disable email confirmation under Authentication > Providers > Email in Supabase UI
+6. run `create_user.sh` in `scripts` folder
+
+Debugging:
+
+- make sure you are not ip banned on the supabase admin dashboard (if you failed to login)
+
+## Prisma
+
+https://www.prisma.io/docs/concepts/components/prisma-migrate/mental-model
+
+`prisma migrate dev` for development environment
+
+`prisma migrate deploy` for deployment (PRD) environment
+
+- Edit the DBML documentation before editing the schema
 
 ## Resources
 
 - [Figma](https://www.figma.com/file/R0i3v0IsjhkOhDSYITeWHU/Workout-App?type=design&node-id=0%3A1&mode=design&t=4R5sghDXxfNWkufE-1)
-
-<br />
 
 ## Notes to self
 

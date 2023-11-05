@@ -6,7 +6,10 @@ import WorkoutPlanSchema from "src/validators/workout-schema"
 const addWorkoutPlan = tProtectedProcedure
   .input(WorkoutPlanSchema)
   .mutation(
-    async ({ input: { name, exerciseOrder, exercises }, ctx: { user } }) => {
+    async ({
+      input: { name, exerciseOrder, exercises, gymLocation },
+      ctx: { user },
+    }) => {
       try {
         const exerciseIdArr = Object.keys(exercises)
         // create workoutplan
@@ -20,6 +23,11 @@ const addWorkoutPlan = tProtectedProcedure
             user: {
               connect: {
                 userId: user.id,
+              },
+            },
+            gymLocation: {
+              connect: {
+                gymId: gymLocation,
               },
             },
           },
