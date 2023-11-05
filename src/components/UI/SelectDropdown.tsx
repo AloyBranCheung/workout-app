@@ -20,7 +20,7 @@ export default function SelectDropdown({
     >
       <option value="">Select an option</option>
       {menuList.map((option) => (
-        <option key={option.id} value={option.value}>
+        <option key={`${option.id}-${option.name}`} value={option.value}>
           {option.name}
         </option>
       ))}
