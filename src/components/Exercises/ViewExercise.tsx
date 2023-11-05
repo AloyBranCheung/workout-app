@@ -8,7 +8,7 @@ interface ViewExerciseProps {
 }
 
 export default function ViewExercise({
-  exercise: { name, url, description },
+  exercise: { name, url, description, unit },
   onClose,
 }: ViewExerciseProps) {
   return (
@@ -21,6 +21,9 @@ export default function ViewExercise({
       </p>
       <p>
         <strong>Description:</strong> {description}
+      </p>
+      <p>
+        <strong>Unit:</strong> {unit}
       </p>
       <PrimaryButton
         label="Close"
