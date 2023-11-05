@@ -47,6 +47,7 @@ https://www.prisma.io/docs/concepts/components/prisma-migrate/mental-model
 ## Resources
 
 - [Figma](https://www.figma.com/file/R0i3v0IsjhkOhDSYITeWHU/Workout-App?type=design&node-id=0%3A1&mode=design&t=4R5sghDXxfNWkufE-1)
+- [FigJam](https://www.figma.com/file/juzdl3w9WAAFb52uKXQNBr/Active-Workout-System-Design?type=whiteboard&node-id=0-1&t=Tcm4iRRwaxpdOEp9-0)
 
 ## Notes to self
 
