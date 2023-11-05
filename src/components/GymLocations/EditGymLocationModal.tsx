@@ -35,9 +35,12 @@ export default function EditGymLocationModal({
     })
 
   const handleSubmitForm = async (data: UpdateGymLocationType) => {
-    mutate(data)
-    reset()
-    onClickDecline()
+    mutate(data, {
+      onSuccess: () => {
+        reset()
+        onClickDecline()
+      },
+    })
   }
 
   useEffect(() => {

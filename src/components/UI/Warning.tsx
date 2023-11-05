@@ -9,6 +9,7 @@ interface WarningProps {
   onConfirm: () => void
   onCancel: () => void
   warningTitle: string
+  isLoading?: boolean
 }
 
 export default function Warning({
@@ -18,6 +19,7 @@ export default function Warning({
   onConfirm,
   onCancel,
   warningTitle,
+  isLoading,
 }: WarningProps) {
   return (
     <Modal
@@ -25,11 +27,19 @@ export default function Warning({
       onClose={onCloseModal}
       cardTitle={`Warning: ${warningTitle}`}
     >
-      <div className="w-full flex flex-col gap-2">
-        <Text text={warningMsg} />
-        <Text text="Are you sure?" />
-        <YesNoBtnGroup onClickConfirm={onConfirm} onClickDecline={onCancel} />
-      </div>
+      {isLoading ? (
+        <div className="flex items-center">Loading...</div>
+      ) : (
+        <div className="w-full flex flex-col gap-2">
+          <Text text={warningMsg} />
+          <Text text="Are you sure?" />
+          <YesNoBtnGroup onClickConfirm={onConfirm} onClickDecline={onCancel} />
+        </div>
+      )}
     </Modal>
   )
+}
+
+Warning.defaultProps = {
+  isLoading: false,
 }

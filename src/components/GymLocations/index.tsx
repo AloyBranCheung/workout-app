@@ -24,7 +24,7 @@ export default function GymLocations({ gymLocations }: GymLocationsProps) {
   const [isWarning, setIsWarning] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const toastMessage = useToastMessage()
-  const { mutate } = useMutationDeleteGymLocation(
+  const { mutate, isLoading: isDeleting } = useMutationDeleteGymLocation(
     () => {
       toastMessage("Gym location deleted successfully", ToastMessage.Success)
     },
@@ -78,14 +78,21 @@ export default function GymLocations({ gymLocations }: GymLocationsProps) {
                   typography={Typography.p3}
                 />
                 <Warning
+                  isLoading={isDeleting}
                   isOpen={isWarning}
                   onCloseModal={() => setIsWarning(false)}
                   warningMsg={
                     "All workout plans associated with this gym location will be deleted."
                   }
                   onConfirm={() => {
-                    mutate({ gymId })
-                    setIsWarning(false)
+                    mutate(
+                      { gymId },
+                      {
+                        onSuccess: () => {
+                          setIsWarning(false)
+                        },
+                      }
+                    )
                   }}
                   onCancel={() => setIsWarning(false)}
                   warningTitle="You are about to delete a gym location."
