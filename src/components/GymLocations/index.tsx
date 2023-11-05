@@ -2,6 +2,9 @@
 import React, { useState } from "react"
 // types
 import { GetGymLocationsOutput } from "src/types/trpc/router-types"
+// hooks
+import useMutationDeleteGymLocation from "src/hooks/useMutationDeleteGymLocation"
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // components
 import Text, { Typography } from "../UI/typography/Text"
 import CRUD from "../UI/CRUD"
@@ -9,13 +12,24 @@ import AddGymLocationModal from "../CreateWorkout/AddGymLocationModal"
 import Modal from "../UI/Modal"
 import SecondaryButton from "../UI/SecondaryButton"
 import CRUDCard from "../UI/CRUDCard"
+import Warning from "../UI/Warning"
 
 interface GymLocationsProps {
   gymLocations: GetGymLocationsOutput | undefined
 }
 
 export default function GymLocations({ gymLocations }: GymLocationsProps) {
+  const [isWarning, setIsWarning] = useState(false)
+  const toastMessage = useToastMessage()
+  const { mutate } = useMutationDeleteGymLocation(
+    () => {
+      toastMessage("Gym location deleted successfully", ToastMessage.Success)
+    },
+    () =>
+      toastMessage("Err: Unable to delete gym location.", ToastMessage.Error)
+  )
   const [isCreate, setIsCreate] = useState(false)
+
   return (
     <CRUD
       onCreate={() => setIsCreate(true)}
@@ -37,13 +51,26 @@ export default function GymLocations({ gymLocations }: GymLocationsProps) {
             <CRUDCard
               key={gymId}
               onClickEdit={() => console.log("clicked edit")}
-              onClickDelete={() => console.log("clicked delete")}
+              onClickDelete={() => setIsWarning(true)}
             >
               <div>
                 <Text text={name} typography={Typography.p2} bold />
                 <Text
                   text={description ? description : "no description"}
                   typography={Typography.p3}
+                />
+                <Warning
+                  isOpen={isWarning}
+                  onCloseModal={() => setIsWarning(false)}
+                  warningMsg={
+                    "All workout plans associated with this gym location will be deleted."
+                  }
+                  onConfirm={() => {
+                    mutate({ gymId })
+                    setIsWarning(false)
+                  }}
+                  onCancel={() => setIsWarning(false)}
+                  warningTitle="You are about to delete a gym location."
                 />
               </div>
             </CRUDCard>

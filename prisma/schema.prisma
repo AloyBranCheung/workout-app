@@ -136,7 +136,7 @@ model WorkoutPlan {
   // relations
   user          User        @relation(fields: [userId], references: [userId])
   userId        String
-  gymLocation   GymLocation @relation(fields: [gymId], references: [gymId])
+  gymLocation   GymLocation @relation(fields: [gymId], references: [gymId], onDelete: Cascade)
   gymId         String      @db.Uuid
 
   exercises Exercise[]
