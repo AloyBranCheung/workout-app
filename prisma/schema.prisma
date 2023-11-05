@@ -190,11 +190,11 @@ model Run {
 }
 
 model GymLocation {
-  gymId       String @id @unique @default(uuid()) @db.Uuid
+  gymId       String  @id @unique @default(uuid()) @db.Uuid
   name        String
-  description String
+  description String?
 
   // relation
-  gymLocation User   @relation(fields: [userId], references: [userId])
-  userId      String
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String
 }
