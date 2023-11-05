@@ -3,3 +3,4 @@
 # development only  migrate db 
 yarn prisma migrate dev
 yarn prisma generate
+./restart.sh
