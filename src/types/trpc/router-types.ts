@@ -17,3 +17,13 @@ export type StatsOutput = RouterOutput["stats"]["getStats"]
 export type GetWorkoutPlansOutput = RouterOutput["workouts"]["getWorkoutPlans"]
 
 export type GetExercisesOutput = RouterOutput["workouts"]["getExercises"]
+
+/* -------------------------------------------------------------------------- */
+/*                            Gym Locations Router                            */
+/* -------------------------------------------------------------------------- */
+
+export type CreateGymLocationOutput =
+  RouterOutput["gymLocations"]["addGymLocation"]
+
+export type GetGymLocationsOutput =
+  RouterOutput["gymLocations"]["getGymLocations"]

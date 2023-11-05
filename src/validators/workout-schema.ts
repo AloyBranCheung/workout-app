@@ -9,6 +9,7 @@ const WorkoutPlanSchema = z
   .object({
     name: z.string().min(1),
     exercises: z.record(z.string(), TargetSchema.required()),
+    gymLocation: z.string().min(1),
     exerciseOrder: z
       .array(z.string())
       .min(1, { message: "At least one exercise required." }),
@@ -25,4 +26,9 @@ export const UpdatePlanSchema = WorkoutPlanSchema.extend({
       targetId: z.string().uuid(),
     })
   ),
+})
+
+export const AddGymLocationSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().nullable(),
 })
