@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import useDragSorting from "src/hooks/useDragSorting"
 import useMutationUpdateWorkoutPlan from "src/hooks/useMutationUpdateWorkoutPlan"
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
+import useGetExercises from "src/hooks/useGetExercises"
 // types/utils
 import { GetWorkoutPlansOutput } from "src/types/trpc/router-types"
 import { UpdatePlanSchema } from "src/validators/workout-schema"
@@ -18,6 +19,7 @@ import BorderCard from "../UI/BorderCard"
 import DragSortable from "../UI/DragSortable"
 import ExerciseCard from "../CreateWorkout/ExerciseCard"
 import YesNoBtnGroup from "../UI/YesNoBtnGroup"
+import LoadingSpinner from "../UI/LoadingSpinner"
 
 interface EditWorkoutPlanProps {
   workoutPlan: GetWorkoutPlansOutput[number]
@@ -28,6 +30,15 @@ export default function EditWorkoutPlan({
   workoutPlan,
   onClose,
 }: EditWorkoutPlanProps) {
+  const { data: exercisesRes, isLoading: isLoadingGetExercises } =
+    useGetExercises()
+
+  const isGetting = isLoadingGetExercises
+
+  const gymSpecificExercises =
+    exercisesRes?.filter((exercise) => exercise.gymId === workoutPlan.gymId) ||
+    []
+
   const {
     exerciseOrder,
     exerciseObj: exercises,
@@ -84,7 +95,9 @@ export default function EditWorkoutPlan({
     setValue("exerciseOrder", items as string[])
   }, [items, setValue])
 
-  return (
+  return isGetting ? (
+    <LoadingSpinner />
+  ) : (
     <div className="flex flex-col gap-4">
       <Text text={`Editing ${workoutPlan.name}`} className="text-p1" bold />
       <form
