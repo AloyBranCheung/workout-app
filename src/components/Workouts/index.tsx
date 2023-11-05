@@ -1,11 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react"
 import { useRouter } from "next/router"
-import dayjs from "dayjs"
 // hooks
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 import useMutationDeleteWorkoutPlan from "src/hooks/useMutationDeleteWorkoutPlan"
 // types/utils
-import MsToStrTime from "src/utils/MsToStrTime"
 import {
   GetGymLocationsOutput,
   GetWorkoutPlansOutput,
@@ -13,15 +11,13 @@ import {
 // components
 import PrimaryButton from "../UI/PrimaryButton"
 import Text, { Typography } from "../UI/typography/Text"
-import SecondaryCard from "../UI/SecondaryCard"
 import ParentCard from "../UI/ParentCard"
 import SecondaryButton from "../UI/SecondaryButton"
-import EditIcon from "../UI/icons/EditIcon"
-import TrashIcon from "../UI/icons/TrashIcon"
 import Modal from "../UI/Modal"
 import EditWorkoutPlan from "./EditWorkoutPlan"
 import YesNoBtnGroup from "../UI/YesNoBtnGroup"
 import SelectDropdown from "../UI/SelectDropdown"
+import PlanCard from "./PlanCard"
 
 interface WorkoutsProps {
   plans: GetWorkoutPlansOutput | undefined
@@ -66,65 +62,22 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
       plans
         .filter((plan) => plan.gymId === selectedGymLocation)
         .map(({ planId, name, lastWorkout, duration, gymLocation }) => (
-          <SecondaryCard
+          <PlanCard
             key={planId}
-            className="flex justify-between items-center"
-          >
-            <div>
-              <Text
-                text={name}
-                typography={Typography.p2}
-                bold
-                className="text-p2"
-              />
-              <div>
-                <Text
-                  testId={`gymLocation-${planId}`}
-                  text={`Gym Location: ${
-                    gymLocation?.name
-                      ? gymLocation.name
-                      : "ERR: No location found."
-                  }`}
-                  typography={Typography.p3}
-                  className="text-p3"
-                />
-                <Text
-                  testId={`last-workout-${planId}`}
-                  text={`Last Workout: ${
-                    lastWorkout
-                      ? dayjs(lastWorkout).format("YYYY-MM-DD")
-                      : "Get Started :)"
-                  }`}
-                  typography={Typography.p3}
-                  className="text-p3"
-                />
-                <Text
-                  testId={`workout-duration-${planId}`}
-                  text={`Duration: ${
-                    duration
-                      ? new MsToStrTime(duration).msToStrTime()
-                      : "Get Started :)"
-                  } `}
-                  typography={Typography.p3}
-                  className="text-p3"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <EditIcon
-                onClick={() => {
-                  setSelectedPlanId(planId)
-                  setIsEdit(true)
-                }}
-              />
-              <TrashIcon
-                onClick={() => {
-                  setSelectedPlanId(planId)
-                  setIsConfirmDelete(true)
-                }}
-              />
-            </div>
-          </SecondaryCard>
+            name={name}
+            planId={planId}
+            gymLocation={gymLocation}
+            lastWorkout={lastWorkout}
+            duration={duration}
+            onEditClick={() => {
+              setSelectedPlanId(planId)
+              setIsEdit(true)
+            }}
+            onDeleteClick={() => {
+              setSelectedPlanId(planId)
+              setIsConfirmDelete(true)
+            }}
+          />
         ))) ||
     []
 
