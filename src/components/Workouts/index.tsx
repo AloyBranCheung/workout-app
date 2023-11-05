@@ -18,12 +18,16 @@ import TrashIcon from "../UI/icons/TrashIcon"
 import Modal from "../UI/Modal"
 import EditWorkoutPlan from "./EditWorkoutPlan"
 import YesNoBtnGroup from "../UI/YesNoBtnGroup"
+import SelectDropdown from "../UI/SelectDropdown"
 
 interface WorkoutsProps {
   plans: GetWorkoutPlansOutput | undefined
 }
 
 export default function Workouts({ plans }: WorkoutsProps) {
+  const [selectedGymLocation, setSelectedGymLocation] = useState(
+    (plans && plans[0].planId) || ""
+  )
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isEdit, setIsEdit] = useState(false)
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
@@ -52,6 +56,7 @@ export default function Workouts({ plans }: WorkoutsProps) {
   const handleCloseEdit = () => setIsEdit(false)
 
   const handleDeleteWorkout = (planId: string) => mutate(planId)
+
   return (
     <div className="flex flex-col justify-center w-full h-full gap-8">
       <PrimaryButton
@@ -61,15 +66,30 @@ export default function Workouts({ plans }: WorkoutsProps) {
         className="w-full"
       />
       <div className="flex flex-col gap-5">
-        <Text
-          text="My Workouts"
-          typography={Typography.h3}
-          className="text-h3"
-        />
+        <div className="flex flex-col gap-2">
+          <Text
+            text="My Workouts"
+            typography={Typography.h3}
+            className="text-h3"
+          />
+          <SelectDropdown
+            value={selectedGymLocation}
+            onChange={(e) => setSelectedGymLocation(e.target.value)}
+            menuList={
+              plans?.map((plan) => ({
+                id: plan.gymId,
+                name: plan.name,
+                value: plan.gymId,
+              })) || []
+            }
+          />
+        </div>
         <ParentCard cardTitle="">
           {plans && plans.length > 0 ? (
-            plans.map(
-              ({ planId, name, lastWorkout, duration, gymLocation }) => (
+            // upgrade to reducer fn?
+            plans
+              .filter((plan) => plan.gymId === selectedGymLocation)
+              .map(({ planId, name, lastWorkout, duration, gymLocation }) => (
                 <SecondaryCard
                   key={planId}
                   className="flex justify-between items-center"
@@ -129,8 +149,7 @@ export default function Workouts({ plans }: WorkoutsProps) {
                     />
                   </div>
                 </SecondaryCard>
-              )
-            )
+              ))
           ) : (
             <SecondaryButton
               onClick={() => router.push("/workouts/create-workout")}

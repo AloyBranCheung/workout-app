@@ -43,10 +43,7 @@ export default function FormSelect<FV extends FieldValues>({
                 <option value="addGymLocation">Add an option</option>
               </>
             ) : (
-              <>
-                <option value="">Select an option</option>
-                <option value="addGymLocation">Add an option</option>
-              </>
+              <option value="addGymLocation">Add an option</option>
             )}
           </select>
           {error && <p className="text-red-500 text-xs">{error.message}</p>}
