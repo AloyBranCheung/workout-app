@@ -131,16 +131,17 @@ model Set {
 }
 
 model WorkoutPlan {
-  planId        String      @id @unique @default(uuid()) @db.Uuid
-  updatedAt     DateTime    @default(now()) @updatedAt
-  createdAt     DateTime    @default(now())
-  name          String
-  exerciseOrder String[]
+  planId      String      @id @unique @default(uuid()) @db.Uuid
+  updatedAt   DateTime    @default(now()) @updatedAt
+  createdAt   DateTime    @default(now())
+  name        String
+  lastWorkout DateTime? // calculate and update row
+  duration    Int? // calculate and update row 
   // relations
-  user          User        @relation(fields: [userId], references: [userId])
-  userId        String
-  gymLocation   GymLocation @relation(fields: [gymId], references: [gymId], onDelete: Cascade)
-  gymId         String      @db.Uuid
+  user        User        @relation(fields: [userId], references: [userId])
+  userId      String
+  gymLocation GymLocation @relation(fields: [gymId], references: [gymId], onDelete: Cascade)
+  gymId       String      @db.Uuid
 
   exercises Exercise[]
   sessions  Session[]
