@@ -68,57 +68,69 @@ export default function Workouts({ plans }: WorkoutsProps) {
         />
         <ParentCard cardTitle="">
           {plans && plans.length > 0 ? (
-            plans.map(({ planId, name, lastWorkout, duration }) => (
-              <SecondaryCard
-                key={planId}
-                className="flex justify-between items-center"
-              >
-                <div>
-                  <Text
-                    text={name}
-                    typography={Typography.p2}
-                    bold
-                    className="text-p2"
-                  />
+            plans.map(
+              ({ planId, name, lastWorkout, duration, gymLocation }) => (
+                <SecondaryCard
+                  key={planId}
+                  className="flex justify-between items-center"
+                >
                   <div>
                     <Text
-                      testId={`last-workout-${planId}`}
-                      text={`Last Workout: ${
-                        lastWorkout
-                          ? dayjs(lastWorkout).format("YYYY-MM-DD")
-                          : "Get Started :)"
-                      }`}
-                      typography={Typography.p3}
-                      className="text-p3"
+                      text={name}
+                      typography={Typography.p2}
+                      bold
+                      className="text-p2"
                     />
-                    <Text
-                      testId={`workout-duration-${planId}`}
-                      text={`Duration: ${
-                        duration
-                          ? new MsToStrTime(duration).msToStrTime()
-                          : "Get Started :)"
-                      } `}
-                      typography={Typography.p3}
-                      className="text-p3"
+                    <div>
+                      <Text
+                        testId={`gymLocation-${planId}`}
+                        text={`Gym Location: ${
+                          gymLocation?.name
+                            ? gymLocation.name
+                            : "ERR: No location found."
+                        }`}
+                        typography={Typography.p3}
+                        className="text-p3"
+                      />
+                      <Text
+                        testId={`last-workout-${planId}`}
+                        text={`Last Workout: ${
+                          lastWorkout
+                            ? dayjs(lastWorkout).format("YYYY-MM-DD")
+                            : "Get Started :)"
+                        }`}
+                        typography={Typography.p3}
+                        className="text-p3"
+                      />
+                      <Text
+                        testId={`workout-duration-${planId}`}
+                        text={`Duration: ${
+                          duration
+                            ? new MsToStrTime(duration).msToStrTime()
+                            : "Get Started :)"
+                        } `}
+                        typography={Typography.p3}
+                        className="text-p3"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <EditIcon
+                      onClick={() => {
+                        setSelectedPlanId(planId)
+                        setIsEdit(true)
+                      }}
+                    />
+                    <TrashIcon
+                      onClick={() => {
+                        setSelectedPlanId(planId)
+                        setIsConfirmDelete(true)
+                      }}
                     />
                   </div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <EditIcon
-                    onClick={() => {
-                      setSelectedPlanId(planId)
-                      setIsEdit(true)
-                    }}
-                  />
-                  <TrashIcon
-                    onClick={() => {
-                      setSelectedPlanId(planId)
-                      setIsConfirmDelete(true)
-                    }}
-                  />
-                </div>
-              </SecondaryCard>
-            ))
+                </SecondaryCard>
+              )
+            )
           ) : (
             <SecondaryButton
               onClick={() => router.push("/workouts/create-workout")}
