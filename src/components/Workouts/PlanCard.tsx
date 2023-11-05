@@ -16,6 +16,7 @@ interface PlanCardProps {
   duration: number | null
   onEditClick: () => void
   onDeleteClick: () => void
+  onClickCard: React.MouseEventHandler<HTMLDivElement>
 }
 
 export default function PlanCard({
@@ -26,10 +27,11 @@ export default function PlanCard({
   duration,
   onEditClick,
   onDeleteClick,
+  onClickCard,
 }: PlanCardProps) {
   return (
     <SecondaryCard className="flex justify-between items-center">
-      <div>
+      <div className="w-full cursor-pointer" onClick={onClickCard}>
         <Text text={name} typography={Typography.p2} bold className="text-p2" />
         <div>
           <Text

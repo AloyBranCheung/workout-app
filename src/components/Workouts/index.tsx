@@ -63,6 +63,10 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
         .filter((plan) => plan.gymId === selectedGymLocation)
         .map(({ planId, name, lastWorkout, duration, gymLocation }) => (
           <PlanCard
+            onClickCard={(e) => {
+              e.stopPropagation()
+              console.log("hello world")
+            }}
             key={planId}
             name={name}
             planId={planId}
