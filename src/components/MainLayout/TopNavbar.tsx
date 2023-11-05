@@ -16,6 +16,7 @@ interface TopNavbarProps {
   onToggleMenu: () => void
   onClickExercises: () => void
   onClickRuns: () => void
+  onClickGymLocation: () => void
   isMenuOpen: boolean
 }
 
@@ -27,6 +28,7 @@ export default function TopNavbar({
   onToggleMenu,
   onClickExercises,
   onClickRuns,
+  onClickGymLocation,
 }: TopNavbarProps) {
   const anchorEl = useRef<HTMLDivElement | null>(null)
   const popupRef = useRef<HTMLDivElement | null>(null)
@@ -80,6 +82,11 @@ export default function TopNavbar({
                     },
                   }}
                 >
+                  <PrimaryButton
+                    label="gym locations"
+                    type="button"
+                    onClick={onClickGymLocation}
+                  />
                   <PrimaryButton
                     label="workouts"
                     type="button"
