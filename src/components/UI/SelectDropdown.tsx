@@ -5,12 +5,14 @@ interface SelectDropdownProps {
   menuList: MenuOption[]
   value: string | number
   onChange: React.ChangeEventHandler<HTMLSelectElement>
+  instruction?: string
 }
 
 export default function SelectDropdown({
   menuList,
   onChange,
   value,
+  instruction,
 }: SelectDropdownProps) {
   return (
     <select
@@ -18,7 +20,7 @@ export default function SelectDropdown({
       value={value}
       onChange={onChange}
     >
-      <option value="">Select an option</option>
+      <option value="">{instruction || "Select an option"}</option>
       {menuList.map((option) => (
         <option key={`${option.id}-${option.name}`} value={option.value}>
           {option.name}

@@ -9,6 +9,8 @@ interface FormSelectProps<FV extends FieldValues> {
   control: UseControllerProps<FV>["control"]
   label?: string
   menuOptions: MenuOption[] | []
+  instruction?: string
+  withAddAnOption?: boolean
 }
 
 export default function FormSelect<FV extends FieldValues>({
@@ -16,6 +18,8 @@ export default function FormSelect<FV extends FieldValues>({
   control,
   label,
   menuOptions,
+  instruction,
+  withAddAnOption,
 }: FormSelectProps<FV>) {
   return (
     <Controller
@@ -32,7 +36,7 @@ export default function FormSelect<FV extends FieldValues>({
             onChange={onChange}
             className="w-full"
           >
-            <option value="">Select an option</option>
+            <option value="">{instruction || "Select an option"}</option>
             {menuOptions.length > 0 ? (
               <>
                 {menuOptions.map(({ id, name, value }) => (
@@ -40,10 +44,14 @@ export default function FormSelect<FV extends FieldValues>({
                     {name}
                   </option>
                 ))}
-                <option value="addGymLocation">Add an option</option>
+                {withAddAnOption && (
+                  <option value="addGymLocation">Add an option</option>
+                )}
               </>
             ) : (
-              <option value="addGymLocation">Add an option</option>
+              withAddAnOption && (
+                <option value="addGymLocation">Add an option</option>
+              )
             )}
           </select>
           {error && <p className="text-red-500 text-xs">{error.message}</p>}
@@ -51,4 +59,8 @@ export default function FormSelect<FV extends FieldValues>({
       )}
     />
   )
+}
+
+FormSelect.defaultProps = {
+  withAddAnOption: true,
 }

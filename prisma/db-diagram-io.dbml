@@ -35,6 +35,8 @@ Table Exercise {
   description string [note: 'optional']
   url string [note: 'optional youtube link to exercise']
   targetId string 
+  unit string
+  gymId string [ref: > GymLocation.gymId]
 }
 
 Table Target {

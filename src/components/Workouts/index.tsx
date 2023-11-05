@@ -29,9 +29,7 @@ interface WorkoutsProps {
 }
 
 export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
-  const [selectedGymLocation, setSelectedGymLocation] = useState(
-    (plans && plans[0].planId) || ""
-  )
+  const [selectedGymLocation, setSelectedGymLocation] = useState("")
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isEdit, setIsEdit] = useState(false)
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
@@ -152,6 +150,7 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
             className="text-h3"
           />
           <SelectDropdown
+            instruction="Select a location"
             value={selectedGymLocation}
             onChange={(e) => setSelectedGymLocation(e.target.value)}
             menuList={

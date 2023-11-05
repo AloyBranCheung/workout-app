@@ -60,15 +60,18 @@ model Activity {
 
 // Exercises Table
 model Exercise {
-  exerciseId  String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt   DateTime @default(now()) @updatedAt
-  createdAt   DateTime @default(now())
-  name        String
-  description String?
-  url         String?
+  exerciseId   String      @id @unique @default(uuid()) @db.Uuid
+  updatedAt    DateTime    @default(now()) @updatedAt
+  createdAt    DateTime    @default(now())
+  name         String
+  description  String?
+  url          String?
+  unit         String
   // relations
-  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId      String
+  user         User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId       String
+  gymLocations GymLocation @relation(fields: [gymId], references: [gymId], onDelete: Cascade)
+  gymId        String      @db.Uuid
 
   workoutPlans WorkoutPlan[]
   sets         Set[]
@@ -201,4 +204,5 @@ model GymLocation {
   userId String
 
   workoutPlans WorkoutPlan[]
+  exercises    Exercise[]
 }
