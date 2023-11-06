@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { z } from "zod"
 // react-hook-forms
 import { useForm } from "react-hook-form"
@@ -20,6 +20,8 @@ import DragSortable from "../UI/DragSortable"
 import ExerciseCard from "../CreateWorkout/ExerciseCard"
 import YesNoBtnGroup from "../UI/YesNoBtnGroup"
 import LoadingSpinner from "../UI/LoadingSpinner"
+import SecondaryButton from "../UI/SecondaryButton"
+import AddExercise from "./AddExercise"
 
 interface EditWorkoutPlanProps {
   workoutPlan: GetWorkoutPlansOutput[number]
@@ -30,14 +32,18 @@ export default function EditWorkoutPlan({
   workoutPlan,
   onClose,
 }: EditWorkoutPlanProps) {
+  const [isShowExercises, setIsShowExercises] = useState(false)
   const { data: exercisesRes, isLoading: isLoadingGetExercises } =
     useGetExercises()
 
   const isGetting = isLoadingGetExercises
 
   const gymSpecificExercises =
-    exercisesRes?.filter((exercise) => exercise.gymId === workoutPlan.gymId) ||
-    []
+    exercisesRes?.filter(
+      (exercise) =>
+        exercise.gymId === workoutPlan.gymId &&
+        !workoutPlan.exerciseOrder.includes(exercise.exerciseId)
+    ) || []
 
   const {
     exerciseOrder,
@@ -65,7 +71,7 @@ export default function EditWorkoutPlan({
   const { items, verticalListSortingStrategy, handleDragEnd } =
     useDragSorting(exerciseOrder)
 
-  const { control, handleSubmit, setValue } = useForm<
+  const { control, handleSubmit, setValue, getValues } = useForm<
     z.infer<typeof UpdatePlanSchema>
   >({
     resolver: zodResolver(UpdatePlanSchema),
@@ -91,6 +97,13 @@ export default function EditWorkoutPlan({
   const handleSubmitForm = (data: z.infer<typeof UpdatePlanSchema>) =>
     mutate(data)
 
+  // TODO: finish this
+  const handleClickAddExercise = (exerciseId: string) => {
+    const currExerciseOrder = getValues("exerciseOrder")
+    setValue("exerciseOrder", [...currExerciseOrder, exerciseId])
+    workoutPlan.exerciseOrder.push(exerciseId)
+  }
+
   useEffect(() => {
     setValue("exerciseOrder", items as string[])
   }, [items, setValue])
@@ -105,6 +118,25 @@ export default function EditWorkoutPlan({
         onSubmit={handleSubmit(handleSubmitForm)}
       >
         <FormInput name="name" control={control} />
+        {isShowExercises ? (
+          <SecondaryButton
+            label="Close"
+            type="button"
+            onClick={() => setIsShowExercises(false)}
+          />
+        ) : (
+          <SecondaryButton
+            label="Add Exercise"
+            type="button"
+            onClick={() => setIsShowExercises(true)}
+          />
+        )}
+        {isShowExercises && (
+          <AddExercise
+            gymSpecificExercises={gymSpecificExercises}
+            onClickAdd={handleClickAddExercise}
+          />
+        )}
         <BorderCard>
           <DragSortable
             items={items}
