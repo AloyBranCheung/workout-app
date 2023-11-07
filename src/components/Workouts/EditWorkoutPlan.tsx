@@ -115,6 +115,26 @@ export default function EditWorkoutPlan({
     )
   }
 
+  const handleClickRemoveExercise = (exerciseId: string) => {
+    if (!(items.length > 1))
+      return toastMessage("Cannot remove last item.", ToastMessage.Error)
+    setItems(items.filter((itemId) => itemId !== exerciseId))
+    if (exercisesRes) {
+      const exerciseToAddBack = exercisesRes.find(
+        (obj) => obj.exerciseId === exerciseId
+      )
+
+      if (exerciseToAddBack)
+        setGymSpecificExercises((prevObj) =>
+          [...prevObj, exerciseToAddBack].sort((a, b) => {
+            if (a.name > b.name) return 1
+            if (a.name < b.name) return -1
+            return 0
+          })
+        )
+    }
+  }
+
   useEffect(() => {
     if (exercisesRes) {
       const arr = exercisesRes?.filter(
@@ -173,6 +193,7 @@ export default function EditWorkoutPlan({
                 exerciseName={exerciseHashmap[itemId]?.name || ""}
                 setsName={`exercises.${itemId}.sets`}
                 repsName={`exercises.${itemId}.reps`}
+                onClickRemove={handleClickRemoveExercise}
               />
             ))}
           </DragSortable>

@@ -107,7 +107,7 @@ export default function CreateWorkout({
   // if addGymLocation is selected then open popup dialog
   useEffect(() => {
     const subscription = watch((value) => {
-      if (value.gymLocation?.gymId === "addGymLocation") {
+      if (value.gymLocation?.name === "addGymLocation") {
         setIsAddGymLocation(true)
       }
     })
@@ -124,7 +124,8 @@ export default function CreateWorkout({
         >
           <FormInput control={control} name="name" />
           <FormSelect
-            name="gymLocation"
+            name="gymLocation.name"
+            label="Gym Location"
             control={control}
             menuOptions={
               gymLocations?.map(({ gymId, name }) => ({
@@ -154,6 +155,9 @@ export default function CreateWorkout({
                     exerciseName={exercisesHashmap[itemId].name}
                     setsName={`exercises.${itemId}.sets`}
                     repsName={`exercises.${itemId}.reps`}
+                    onClickRemove={(id) => {
+                      setItems(items.filter((item) => item !== id))
+                    }}
                   />
                 ))}
               </DragSortable>

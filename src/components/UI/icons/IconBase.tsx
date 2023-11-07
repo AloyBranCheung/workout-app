@@ -37,6 +37,7 @@ export default function IconBase({
       onClick={onClick}
       whileTap={{ scale: 0.9 }}
       whileHover={{ scale: 1.1 }}
+      type="button"
     >
       {children || nextImage}
     </motion.button>
