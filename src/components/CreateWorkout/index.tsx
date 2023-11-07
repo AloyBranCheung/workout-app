@@ -55,7 +55,9 @@ export default function CreateWorkout({
   } = useForm<z.infer<typeof WorkoutPlanSchema> & FieldValues>({
     defaultValues: {
       name: "",
-      gymLocation: "",
+      gymLocation: {
+        gymId: "",
+      },
       exercises: {},
       exerciseOrder: [],
     },
@@ -92,7 +94,7 @@ export default function CreateWorkout({
   const handleCloseModal = () => setIsAddExercise(false)
   const handleCloseAddGymLocation = () => {
     setIsAddGymLocation(false)
-    setValue("gymLocation", "")
+    setValue("gymLocation", { gymId: "", name: "" })
   }
   const handleClickAdd = (exerciseId: string) =>
     setItems([...items, exerciseId])
@@ -105,7 +107,7 @@ export default function CreateWorkout({
   // if addGymLocation is selected then open popup dialog
   useEffect(() => {
     const subscription = watch((value) => {
-      if (value.gymLocation === "addGymLocation") {
+      if (value.gymLocation?.gymId === "addGymLocation") {
         setIsAddGymLocation(true)
       }
     })
@@ -202,7 +204,7 @@ export default function CreateWorkout({
       >
         <AddGymLocationModal
           onSuccessAdd={(gymLocation) => {
-            setValue("gymLocation", gymLocation)
+            setValue("gymLocation", { gymId: gymLocation, name: "" })
             setIsAddGymLocation(false)
           }}
         />

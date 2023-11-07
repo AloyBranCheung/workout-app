@@ -63,12 +63,7 @@ export default function EditWorkoutPlan({
     exerciseHashmap,
     exerciseOrder,
   } = useMemo(() => {
-    const exerciseHashmap = exerciseHash(
-      workoutPlan.targets.map(({ exercise, targetId }) => ({
-        ...exercise,
-        targetId,
-      }))
-    )
+    const exerciseHashmap = exerciseHash(exercisesRes)
     const exerciseOrder = workoutPlan.exerciseOrder
     const exerciseObj: z.infer<typeof UpdatePlanSchema>["exercises"] = {}
     for (const target of workoutPlan.targets) {
@@ -79,7 +74,7 @@ export default function EditWorkoutPlan({
       }
     }
     return { exerciseOrder, exerciseObj, exerciseHashmap }
-  }, [workoutPlan])
+  }, [exercisesRes, workoutPlan.exerciseOrder, workoutPlan.targets])
 
   const { items, verticalListSortingStrategy, handleDragEnd, setItems } =
     useDragSorting(exerciseOrder)
@@ -93,8 +88,10 @@ export default function EditWorkoutPlan({
       planId: workoutPlan.planId,
       exerciseOrder: [],
       exercises,
+      gymLocation: { ...workoutPlan.gymLocation },
     },
   })
+
   const toastMessage = useToastMessage()
 
   const { mutate, isLoading } = useMutationUpdateWorkoutPlan(
@@ -107,8 +104,9 @@ export default function EditWorkoutPlan({
     }
   )
 
-  const handleSubmitForm = (data: z.infer<typeof UpdatePlanSchema>) =>
+  const handleSubmitForm = (data: z.infer<typeof UpdatePlanSchema>) => {
     mutate(data)
+  }
 
   const handleClickAddExercise = (exerciseId: string) => {
     setItems([...items, exerciseId])

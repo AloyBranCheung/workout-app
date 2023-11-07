@@ -21,6 +21,7 @@ const getWorkoutPlans = tProtectedProcedure.query(async ({ ctx: { user } }) => {
         gymLocation: {
           select: {
             name: true,
+            gymId: true,
           },
         },
       },

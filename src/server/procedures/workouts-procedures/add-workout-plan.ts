@@ -27,7 +27,7 @@ const addWorkoutPlan = tProtectedProcedure
             },
             gymLocation: {
               connect: {
-                gymId: gymLocation,
+                gymId: gymLocation.gymId,
               },
             },
           },

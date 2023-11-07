@@ -20,11 +20,21 @@ const updateWorkoutPlan = tProtectedProcedure
     // get targetId to update from exercises object
     const targetHash: { [targetId: string]: (typeof exercises)[string] } = {}
     const targetIdArr = []
+    const newTargets = []
     for (const exerciseId of Object.keys(exercises)) {
       const exerciseObj = exercises[exerciseId]
-      if (!(exerciseObj.targetId in targetHash)) {
-        targetHash[exerciseObj.targetId] = exerciseObj
-        targetIdArr.push(exerciseObj.targetId)
+      if (exerciseObj?.targetId) {
+        if (!(exerciseObj.targetId in targetHash)) {
+          targetHash[exerciseObj.targetId] = exerciseObj
+          targetIdArr.push(exerciseObj.targetId)
+        }
+      } else {
+        newTargets.push({
+          targetReps: exerciseObj.reps,
+          targetSets: exerciseObj.sets,
+          exerciseId,
+          planId,
+        })
       }
     }
 
@@ -42,11 +52,36 @@ const updateWorkoutPlan = tProtectedProcedure
       return updatedTarget
     }
 
+    const createNewTarget = async ({
+      targetReps,
+      targetSets,
+      exerciseId,
+      planId,
+    }: {
+      targetReps: string
+      targetSets: string
+      exerciseId: string
+      planId: string
+    }) => {
+      await prisma.target.create({
+        data: {
+          targetReps: Number(targetReps),
+          targetSets: Number(targetSets),
+          exerciseId,
+          planId,
+        },
+      })
+    }
+
     const updatedTargets = await Promise.all(
       targetIdArr.map((targetId) => updateTarget(targetId))
     )
 
-    return { updatedWorkoutPlan, updatedTargets }
+    const createdTargets = await Promise.all(
+      newTargets.map((targetObj) => createNewTarget(targetObj))
+    )
+
+    return { updatedWorkoutPlan, updatedTargets, createdTargets }
   })
 
 export default updateWorkoutPlan
