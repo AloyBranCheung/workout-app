@@ -23,6 +23,22 @@ import LoadingSpinner from "../UI/LoadingSpinner"
 import SecondaryButton from "../UI/SecondaryButton"
 import AddExercise from "./AddExercise"
 
+interface IGymSpecificExercises {
+  userId: string
+  createdAt: string
+  updatedAt: string
+  name: string
+  gymLocations: {
+    name: string
+    gymId: string
+  }
+  url: string | null
+  description: string | null
+  gymId: string
+  unit: string
+  exerciseId: string
+}
+
 interface EditWorkoutPlanProps {
   workoutPlan: GetWorkoutPlansOutput[number]
   onClose: () => void
@@ -33,22 +49,19 @@ export default function EditWorkoutPlan({
   onClose,
 }: EditWorkoutPlanProps) {
   const [isShowExercises, setIsShowExercises] = useState(false)
+  const [gymSpecificExercises, setGymSpecificExercises] = useState<
+    IGymSpecificExercises[]
+  >([])
+
   const { data: exercisesRes, isLoading: isLoadingGetExercises } =
     useGetExercises()
 
   const isGetting = isLoadingGetExercises
 
-  const gymSpecificExercises =
-    exercisesRes?.filter(
-      (exercise) =>
-        exercise.gymId === workoutPlan.gymId &&
-        !workoutPlan.exerciseOrder.includes(exercise.exerciseId)
-    ) || []
-
   const {
-    exerciseOrder,
     exerciseObj: exercises,
     exerciseHashmap,
+    exerciseOrder,
   } = useMemo(() => {
     const exerciseHashmap = exerciseHash(
       workoutPlan.targets.map(({ exercise, targetId }) => ({
@@ -68,10 +81,10 @@ export default function EditWorkoutPlan({
     return { exerciseOrder, exerciseObj, exerciseHashmap }
   }, [workoutPlan])
 
-  const { items, verticalListSortingStrategy, handleDragEnd } =
+  const { items, verticalListSortingStrategy, handleDragEnd, setItems } =
     useDragSorting(exerciseOrder)
 
-  const { control, handleSubmit, setValue, getValues } = useForm<
+  const { control, handleSubmit, setValue } = useForm<
     z.infer<typeof UpdatePlanSchema>
   >({
     resolver: zodResolver(UpdatePlanSchema),
@@ -97,12 +110,23 @@ export default function EditWorkoutPlan({
   const handleSubmitForm = (data: z.infer<typeof UpdatePlanSchema>) =>
     mutate(data)
 
-  // TODO: finish this
   const handleClickAddExercise = (exerciseId: string) => {
-    const currExerciseOrder = getValues("exerciseOrder")
-    setValue("exerciseOrder", [...currExerciseOrder, exerciseId])
-    workoutPlan.exerciseOrder.push(exerciseId)
+    setItems([...items, exerciseId])
+    setGymSpecificExercises((prev) =>
+      prev.filter((prevObj) => prevObj.exerciseId !== exerciseId)
+    )
   }
+
+  useEffect(() => {
+    if (exercisesRes) {
+      const arr = exercisesRes?.filter(
+        (exercise) =>
+          exercise.gymId === workoutPlan.gymId &&
+          !workoutPlan.exerciseOrder.includes(exercise.exerciseId)
+      )
+      setGymSpecificExercises(arr)
+    }
+  }, [exercisesRes, workoutPlan.exerciseOrder, workoutPlan.gymId])
 
   useEffect(() => {
     setValue("exerciseOrder", items as string[])
@@ -148,7 +172,7 @@ export default function EditWorkoutPlan({
                 exerciseId={itemId.toString()}
                 key={itemId}
                 control={control}
-                exerciseName={exerciseHashmap[itemId].name}
+                exerciseName={exerciseHashmap[itemId]?.name || ""}
                 setsName={`exercises.${itemId}.sets`}
                 repsName={`exercises.${itemId}.reps`}
               />
