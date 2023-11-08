@@ -23,6 +23,7 @@ import { GetExercisesOutput } from "src/types/trpc/router-types"
 import useGetGymLocations from "src/hooks/useGetGymLocations"
 import LoadingSpinner from "../UI/LoadingSpinner"
 import SelectDropdown from "../UI/SelectDropdown"
+import useGetWorkoutPlans from "src/hooks/useGetWorkoutPlans"
 
 interface ExercisesProps {
   exercises: GetExercisesOutput | undefined
@@ -31,6 +32,8 @@ interface ExercisesProps {
 export default function Exercises({ exercises }: ExercisesProps) {
   const { data: gymLocations, isLoading: isLoadingGymLocations } =
     useGetGymLocations()
+  const { data: workoutPlans, isLoading: isLoadingWorkoutPlans } =
+    useGetWorkoutPlans()
   const [viewExercise, setViewExercise] = useState(false)
   const [editExercise, setEditExercise] = useState(false)
   const [isAddExercise, setIsAddExercise] = useState(false)
@@ -39,7 +42,7 @@ export default function Exercises({ exercises }: ExercisesProps) {
   const toastMessage = useToastMessage()
   const [currGymLocation, setCurrGymLocation] = useState("")
 
-  const isLoading = isLoadingGymLocations
+  const isLoading = isLoadingGymLocations || isLoadingWorkoutPlans
 
   const gymOptions =
     gymLocations?.map((loc) => ({
@@ -68,6 +71,16 @@ export default function Exercises({ exercises }: ExercisesProps) {
   const handleCloseConfirmDelete = () => setIsConfirmDelete(false)
   const handleClickConfirm = () => {
     const validatedId = z.string().uuid().safeParse(selectedExerciseId)
+    const isExerciseInWorkoutPlan = workoutPlans?.some((workoutPlan) =>
+      workoutPlan.exerciseOrder.includes(selectedExerciseId)
+    )
+    if (isExerciseInWorkoutPlan) {
+      toastMessage(
+        "Cannot delete exercise in a workoutplan",
+        ToastMessage.Error
+      )
+      return
+    }
     if (!validatedId.success) {
       toastMessage("Invalid exercise id", ToastMessage.Error)
       return
