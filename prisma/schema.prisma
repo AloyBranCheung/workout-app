@@ -14,19 +14,20 @@ datasource db {
 
 // User Attributes Table
 model User {
-  id           Int           @id @unique @default(autoincrement())
-  userId       String        @unique
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @default(now()) @updatedAt
-  email        String        @unique
-  name         String
+  id             Int             @id @unique @default(autoincrement())
+  userId         String          @unique
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
+  email          String          @unique
+  name           String
   // relations
-  workoutPlans WorkoutPlan[]
-  exercises    Exercise[]
-  profile      Profile?
-  runPlans     RunPlan[]
-  activities   Activity[]
-  gymLocations GymLocation[]
+  workoutPlans   WorkoutPlan[]
+  exercises      Exercise[]
+  profile        Profile?
+  runPlans       RunPlan[]
+  activities     Activity[]
+  gymLocations   GymLocation[]
+  currActiveSesh CurrActiveSesh?
 }
 
 // Profile Model Table
@@ -66,28 +67,18 @@ model Exercise {
   name        String
   description String?
   url         String?
+  unit        String
+  targetReps  Int?
+  targetSets  Int?
+
   // relations
-  user        User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId      String
+  user         User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId       String
+  gymLocations GymLocation @relation(fields: [gymId], references: [gymId], onDelete: Cascade)
+  gymId        String      @db.Uuid
 
   workoutPlans WorkoutPlan[]
   sets         Set[]
-  target       Target[]
-}
-
-// Exercise Targets for Workout
-model Target {
-  targetId   String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt  DateTime @default(now()) @updatedAt
-  createdAt  DateTime @default(now())
-  targetReps Int
-  targetSets Int
-  // relations
-  exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId], onDelete: Cascade)
-  exerciseId String   @db.Uuid
-
-  workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId], onDelete: Cascade)
-  planId      String      @db.Uuid
 }
 
 // Session Table for each workout 'session'
@@ -95,8 +86,8 @@ model Session {
   sessionId     String   @id @unique @default(uuid()) @db.Uuid
   updatedAt     DateTime @default(now()) @updatedAt
   createdAt     DateTime @default(now())
-  duration      Int
-  exerciseOrder String[] // array of integers Exercise.exerciseId 
+  startDuration DateTime
+  endDuration   DateTime
   // relations
   sets          Set[]
 
@@ -105,17 +96,20 @@ model Session {
 
   activity   Activity @relation(fields: [activityId], references: [activityId])
   activityId String   @unique @db.Uuid
+
+  currActiveSesh CurrActiveSesh?
 }
 
 // Exercise History Table
 model Set {
-  historyId String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt DateTime @default(now()) @updatedAt
-  createdAt DateTime @default(now())
-  weight    Int
-  unit      String   @default("kg")
-  reps      Int
-  note      String?
+  historyId  String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt  DateTime @default(now()) @updatedAt
+  createdAt  DateTime @default(now())
+  weight     Int
+  weightUnit String
+  unit       String   @default("kg")
+  reps       Int
+  note       String?
 
   // relations
   session   Session @relation(fields: [sessionId], references: [sessionId])
@@ -131,8 +125,8 @@ model WorkoutPlan {
   createdAt     DateTime    @default(now())
   name          String
   exerciseOrder String[]
-  lastWorkout   DateTime?
-  duration      Int?
+  lastWorkout   DateTime? // calculate and update row
+  duration      Int? // calculate and update row 
   // relations
   user          User        @relation(fields: [userId], references: [userId])
   userId        String
@@ -141,7 +135,6 @@ model WorkoutPlan {
 
   exercises Exercise[]
   sessions  Session[]
-  targets   Target[]
 }
 
 model RunPlan {
@@ -192,7 +185,9 @@ model Run {
 }
 
 model GymLocation {
-  gymId       String  @id @unique @default(uuid()) @db.Uuid
+  gymId       String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt   DateTime @default(now()) @updatedAt
+  createdAt   DateTime @default(now())
   name        String
   description String?
 
@@ -201,4 +196,18 @@ model GymLocation {
   userId String
 
   workoutPlans WorkoutPlan[]
+  exercises    Exercise[]
+}
+
+model CurrActiveSesh {
+  actSeshId String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  // relations
+
+  session   Session @relation(fields: [sessionId], references: [sessionId])
+  sessionId String  @unique @db.Uuid
+
+  user   User   @relation(fields: [userId], references: [userId])
+  userId String @unique
 }

@@ -3,15 +3,18 @@ import React from "react"
 import { Control, FieldValues, Path } from "react-hook-form"
 // dnd
 import { useSortable } from "@dnd-kit/sortable"
+// zod
+import { z } from "zod"
+// types/validators
+import WorkoutPlanSchema, {
+  UpdatePlanSchema,
+} from "src/validators/workout-schema"
 // components
 import DragIcon from "../UI/icons/DragIcon"
 import SecondaryCard from "../UI/SecondaryCard"
 import Text from "../UI/typography/Text"
 import FormInput from "../UI/FormInput"
-import WorkoutPlanSchema, {
-  UpdatePlanSchema,
-} from "src/validators/workout-schema"
-import { z } from "zod"
+import TrashIcon from "../UI/icons/TrashIcon"
 
 interface ExerciseCardProps<
   T extends z.infer<typeof UpdatePlanSchema> | z.infer<typeof WorkoutPlanSchema>
@@ -21,6 +24,7 @@ interface ExerciseCardProps<
   control: Control<FieldValues & T>
   setsName: Path<FieldValues & T>
   repsName: Path<FieldValues & T>
+  onClickRemove: (exerciseId: string) => void
 }
 
 export default function ExerciseCard<
@@ -31,6 +35,7 @@ export default function ExerciseCard<
   control,
   setsName,
   repsName,
+  onClickRemove,
 }: ExerciseCardProps<T>) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: exerciseId })
@@ -50,7 +55,10 @@ export default function ExerciseCard<
       <SecondaryCard className="p-3 flex items-center gap-4">
         <DragIcon />
         <div className="flex flex-col gap-3">
-          <Text text={`Name: ${exerciseName}`} bold />
+          <div className="flex justify-between items-center">
+            <Text text={`Name: ${exerciseName}`} bold />
+            <TrashIcon onClick={() => onClickRemove(exerciseId)} />
+          </div>
           <div className="flex items-center gap-4">
             <FormInput
               control={control}

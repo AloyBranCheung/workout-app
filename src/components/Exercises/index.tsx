@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { z } from "zod"
 // components
 import PrimaryButton from "../UI/PrimaryButton"
@@ -20,18 +20,36 @@ import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // types/utils
 import exerciseHash from "src/utils/exercises-hashmap"
 import { GetExercisesOutput } from "src/types/trpc/router-types"
+import useGetGymLocations from "src/hooks/useGetGymLocations"
+import LoadingSpinner from "../UI/LoadingSpinner"
+import SelectDropdown from "../UI/SelectDropdown"
+import useGetWorkoutPlans from "src/hooks/useGetWorkoutPlans"
 
 interface ExercisesProps {
   exercises: GetExercisesOutput | undefined
 }
 
 export default function Exercises({ exercises }: ExercisesProps) {
+  const { data: gymLocations, isLoading: isLoadingGymLocations } =
+    useGetGymLocations()
+  const { data: workoutPlans, isLoading: isLoadingWorkoutPlans } =
+    useGetWorkoutPlans()
   const [viewExercise, setViewExercise] = useState(false)
   const [editExercise, setEditExercise] = useState(false)
   const [isAddExercise, setIsAddExercise] = useState(false)
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
   const [selectedExerciseId, setSelectedExerciseId] = useState<string>("")
   const toastMessage = useToastMessage()
+  const [currGymLocation, setCurrGymLocation] = useState("")
+
+  const isLoading = isLoadingGymLocations || isLoadingWorkoutPlans
+
+  const gymOptions =
+    gymLocations?.map((loc) => ({
+      id: loc.gymId,
+      name: loc.name,
+      value: loc.gymId,
+    })) || []
 
   const { mutate } = useMutationDeleteExercise(
     () => {
@@ -47,10 +65,22 @@ export default function Exercises({ exercises }: ExercisesProps) {
 
   const exerciseName = exerciseHashmap[selectedExerciseId]?.name ?? ""
 
+  const filtered = exercises?.filter((exerc) => exerc.gymId === currGymLocation)
+
   const handleCloseAddExercise = () => setIsAddExercise(false)
   const handleCloseConfirmDelete = () => setIsConfirmDelete(false)
   const handleClickConfirm = () => {
     const validatedId = z.string().uuid().safeParse(selectedExerciseId)
+    const isExerciseInWorkoutPlan = workoutPlans?.some((workoutPlan) =>
+      workoutPlan.exerciseOrder.includes(selectedExerciseId)
+    )
+    if (isExerciseInWorkoutPlan) {
+      toastMessage(
+        "Cannot delete exercise in a workoutplan",
+        ToastMessage.Error
+      )
+      return
+    }
     if (!validatedId.success) {
       toastMessage("Invalid exercise id", ToastMessage.Error)
       return
@@ -58,7 +88,15 @@ export default function Exercises({ exercises }: ExercisesProps) {
     mutate(validatedId.data)
   }
 
-  return (
+  useEffect(() => {
+    if (gymLocations) {
+      setCurrGymLocation(gymLocations[0].gymId)
+    }
+  }, [gymLocations])
+
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div className="flex flex-col gap-10">
       <PrimaryButton
         label="add an exercise"
@@ -66,11 +104,18 @@ export default function Exercises({ exercises }: ExercisesProps) {
         className="w-full"
         onClick={() => setIsAddExercise(true)}
       />
-      <div>
-        <Text text="My Exercises" className="text-h3" />
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <Text text="Exercises" className="text-h3" />
+          <SelectDropdown
+            menuList={gymOptions}
+            value={currGymLocation}
+            onChange={(e) => setCurrGymLocation(e.target.value)}
+          />
+        </div>
         <ParentCard>
-          {exercises && exercises.length > 0 ? (
-            exercises.map(({ exerciseId, name }) => (
+          {filtered && filtered.length > 0 ? (
+            filtered.map(({ exerciseId, name }) => (
               <SecondaryCard
                 key={exerciseId}
                 className="flex justify-between items-center"

@@ -1,5 +1,6 @@
 services:
   nextjs:
+    container_name: workout-app
     build:
       dockerfile: ./Dockerfile.dev
     ports:
@@ -8,3 +9,9 @@ services:
       - ./.env
     volumes:
       - ./src:/app/src
+  prismaliser:
+    container_name: prismaliser
+    build:
+      dockerfile: ./prismaliser/Dockerfile.dev
+    ports:
+      - "8080:8080"

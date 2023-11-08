@@ -8,6 +8,11 @@ const MOCK_EXERCISES: GetExercisesOutput = new Array(5).fill(0).map((_, i) => ({
   updatedAt: new Date().toISOString(),
   createdAt: new Date().toISOString(),
   userId: "1",
+  gymLocations: { name: `test${i}`, gymId: `${i}` },
+  gymId: `test${i}`,
+  unit: "kg",
+  targetReps: 8,
+  targetSets: 3,
 }))
 
 export default MOCK_EXERCISES

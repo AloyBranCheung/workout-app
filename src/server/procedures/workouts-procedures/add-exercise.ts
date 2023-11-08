@@ -12,9 +12,15 @@ const addExercise = tProtectedProcedure
           name: input.name,
           description: input.description,
           url: input?.url ?? "",
+          unit: input.unit,
           user: {
             connect: {
               userId: user.id,
+            },
+          },
+          gymLocations: {
+            connect: {
+              gymId: input.gymId,
             },
           },
         },

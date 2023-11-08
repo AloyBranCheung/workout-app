@@ -1,5 +1,7 @@
 import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+// hooks
+import useGetGymLocations from "src/hooks/useGetGymLocations"
 // components
 import Text from "../UI/typography/Text"
 import PrimaryButton from "../UI/PrimaryButton"
@@ -9,6 +11,9 @@ import SecondaryCard from "../UI/SecondaryCard"
 // types/utils
 import { GetExercisesOutput } from "src/types/trpc/router-types"
 import AddExerciseForm from "../Exercises/AddExerciseForm"
+import { MenuOption } from "src/types/menu"
+import SelectDropdown from "../UI/SelectDropdown"
+import LoadingSpinner from "../UI/LoadingSpinner"
 
 interface AddExerciseProps {
   onClickCancel: () => void
@@ -21,9 +26,28 @@ export default function AddExercise({
   exercises,
   onClickAdd,
 }: AddExerciseProps) {
+  const { data, isLoading: isLoadingGymLocations } = useGetGymLocations()
   const [createNewExercise, setCreateNewExercise] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState("")
 
-  return (
+  const isLoading = isLoadingGymLocations
+
+  const gymLocationsMenuOptions: MenuOption[] = (() => {
+    if (!data) return []
+    return data.map((gymLocation) => ({
+      id: gymLocation.gymId,
+      value: gymLocation.gymId,
+      name: gymLocation.name,
+    }))
+  })()
+
+  const filteredExercises = exercises.filter(
+    (exercise) => exercise.gymId === selectedLocation
+  )
+
+  return isLoading ? (
+    <LoadingSpinner />
+  ) : (
     <div className="flex flex-col gap-4">
       {createNewExercise ? (
         <AddExerciseForm
@@ -38,11 +62,17 @@ export default function AddExercise({
           className="w-full"
         />
       )}
+      <SelectDropdown
+        menuList={gymLocationsMenuOptions}
+        value={selectedLocation}
+        onChange={(e) => setSelectedLocation(e.target.value)}
+        instruction="Select a location"
+      />
       <BorderCard>
         <Text className="text-p2" bold text="My Exercises" />
         <div className="flex flex-col gap-4">
-          {exercises.length > 0 ? (
-            exercises.map(({ exerciseId, name }) => (
+          {filteredExercises.length > 0 ? (
+            filteredExercises.map(({ exerciseId, name }) => (
               <AnimatePresence key={exerciseId}>
                 <motion.div
                   initial={{ opacity: 0 }}

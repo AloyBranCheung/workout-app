@@ -9,6 +9,7 @@ interface CRUDProps {
   secondaryCards: React.ReactNode
   onCreate: () => void // toggle a create modal
   h3Text: string
+  primaryButtonLabel: string
 }
 
 // CRUD layout styling
@@ -17,12 +18,13 @@ export default function CRUD({
   onCreate,
   h3Text,
   secondaryCards,
+  primaryButtonLabel,
 }: CRUDProps) {
   return (
     <div className="flex flex-col justify-center w-full h-full gap-8">
       <PrimaryButton
         onClick={onCreate}
-        label="create a plan"
+        label={primaryButtonLabel}
         type="button"
         className="w-full"
       />

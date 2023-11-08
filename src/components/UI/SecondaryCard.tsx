@@ -5,7 +5,7 @@ import ButtonClick from "./animations/ButtonClick"
 
 interface SecondaryCardProps {
   children: React.ReactNode
-  onClick?: () => void
+  onClick?: React.MouseEventHandler<HTMLDivElement>
   className?: string
 }
 

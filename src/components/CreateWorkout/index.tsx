@@ -55,12 +55,15 @@ export default function CreateWorkout({
   } = useForm<z.infer<typeof WorkoutPlanSchema> & FieldValues>({
     defaultValues: {
       name: "",
-      gymLocation: "",
+      gymLocation: {
+        name: "",
+      },
       exercises: {},
       exerciseOrder: [],
     },
     resolver: zodResolver(WorkoutPlanSchema),
   })
+
   const { mutate, isLoading } = useMutationAddWorkoutPlan(
     () => {
       toastMessage("Successfully added workout plan.", ToastMessage.Success)
@@ -92,7 +95,7 @@ export default function CreateWorkout({
   const handleCloseModal = () => setIsAddExercise(false)
   const handleCloseAddGymLocation = () => {
     setIsAddGymLocation(false)
-    setValue("gymLocation", "")
+    setValue("gymLocation", { name: "" })
   }
   const handleClickAdd = (exerciseId: string) =>
     setItems([...items, exerciseId])
@@ -105,7 +108,7 @@ export default function CreateWorkout({
   // if addGymLocation is selected then open popup dialog
   useEffect(() => {
     const subscription = watch((value) => {
-      if (value.gymLocation === "addGymLocation") {
+      if (value.gymLocation?.name === "addGymLocation") {
         setIsAddGymLocation(true)
       }
     })
@@ -122,7 +125,8 @@ export default function CreateWorkout({
         >
           <FormInput control={control} name="name" />
           <FormSelect
-            name="gymLocation"
+            name="gymLocation.name"
+            label="Gym Location"
             control={control}
             menuOptions={
               gymLocations?.map(({ gymId, name }) => ({
@@ -152,6 +156,9 @@ export default function CreateWorkout({
                     exerciseName={exercisesHashmap[itemId].name}
                     setsName={`exercises.${itemId}.sets`}
                     repsName={`exercises.${itemId}.reps`}
+                    onClickRemove={(id) => {
+                      setItems(items.filter((item) => item !== id))
+                    }}
                   />
                 ))}
               </DragSortable>
@@ -202,7 +209,7 @@ export default function CreateWorkout({
       >
         <AddGymLocationModal
           onSuccessAdd={(gymLocation) => {
-            setValue("gymLocation", gymLocation)
+            setValue("gymLocation", { name: gymLocation })
             setIsAddGymLocation(false)
           }}
         />

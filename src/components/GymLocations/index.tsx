@@ -35,6 +35,7 @@ export default function GymLocations({ gymLocations }: GymLocationsProps) {
 
   return (
     <CRUD
+      primaryButtonLabel="Add a location"
       onCreate={() => setIsCreate(true)}
       h3Text="Gym Locations"
       modals={

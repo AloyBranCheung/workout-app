@@ -5,7 +5,7 @@ import prisma from "src/utils/prisma"
 const updateWorkoutPlan = tProtectedProcedure
   .input(UpdatePlanSchema)
   .mutation(async ({ input: { name, exercises, exerciseOrder, planId } }) => {
-    const updatedWorkoutPlan = await prisma.workoutPlan.update({
+    await prisma.workoutPlan.update({
       where: {
         planId,
       },
@@ -17,36 +17,24 @@ const updateWorkoutPlan = tProtectedProcedure
       },
     })
 
-    // get targetId to update from exercises object
-    const targetHash: { [targetId: string]: (typeof exercises)[string] } = {}
-    const targetIdArr = []
-    for (const exerciseId of Object.keys(exercises)) {
-      const exerciseObj = exercises[exerciseId]
-      if (!(exerciseObj.targetId in targetHash)) {
-        targetHash[exerciseObj.targetId] = exerciseObj
-        targetIdArr.push(exerciseObj.targetId)
-      }
-    }
-
-    // use Promise.all to update all targets
-    const updateTarget = async (targetId: string) => {
-      const updatedTarget = await prisma.target.update({
+    const updateExercise = async (exerciseId: string) => {
+      const exercise = exercises[exerciseId]
+      await prisma.exercise.update({
         where: {
-          targetId,
+          exerciseId,
         },
         data: {
-          targetReps: Number(targetHash[targetId].reps),
-          targetSets: Number(targetHash[targetId].sets),
+          targetReps: Number(exercise.reps),
+          targetSets: Number(exercise.sets),
         },
       })
-      return updatedTarget
     }
 
-    const updatedTargets = await Promise.all(
-      targetIdArr.map((targetId) => updateTarget(targetId))
+    await Promise.all(
+      exerciseOrder.map((exerciseId) => updateExercise(exerciseId))
     )
 
-    return { updatedWorkoutPlan, updatedTargets }
+    return "OK"
   })
 
 export default updateWorkoutPlan

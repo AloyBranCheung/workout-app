@@ -8,6 +8,14 @@ const getExercises = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       where: {
         userId: user.id,
       },
+      include: {
+        gymLocations: {
+          select: {
+            gymId: true,
+            name: true,
+          },
+        },
+      },
       orderBy: {
         name: "asc",
       },
