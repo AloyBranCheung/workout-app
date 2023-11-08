@@ -11,7 +11,6 @@ const WorkoutPlanSchema = z
     exercises: z.record(z.string(), TargetSchema.required()),
     gymLocation: z.object({
       name: z.string().min(1),
-      gymId: z.string().uuid(),
     }),
     exerciseOrder: z
       .array(z.string())

@@ -9,15 +9,6 @@ const getWorkoutPlans = tProtectedProcedure.query(async ({ ctx: { user } }) => {
         userId: user.id,
       },
       include: {
-        targets: {
-          include: {
-            exercise: {
-              include: {
-                gymLocations: true,
-              },
-            },
-          },
-        },
         gymLocation: {
           select: {
             name: true,

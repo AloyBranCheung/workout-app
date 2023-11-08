@@ -1,0 +1,6 @@
+FROM node:lts-alpine
+WORKDIR /app
+RUN apk update && apk add git
+RUN git clone --branch fork https://github.com/AloyBranCheung/prismaliser.git .
+RUN yarn install && yarn build
+CMD ["yarn", "start"]

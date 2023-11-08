@@ -13,7 +13,7 @@ const addWorkoutPlan = tProtectedProcedure
       try {
         const exerciseIdArr = Object.keys(exercises)
         // create workoutplan
-        const workoutPlan = await prisma.workoutPlan.create({
+        await prisma.workoutPlan.create({
           data: {
             name,
             exerciseOrder,
@@ -27,28 +27,30 @@ const addWorkoutPlan = tProtectedProcedure
             },
             gymLocation: {
               connect: {
-                gymId: gymLocation.gymId,
+                gymId: gymLocation.name,
               },
             },
           },
         })
 
-        const targetExercise = async (exerciseId: string) => {
-          await prisma.target.create({
-            data: {
-              targetReps: Number(exercises[exerciseId].reps),
-              targetSets: Number(exercises[exerciseId].sets),
+        const updateExerciseTargets = async (exerciseId: string) => {
+          const { reps, sets } = exercises[exerciseId]
+          await prisma.exercise.update({
+            where: {
               exerciseId,
-              planId: workoutPlan.planId,
+            },
+            data: {
+              targetReps: Number(reps),
+              targetSets: Number(sets),
             },
           })
         }
 
-        const updatedExercises = await Promise.all(
-          exerciseIdArr.map((exerciseId) => targetExercise(exerciseId))
+        await Promise.all(
+          exerciseIdArr.map((exerciseId) => updateExerciseTargets(exerciseId))
         )
 
-        return { workoutPlan, updatedExercises }
+        return "Ok"
       } catch (error) {
         console.error("Error adding workoutplan.")
         console.error(error)

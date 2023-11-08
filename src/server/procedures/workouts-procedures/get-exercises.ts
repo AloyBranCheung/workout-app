@@ -15,13 +15,6 @@ const getExercises = tProtectedProcedure.query(async ({ ctx: { user } }) => {
             name: true,
           },
         },
-        target: {
-          select: {
-            targetReps: true,
-            targetSets: true,
-            targetId: true,
-          },
-        },
       },
       orderBy: {
         name: "asc",

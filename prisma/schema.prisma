@@ -61,13 +61,16 @@ model Activity {
 
 // Exercises Table
 model Exercise {
-  exerciseId   String      @id @unique @default(uuid()) @db.Uuid
-  updatedAt    DateTime    @default(now()) @updatedAt
-  createdAt    DateTime    @default(now())
-  name         String
-  description  String?
-  url          String?
-  unit         String
+  exerciseId  String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt   DateTime @default(now()) @updatedAt
+  createdAt   DateTime @default(now())
+  name        String
+  description String?
+  url         String?
+  unit        String
+  targetReps  Int?
+  targetSets  Int?
+
   // relations
   user         User        @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId       String
@@ -76,22 +79,6 @@ model Exercise {
 
   workoutPlans WorkoutPlan[]
   sets         Set[]
-  target       Target?
-}
-
-// Exercise Targets for Workout
-model Target {
-  targetId   String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt  DateTime @default(now()) @updatedAt
-  createdAt  DateTime @default(now())
-  targetReps Int
-  targetSets Int
-  // relations
-  exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId], onDelete: Cascade)
-  exerciseId String   @unique @db.Uuid
-
-  workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId], onDelete: Cascade)
-  planId      String      @db.Uuid
 }
 
 // Session Table for each workout 'session'
@@ -114,13 +101,14 @@ model Session {
 
 // Exercise History Table
 model Set {
-  historyId String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt DateTime @default(now()) @updatedAt
-  createdAt DateTime @default(now())
-  weight    Int
-  unit      String   @default("kg")
-  reps      Int
-  note      String?
+  historyId  String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt  DateTime @default(now()) @updatedAt
+  createdAt  DateTime @default(now())
+  weight     Int
+  weightUnit String
+  unit       String   @default("kg")
+  reps       Int
+  note       String?
 
   // relations
   session   Session @relation(fields: [sessionId], references: [sessionId])
@@ -146,7 +134,6 @@ model WorkoutPlan {
 
   exercises Exercise[]
   sessions  Session[]
-  targets   Target[]
 }
 
 model RunPlan {

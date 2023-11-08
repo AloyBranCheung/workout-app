@@ -34,6 +34,10 @@ Debugging:
 
 - make sure you are not ip banned on the supabase admin dashboard (if you failed to login)
 
+## Dev
+
+- Visualize your prisma schema [with this](https://github.com/Ovyerus/prismaliser)
+
 ## Prisma
 
 https://www.prisma.io/docs/concepts/components/prisma-migrate/mental-model

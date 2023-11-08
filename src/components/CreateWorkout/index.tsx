@@ -56,13 +56,14 @@ export default function CreateWorkout({
     defaultValues: {
       name: "",
       gymLocation: {
-        gymId: "",
+        name: "",
       },
       exercises: {},
       exerciseOrder: [],
     },
     resolver: zodResolver(WorkoutPlanSchema),
   })
+
   const { mutate, isLoading } = useMutationAddWorkoutPlan(
     () => {
       toastMessage("Successfully added workout plan.", ToastMessage.Success)
@@ -94,7 +95,7 @@ export default function CreateWorkout({
   const handleCloseModal = () => setIsAddExercise(false)
   const handleCloseAddGymLocation = () => {
     setIsAddGymLocation(false)
-    setValue("gymLocation", { gymId: "", name: "" })
+    setValue("gymLocation", { name: "" })
   }
   const handleClickAdd = (exerciseId: string) =>
     setItems([...items, exerciseId])
@@ -208,7 +209,7 @@ export default function CreateWorkout({
       >
         <AddGymLocationModal
           onSuccessAdd={(gymLocation) => {
-            setValue("gymLocation", { gymId: gymLocation, name: "" })
+            setValue("gymLocation", { name: gymLocation })
             setIsAddGymLocation(false)
           }}
         />
