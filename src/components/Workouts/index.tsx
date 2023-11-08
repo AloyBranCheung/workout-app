@@ -65,6 +65,7 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
           <PlanCard
             onClickCard={(e) => {
               e.stopPropagation()
+              // eslint-disable-next-line no-console
               console.log("hello world")
             }}
             key={planId}
