@@ -49,6 +49,9 @@ export default function EditWorkoutPlan({
   onClose,
 }: EditWorkoutPlanProps) {
   const [isShowExercises, setIsShowExercises] = useState(false)
+  const [exercises, setExercises] = useState<{
+    [exerciseId: string]: { reps: string; sets: string }
+  }>({})
   const [gymSpecificExercises, setGymSpecificExercises] = useState<
     IGymSpecificExercises[]
   >([])
@@ -58,23 +61,21 @@ export default function EditWorkoutPlan({
 
   const isGetting = isLoadingGetExercises
 
-  const {
-    exerciseObj: exercises,
-    exerciseHashmap,
-    exerciseOrder,
-  } = useMemo(() => {
+  const { exerciseHashmap, exerciseOrder } = useMemo(() => {
     const exerciseHashmap = exerciseHash(exercisesRes)
     const exerciseOrder = workoutPlan.exerciseOrder
     const exerciseObj: z.infer<typeof UpdatePlanSchema>["exercises"] = {}
-    for (const target of workoutPlan.targets) {
-      exerciseObj[target.exerciseId] = {
-        reps: target.targetReps.toString(),
-        sets: target.targetSets.toString(),
-        targetId: target.targetId,
+    for (const exerciseId of Object.keys(exerciseHashmap)) {
+      exerciseObj[exerciseId] = {
+        reps: exerciseHashmap[exerciseId].targetReps?.toString() || "",
+        sets: exerciseHashmap[exerciseId].targetSets?.toString() || "",
       }
     }
-    return { exerciseOrder, exerciseObj, exerciseHashmap }
-  }, [exercisesRes, workoutPlan.exerciseOrder, workoutPlan.targets])
+
+    setExercises(exerciseObj)
+
+    return { exerciseOrder, exerciseHashmap }
+  }, [exercisesRes, workoutPlan.exerciseOrder])
 
   const { items, verticalListSortingStrategy, handleDragEnd, setItems } =
     useDragSorting(exerciseOrder)
@@ -149,6 +150,10 @@ export default function EditWorkoutPlan({
   useEffect(() => {
     setValue("exerciseOrder", items as string[])
   }, [items, setValue])
+
+  useEffect(() => {
+    setValue("exercises", exercises)
+  }, [exercises, setValue])
 
   return isGetting ? (
     <LoadingSpinner />

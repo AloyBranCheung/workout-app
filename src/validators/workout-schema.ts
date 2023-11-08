@@ -22,12 +22,7 @@ export default WorkoutPlanSchema
 
 export const UpdatePlanSchema = WorkoutPlanSchema.extend({
   planId: z.string().uuid(),
-  exercises: z.record(
-    z.string(),
-    TargetSchema.extend({
-      targetId: z.string().uuid().optional(),
-    })
-  ),
+  exercises: z.record(z.string(), TargetSchema),
 })
 
 export const AddGymLocationSchema = z.object({
