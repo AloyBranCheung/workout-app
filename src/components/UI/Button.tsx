@@ -7,6 +7,7 @@ interface ButtonProps {
   onClick?: () => void
   type: "button" | "submit" | "reset"
   className?: string
+  icon?: React.ReactNode
 }
 
 export default function Button({
@@ -14,6 +15,7 @@ export default function Button({
   onClick,
   type,
   className,
+  icon,
 }: ButtonProps) {
   return (
     <motion.button
@@ -27,10 +29,12 @@ export default function Button({
       type={type}
     >
       <strong>{label}</strong>
+      {icon && icon}
     </motion.button>
   )
 }
 
 Button.defaultProps = {
   onClick: undefined,
+  icon: undefined,
 }

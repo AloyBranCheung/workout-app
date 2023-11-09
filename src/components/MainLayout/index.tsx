@@ -10,6 +10,8 @@ import PageGuard from "src/auth/PageGuard"
 import TopNavbar from "./TopNavbar"
 import Fade from "../UI/transitions/Fade"
 import GutterContainer from "../UI/GutterContainer"
+import DownIcon from "../UI/icons/DownIcon"
+import SecondaryButton from "../UI/SecondaryButton"
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -63,18 +65,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
               router.push("/gym-locations")
             }}
           />
-          <div className="h-full relative">
+          <div className="min-h-screen relative">
             <Fade>
               <GutterContainer>
                 <div className="p-5 h-full">{children}</div>
               </GutterContainer>
             </Fade>
-            <div
+            <SecondaryButton
               onClick={() => console.log("router.push curr active workout")}
-              className="sticky bottom-0 right-0 bg-primary-button px-2 py-4 shadow-neobrutShadow border-solid border-black border-2 text-center text-white cursor-pointer w-full rounded-t-2xl"
-            >
-              Continue Workout?
-            </div>
+              type="button"
+              label="Continue Workout?"
+              className="fixed bottom-0 left-0 w-full rounded-t-2xl rounded-b-none py-6 flex items-center justify-center gap-2"
+              icon={<DownIcon />}
+            />
           </div>
         </div>
       </div>
