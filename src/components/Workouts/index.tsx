@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 // hooks
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 import useMutationDeleteWorkoutPlan from "src/hooks/useMutationDeleteWorkoutPlan"
+import useCurrActiveSesh from "src/hooks/useCurrActiveSesh"
 // types/utils
 import {
   GetGymLocationsOutput,
@@ -25,6 +26,7 @@ interface WorkoutsProps {
 }
 
 export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
+  const { setCurrWorkoutPlanId } = useCurrActiveSesh()
   const [selectedGymLocation, setSelectedGymLocation] = useState("")
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isEdit, setIsEdit] = useState(false)
@@ -65,8 +67,8 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
           <PlanCard
             onClickCard={(e) => {
               e.stopPropagation()
-              // eslint-disable-next-line no-console
-              console.log("hello world")
+              router.push("/workouts/curr-active-workout")
+              setCurrWorkoutPlanId(planId)
             }}
             key={planId}
             name={name}

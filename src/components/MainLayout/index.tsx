@@ -10,15 +10,15 @@ import PageGuard from "src/auth/PageGuard"
 import TopNavbar from "./TopNavbar"
 import Fade from "../UI/transitions/Fade"
 import GutterContainer from "../UI/GutterContainer"
-import DownIcon from "../UI/icons/DownIcon"
-import SecondaryButton from "../UI/SecondaryButton"
+import PrimaryButton from "../UI/PrimaryButton"
 
 interface MainLayoutProps {
   children: React.ReactNode
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
-  const { isCurrActiveSeshPresent } = useCurrActiveSesh()
+  const { isNotifyActiveWorkout } = useCurrActiveSesh()
+
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const supabase = useSupabaseClient()
@@ -71,13 +71,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 <div className="p-5 h-full">{children}</div>
               </GutterContainer>
             </Fade>
-            <SecondaryButton
-              onClick={() => console.log("router.push curr active workout")}
-              type="button"
-              label="Continue Workout?"
-              className="fixed bottom-0 left-0 w-full rounded-t-2xl rounded-b-none py-6 flex items-center justify-center gap-2"
-              icon={<DownIcon />}
-            />
+            {isNotifyActiveWorkout && (
+              <PrimaryButton
+                onClick={() => router.push("/workouts/curr-active-workout")}
+                type="button"
+                label="Continue Workout?"
+                className="fixed bottom-0 left-0 w-full rounded-t-2xl rounded-b-none py-6 flex items-center justify-center gap-2"
+              />
+            )}
           </div>
         </div>
       </div>
