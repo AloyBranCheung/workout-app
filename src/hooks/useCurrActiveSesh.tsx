@@ -2,18 +2,26 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 // jotai
 import { useAtom } from "jotai"
-import { currActiveSeshIdAtom } from "src/stores/curr-active-sesh-store"
+import {
+  currActiveSeshIdAtom,
+  currActiveWorkoutPlanIdAtom,
+} from "src/stores/curr-active-sesh-store"
 // hooks
 import useGetCurrActiveSesh from "./useGetCurrActiveSesh"
 
 export default function useCurrActiveSesh() {
   const router = useRouter()
-  const [currWorkoutPlanId, setCurrWorkoutPlanId] = useState("")
+
+  const [currWorkoutPlanId, setCurrWorkoutPlanId] = useAtom(
+    currActiveWorkoutPlanIdAtom
+  )
+  const [currActiveSeshId, setCurrActiveSeshId] = useAtom(currActiveSeshIdAtom)
+
+  const [isCurrActiveSeshPresent, setIsCurrActiveSeshPresent] = useState(false)
+  const [isNotifyActiveWorkout, setIsNotifyActiveWorkout] = useState(false)
+
   const { data: currActiveSeshRes, isLoading: isLoadingCurrActiveSesh } =
     useGetCurrActiveSesh(currWorkoutPlanId)
-  const [isCurrActiveSeshPresent, setIsCurrActiveSeshPresent] = useState(false)
-  const [currActiveSeshId, setCurrActiveSeshId] = useAtom(currActiveSeshIdAtom)
-  const [isNotifyActiveWorkout, setIsNotifyActiveWorkout] = useState(false)
 
   useEffect(() => {
     if (currActiveSeshRes) {
