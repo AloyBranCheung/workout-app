@@ -91,8 +91,8 @@ model Session {
   // relations
   sets          Set[]
 
-  workoutPlan WorkoutPlan @relation(fields: [planId], references: [planId])
-  planId      String      @db.Uuid
+  workoutPlan WorkoutPlan? @relation(fields: [planId], references: [planId], onDelete: SetNull) // workout plan can be deleted but session can remain to keep history 
+  planId      String?      @db.Uuid
 
   activity   Activity @relation(fields: [activityId], references: [activityId])
   activityId String   @unique @db.Uuid
