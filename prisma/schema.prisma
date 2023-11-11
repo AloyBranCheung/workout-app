@@ -52,7 +52,6 @@ model Activity {
   updatedAt   DateTime     @default(now()) @updatedAt
   createdAt   DateTime     @default(now())
   // relations
-  sessionId   Session?
   runExercise RunExercise?
 
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
@@ -93,9 +92,6 @@ model Session {
 
   workoutPlan WorkoutPlan? @relation(fields: [planId], references: [planId], onDelete: SetNull) // workout plan can be deleted but session can remain to keep history 
   planId      String?      @db.Uuid
-
-  activity   Activity @relation(fields: [activityId], references: [activityId])
-  activityId String   @unique @db.Uuid
 
   currActiveSesh CurrActiveSesh?
 }
