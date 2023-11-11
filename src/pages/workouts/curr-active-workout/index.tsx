@@ -4,6 +4,8 @@ import useCurrActiveSesh from "src/hooks/useCurrActiveSesh"
 // components
 import LoadingSpinner from "src/components/UI/LoadingSpinner"
 import MainLayout from "src/components/MainLayout"
+import CurrActiveSeshContainer from "src/components/CurrActiveSesh"
+import NoActiveSession from "src/components/CurrActiveSesh/NoActiveSession"
 
 export default function CurrActiveWorkoutPage() {
   const { isLoadingCurrActiveSesh, isCurrActiveSeshPresent } =
@@ -14,9 +16,9 @@ export default function CurrActiveWorkoutPage() {
   return isLoading ? (
     <LoadingSpinner />
   ) : isCurrActiveSeshPresent ? (
-    <div>hello sesh</div>
+    <CurrActiveSeshContainer />
   ) : (
-    <div>no sesh</div>
+    <NoActiveSession />
   )
 }
 
