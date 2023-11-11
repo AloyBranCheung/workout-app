@@ -9,6 +9,7 @@ import LoadingSpinner from "../UI/LoadingSpinner"
 import Carousel from "../UI/Carousel"
 import SecondaryCard from "../UI/SecondaryCard"
 import Text, { Typography } from "../UI/typography/Text"
+import ParentCard from "../UI/ParentCard"
 
 interface Exercise {
   userId: string
@@ -74,6 +75,15 @@ export default function CurrActiveSeshContainer() {
     return list
   }, [exerciseHashmap, exercisesList])
 
+  // TODO: WIP
+  const sets = useMemo(() => {
+    if (!currActiveExercise?.targetSets) return []
+    const sets = []
+    for (let i = 0; i < currActiveExercise.targetSets; i++) {}
+
+    return sets
+  }, [currActiveExercise])
+
   return isLoading ? (
     <LoadingSpinner />
   ) : (
@@ -98,6 +108,7 @@ export default function CurrActiveSeshContainer() {
         typography={Typography.h3}
         className="text-h3"
       />
+      <ParentCard>hello world</ParentCard>
     </div>
   )
 }
