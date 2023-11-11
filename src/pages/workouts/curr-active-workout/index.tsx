@@ -8,18 +8,17 @@ import CurrActiveSeshContainer from "src/components/CurrActiveSesh"
 import NoActiveSession from "src/components/CurrActiveSesh/NoActiveSession"
 
 export default function CurrActiveWorkoutPage() {
-  const { isLoadingCurrActiveSesh, isCurrActiveSeshPresent } =
-    useCurrActiveSesh()
+  const { isLoading, isCurrActiveSeshPresent } = useCurrActiveSesh()
 
-  const isLoading = isLoadingCurrActiveSesh
+  if (isLoading) {
+    return <LoadingSpinner />
+  }
 
-  return isLoading ? (
-    <LoadingSpinner />
-  ) : isCurrActiveSeshPresent ? (
-    <CurrActiveSeshContainer />
-  ) : (
-    <NoActiveSession />
-  )
+  if (!isCurrActiveSeshPresent) {
+    return <NoActiveSession />
+  }
+
+  return <CurrActiveSeshContainer />
 }
 
 CurrActiveWorkoutPage.getLayout = function getLayout(page: React.ReactElement) {

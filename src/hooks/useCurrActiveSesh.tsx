@@ -23,10 +23,12 @@ export default function useCurrActiveSesh() {
   const { data: currActiveSeshRes, isLoading: isLoadingCurrActiveSesh } =
     useGetCurrActiveSesh(currWorkoutPlanId)
 
+  const isLoading = isLoadingCurrActiveSesh
+
   useEffect(() => {
     if (currActiveSeshRes) {
       setIsCurrActiveSeshPresent(true)
-      setCurrActiveSeshId(currActiveSeshRes.actSeshId)
+      setCurrActiveSeshId(currActiveSeshRes.sessionId)
       if (router.asPath !== "/workouts/curr-active-workout") {
         setIsNotifyActiveWorkout(true)
       } else {
@@ -38,7 +40,7 @@ export default function useCurrActiveSesh() {
   return {
     isCurrActiveSeshPresent,
     currActiveSeshId,
-    isLoadingCurrActiveSesh,
+    isLoading,
     setCurrWorkoutPlanId,
     currWorkoutPlanId,
     isNotifyActiveWorkout,

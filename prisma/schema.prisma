@@ -27,6 +27,7 @@ model User {
   runPlans       RunPlan[]
   activities     Activity[]
   gymLocations   GymLocation[]
+  session        Session[]
   currActiveSesh CurrActiveSesh?
 }
 
@@ -94,6 +95,8 @@ model Session {
   planId      String?      @db.Uuid
 
   currActiveSesh CurrActiveSesh?
+  User           User?           @relation(fields: [userId], references: [id])
+  userId         Int?
 }
 
 // Exercise History Table
