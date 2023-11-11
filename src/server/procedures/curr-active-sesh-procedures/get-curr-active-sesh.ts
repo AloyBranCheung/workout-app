@@ -22,16 +22,9 @@ const getCurrActiveSesh = tProtectedProcedure
 
       // if no active workout session, create one
       if (!currActiveSesh && workoutPlanId) {
-        const newActivity = await prisma.activity.create({
-          data: {
-            userId: user.id,
-          },
-        })
-
         const newSession = await prisma.session.create({
           data: {
             planId: workoutPlanId,
-            activityId: newActivity.activityId,
           },
         })
 
