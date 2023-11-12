@@ -3,7 +3,6 @@ import { useRouter } from "next/router"
 // hooks
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 import useMutationDeleteWorkoutPlan from "src/hooks/useMutationDeleteWorkoutPlan"
-import useCurrActiveSesh from "src/hooks/useCurrActiveSesh"
 // types/utils
 import {
   GetGymLocationsOutput,
@@ -19,7 +18,6 @@ import EditWorkoutPlan from "./EditWorkoutPlan"
 import YesNoBtnGroup from "../UI/YesNoBtnGroup"
 import SelectDropdown from "../UI/SelectDropdown"
 import PlanCard from "./PlanCard"
-import Confirmation from "../UI/Confirmation"
 
 interface WorkoutsProps {
   plans: GetWorkoutPlansOutput | undefined
@@ -27,12 +25,10 @@ interface WorkoutsProps {
 }
 
 export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
-  const { setCurrWorkoutPlanId } = useCurrActiveSesh()
   const [selectedGymLocation, setSelectedGymLocation] = useState("")
   const [selectedPlanId, setSelectedPlanId] = useState("")
   const [isEdit, setIsEdit] = useState(false)
   const [isConfirmDelete, setIsConfirmDelete] = useState(false)
-  const [isStartWorkout, setIsStartWorkout] = useState(false)
   const router = useRouter()
   const toastMessage = useToastMessage()
   const { mutate } = useMutationDeleteWorkoutPlan(
@@ -68,10 +64,6 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
         .map(({ planId, name, lastWorkout, duration, gymLocation }) => (
           <div key={planId}>
             <PlanCard
-              onClickCard={(e) => {
-                e.stopPropagation()
-                setIsStartWorkout(true)
-              }}
               name={name}
               planId={planId}
               gymLocation={gymLocation}
@@ -86,19 +78,6 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
                 setIsConfirmDelete(true)
               }}
             />
-            <Modal
-              isOpen={isStartWorkout}
-              onClose={() => setIsStartWorkout(false)}
-            >
-              <Confirmation
-                description={`You are about to start ${name} workout plan. Are you sure?`}
-                onClickConfirm={() => {
-                  router.push("/workouts/curr-active-workout")
-                  setCurrWorkoutPlanId(planId)
-                }}
-                onClickDecline={() => setIsStartWorkout(false)}
-              />
-            </Modal>
           </div>
         ))) ||
     []
