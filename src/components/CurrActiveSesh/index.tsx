@@ -10,8 +10,9 @@ import Carousel from "../UI/Carousel"
 import SecondaryCard from "../UI/SecondaryCard"
 import Text, { Typography } from "../UI/typography/Text"
 import ParentCard from "../UI/ParentCard"
+import SetGrid from "./SetGrid"
 
-interface Exercise {
+export interface Exercise {
   userId: string
   createdAt: string
   updatedAt: string
@@ -23,6 +24,13 @@ interface Exercise {
   exerciseId: string
   targetReps: number | null
   targetSets: number | null
+}
+
+export interface ISet {
+  name: Exercise["name"]
+  weight: Exercise["unit"]
+  reps: Exercise["targetReps"]
+  setNumber: number
 }
 
 export default function CurrActiveSeshContainer() {
@@ -75,12 +83,17 @@ export default function CurrActiveSeshContainer() {
     return list
   }, [exerciseHashmap, exercisesList])
 
-  // TODO: WIP
   const sets = useMemo(() => {
     if (!currActiveExercise?.targetSets) return []
-    const sets = []
-    for (let i = 0; i < currActiveExercise.targetSets; i++) {}
-
+    const sets: ISet[] = []
+    for (let i = 0; i < currActiveExercise.targetSets; i++) {
+      sets.push({
+        setNumber: i + 1,
+        name: currActiveExercise.name,
+        weight: currActiveExercise.unit,
+        reps: currActiveExercise.targetReps,
+      })
+    }
     return sets
   }, [currActiveExercise])
 
@@ -108,7 +121,9 @@ export default function CurrActiveSeshContainer() {
         typography={Typography.h3}
         className="text-h3"
       />
-      <ParentCard>hello world</ParentCard>
+      <ParentCard>
+        <SetGrid sets={sets} />
+      </ParentCard>
     </div>
   )
 }
