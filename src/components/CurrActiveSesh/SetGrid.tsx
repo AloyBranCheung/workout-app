@@ -10,15 +10,20 @@ interface SetGridProps {
 }
 
 export default function SetGrid({ sets }: SetGridProps) {
-  const setRows = sets.map(({ name, weight, reps, setNumber }) => (
-    <Set
-      key={generateUuid()}
-      name={name}
-      weight={weight}
-      reps={reps || 0}
-      setNumber={setNumber}
-    />
-  ))
+  const setRows = sets.map(
+    ({ exerciseId, name, weight, reps, setNumber, sessionId, unit }) => (
+      <Set
+        key={generateUuid()}
+        name={name}
+        weight={weight}
+        reps={reps || 0}
+        setNumber={setNumber}
+        exerciseId={exerciseId}
+        sessionId={sessionId}
+        unit={unit}
+      />
+    )
+  )
 
   return (
     <div className="grid grid-cols-12">

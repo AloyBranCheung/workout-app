@@ -31,6 +31,9 @@ export interface ISet {
   weight: Exercise["unit"]
   reps: Exercise["targetReps"]
   setNumber: number
+  exerciseId: Exercise["exerciseId"]
+  sessionId: string
+  unit: Exercise["unit"]
 }
 
 export default function CurrActiveSeshContainer() {
@@ -92,10 +95,13 @@ export default function CurrActiveSeshContainer() {
         name: currActiveExercise.name,
         weight: currActiveExercise.unit,
         reps: currActiveExercise.targetReps,
+        unit: currActiveExercise.unit,
+        exerciseId: currActiveExercise.exerciseId,
+        sessionId: currActiveSeshId,
       })
     }
     return sets
-  }, [currActiveExercise])
+  }, [currActiveExercise, currActiveSeshId])
 
   return isLoading ? (
     <LoadingSpinner />

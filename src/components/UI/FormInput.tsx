@@ -11,6 +11,8 @@ interface FormInputProps<FV extends FieldValues> {
   type?: React.InputHTMLAttributes<HTMLInputElement>["type"]
   autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"]
   required?: React.InputHTMLAttributes<HTMLInputElement>["required"]
+  containerClassname?: string
+  withLabel?: boolean
 }
 
 export default function FormInput<FV extends FieldValues>({
@@ -21,17 +23,21 @@ export default function FormInput<FV extends FieldValues>({
   required,
   inputClassName,
   label,
+  containerClassname,
+  withLabel,
 }: FormInputProps<FV>) {
   return (
     <Controller
       name={name}
       control={control}
       render={({ field: { onChange, value, name }, fieldState: { error } }) => (
-        <div className="flex flex-col gap-1">
+        <div className={twMerge("flex flex-col gap-1", containerClassname)}>
           <div className="flex justify-between items-center w-full gap-2">
-            <label htmlFor={name} className="w-full basis-1/4">
-              <b>{label || startCase(name)}:</b>
-            </label>
+            {withLabel && (
+              <label htmlFor={name} className="w-full basis-1/4">
+                <b>{label || startCase(name)}:</b>
+              </label>
+            )}
             <input
               className={twMerge(
                 "border-solid border-black border-2 rounded-2xl w-full px-2 basis-3/4",
@@ -56,4 +62,6 @@ FormInput.defaultProps = {
   type: "text",
   autoComplete: "off",
   required: true,
+  containerClassname: undefined,
+  withLabel: true,
 }

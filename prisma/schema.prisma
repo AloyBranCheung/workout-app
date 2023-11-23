@@ -101,14 +101,13 @@ model Session {
 
 // Exercise History Table
 model Set {
-  historyId  String   @id @unique @default(uuid()) @db.Uuid
-  updatedAt  DateTime @default(now()) @updatedAt
-  createdAt  DateTime @default(now())
-  weight     Int
-  weightUnit String
-  unit       String   @default("kg")
-  reps       Int
-  note       String?
+  historyId String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt DateTime @default(now()) @updatedAt
+  createdAt DateTime @default(now())
+  weight    Int
+  unit      String   @default("kg")
+  reps      Int
+  note      String?
 
   // relations
   session   Session @relation(fields: [sessionId], references: [sessionId])
