@@ -34,6 +34,7 @@ export interface ISet {
   exerciseId: Exercise["exerciseId"]
   sessionId: string
   unit: Exercise["unit"]
+  isDone: boolean
 }
 
 export default function CurrActiveSeshContainer() {
@@ -93,11 +94,12 @@ export default function CurrActiveSeshContainer() {
       sets.push({
         setNumber: i + 1,
         name: currActiveExercise.name,
-        weight: currActiveExercise.unit,
+        weight: "0", // TODO: add last weight exercise was completed in
         reps: currActiveExercise.targetReps,
         unit: currActiveExercise.unit,
         exerciseId: currActiveExercise.exerciseId,
         sessionId: currActiveSeshId,
+        isDone: false,
       })
     }
     return sets
@@ -128,7 +130,7 @@ export default function CurrActiveSeshContainer() {
         className="text-h3"
       />
       <ParentCard>
-        <SetGrid sets={sets} />
+        <SetGrid sets={sets} currActiveExercise={currActiveExercise} />
       </ParentCard>
     </div>
   )

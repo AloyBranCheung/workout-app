@@ -1,80 +1,78 @@
-import React from "react"
-// react-hook-form
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import React, { useState } from "react"
 // types
-import { AddSetSchema } from "src/validators/add-set-schema"
-import WeightEnum from "src/types/weight-enum"
+import { ISet } from "src/types/curr-active-sesh"
+// utils
+import generateUuid from "src/utils/uuid"
+// hooks
+import useCurrActiveSeshIndexDb, {
+  IndexedDBStore,
+} from "src/hooks/useCurrActiveSeshIndexDb"
 // components
-import FormSelect from "../UI/FormSelect"
-import FormInput from "../UI/FormInput"
-import { z } from "zod"
+import Input from "../UI/Input"
 
 interface SetProps {
-  name: string
+  frontendSetId?: string
   weight: string
   reps: number
   setNumber: number
   exerciseId: string
   sessionId: string
   unit: string
+  isDone?: boolean
 }
 
 export default function Set({
-  name,
+  frontendSetId,
   weight,
   reps,
   setNumber,
   exerciseId,
   sessionId,
   unit,
+  isDone,
 }: SetProps) {
-  const {
-    handleSubmit,
-    control,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(AddSetSchema),
-    defaultValues: {
-      weight: 0,
-      unit: unit,
-      reps: 0,
-      note: "",
-      sessionId,
-      exerciseId,
-    },
+  const { addToDb } = useCurrActiveSeshIndexDb()
+
+  const [setValues, setSetValues] = useState<ISet>({
+    frontendSetId: frontendSetId ?? generateUuid(),
+    isDone: isDone ?? false,
+    weight,
+    unit,
+    reps,
+    sessionId,
+    exerciseId,
+    setNumber,
   })
-
-  const onSubmitForm = (data: z.infer<typeof AddSetSchema>) => {
-    console.log("submit")
-    console.log({ data })
-  }
-
-  console.log(errors)
 
   return (
     <form className="grid grid-cols-12 col-span-12">
       <div className="col-span-3 text-center font-bold">{setNumber}</div>
-      <FormInput
-        name="weight"
-        control={control}
-        containerClassname="col-span-3 items-center justify-center w-full h-full"
-        inputClassName="basis-full text-center"
-        withLabel={false}
-      />
+      <div className="col-span-3 items-center justify-center w-full h-full">
+        <Input
+          inputClassName="basis-full text-center"
+          value={setValues.weight}
+          onChange={(e) => {
+            const newValues = { ...setValues, weight: e.target.value }
+            setSetValues(newValues)
+            addToDb(IndexedDBStore.CurrActiveSesh, newValues)
+          }}
+        />
+      </div>
       <div className="col-span-3 text-center font-bold">{unit}</div>
       <div className="col-span-3 text-center">
         <input
           type="checkbox"
+          checked={setValues.isDone}
           onChange={(e) => {
-            if (e.target.checked) {
-              // TODO: get set id to delete if uncheck
-              console.log("submit form")
-              handleSubmit(onSubmitForm)
+            const isChecked = e.target.checked
+            if (isChecked) {
+              setValues.isDone = true
+              addToDb(IndexedDBStore.CurrActiveSesh, setValues)
+              setSetValues({ ...setValues, isDone: true })
             } else {
-              console.log("delete record")
+              setValues.isDone = false
+              addToDb(IndexedDBStore.CurrActiveSesh, setValues)
+              setSetValues({ ...setValues, isDone: false })
             }
           }}
         />
@@ -82,10 +80,3 @@ export default function Set({
     </form>
   )
 }
-
-// * Step1: Submit form to create a Set row in table, returns the setId and save
-// * the id
-// * to state of this component so that if checkmark box toggle then will take
-// * the
-// * id to delete it. Step2: On first load will feed all the sets in if it
-// * exists and set it to the id state
