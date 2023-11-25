@@ -16,6 +16,22 @@ export default function useCurrActiveSeshIndexDb() {
   const [db, setDb] = useState<IDBDatabase | null>(null)
   const VERSION = 1
 
+  const clearDb = (storeName: IndexedDBStore) => {
+    if (!db) {
+      logger.error("DB not initialized")
+      return
+    }
+    try {
+      logger.info(`Clearing ${storeName}`)
+      const tx = db?.transaction(storeName, "readwrite")
+      const store = tx?.objectStore(storeName)
+      store?.clear()
+    } catch (error) {
+      logger.error(error)
+      toastMsg("Error clearing database.", ToastMessage.Error)
+    }
+  }
+
   const getAllFromDb = (storeName: IndexedDBStore) => {
     return new Promise((resolve, reject) => {
       if (!db) {
@@ -104,5 +120,5 @@ export default function useCurrActiveSeshIndexDb() {
     })()
   }, [])
 
-  return { addToDb, deleteFromDb, getAllFromDb }
+  return { addToDb, deleteFromDb, getAllFromDb, clearDb }
 }
