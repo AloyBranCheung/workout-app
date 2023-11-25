@@ -52,7 +52,7 @@ export interface ISet {
 }
 
 export default function CurrActiveSeshContainer() {
-  const { getAllFromDb } = useCurrActiveSeshIndexDb()
+  const { getAllFromDb, clearDb } = useCurrActiveSeshIndexDb()
   const { currActiveSeshId, isLoading: isCurrActiveSeshLoading } =
     useCurrActiveSesh()
   const { data: sessionRes, isLoading: isSessionLoading } =
@@ -177,6 +177,7 @@ export default function CurrActiveSeshContainer() {
     // reset
     setIsCompleteIncompleteWorkout(false)
     setIsCompleteWorkout(false)
+    clearDb(IndexedDBStore.CurrActiveSesh)
     // router navigate
     router.push({
       pathname: "/workouts/curr-active-workout/summary",

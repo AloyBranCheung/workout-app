@@ -8,7 +8,7 @@ export default function SummaryPage() {
   const { data } = router.query
   const completedSets = data && JSON.parse(data as string)
 
-  if (!completedSets) {
+  if (!completedSets || !completedSets.length) {
     router.push("/workouts")
   }
 
