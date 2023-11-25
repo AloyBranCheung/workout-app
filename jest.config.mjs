@@ -1,4 +1,6 @@
 import nextJest from "next/jest.js"
+import { createRequire } from "module"
+const require = createRequire(import.meta.url)
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -12,6 +14,9 @@ const config = {
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: "jest-environment-jsdom",
   transformIgnorePatterns: ["node_modules/jose/dist/browser/index.js"],
+  moduleNameMapper: {
+    "^jose": require.resolve("jose"),
+  },
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

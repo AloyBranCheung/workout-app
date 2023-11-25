@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Session" ALTER COLUMN "endDuration" DROP NOT NULL,
+ALTER COLUMN "startDuration" SET DEFAULT CURRENT_TIMESTAMP;

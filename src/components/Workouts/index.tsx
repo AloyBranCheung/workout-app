@@ -62,27 +62,23 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
       plans
         .filter((plan) => plan.gymId === selectedGymLocation)
         .map(({ planId, name, lastWorkout, duration, gymLocation }) => (
-          <PlanCard
-            onClickCard={(e) => {
-              e.stopPropagation()
-              // eslint-disable-next-line no-console
-              console.log("hello world")
-            }}
-            key={planId}
-            name={name}
-            planId={planId}
-            gymLocation={gymLocation}
-            lastWorkout={lastWorkout}
-            duration={duration}
-            onEditClick={() => {
-              setSelectedPlanId(planId)
-              setIsEdit(true)
-            }}
-            onDeleteClick={() => {
-              setSelectedPlanId(planId)
-              setIsConfirmDelete(true)
-            }}
-          />
+          <div key={planId}>
+            <PlanCard
+              name={name}
+              planId={planId}
+              gymLocation={gymLocation}
+              lastWorkout={lastWorkout}
+              duration={duration}
+              onEditClick={() => {
+                setSelectedPlanId(planId)
+                setIsEdit(true)
+              }}
+              onDeleteClick={() => {
+                setSelectedPlanId(planId)
+                setIsConfirmDelete(true)
+              }}
+            />
+          </div>
         ))) ||
     []
 

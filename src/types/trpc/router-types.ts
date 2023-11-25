@@ -27,3 +27,8 @@ export type CreateGymLocationOutput =
 
 export type GetGymLocationsOutput =
   RouterOutput["gymLocations"]["getGymLocations"]
+
+/* -------------------------------------------------------------------------- */
+/*                               Session Router                               */
+/* -------------------------------------------------------------------------- */
+export type GetSessionByIdOutput = RouterOutput["session"]["getSession"]

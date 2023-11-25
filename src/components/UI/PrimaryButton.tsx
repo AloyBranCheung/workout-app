@@ -8,6 +8,7 @@ interface PrimaryButtonProps {
   type: "button" | "submit" | "reset"
   className?: string
   isLoading?: boolean
+  icon?: React.ReactNode
 }
 
 export default function PrimaryButton({
@@ -16,12 +17,14 @@ export default function PrimaryButton({
   type,
   className,
   isLoading,
+  icon,
 }: PrimaryButtonProps) {
   return isLoading ? (
     <div className="flex items-center">Loading...</div>
   ) : (
     <Button
       label={label}
+      icon={icon}
       onClick={onClick}
       type={type}
       className={twMerge(
@@ -30,4 +33,8 @@ export default function PrimaryButton({
       )}
     />
   )
+}
+
+PrimaryButton.defaultProps = {
+  icon: undefined,
 }

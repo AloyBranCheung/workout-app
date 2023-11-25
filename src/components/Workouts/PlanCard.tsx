@@ -1,5 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import dayjs from "dayjs"
+import { useRouter } from "next/router"
+// hooks
+import useCurrActiveSesh from "src/hooks/useCurrActiveSesh"
 // utils/types
 import MsToStrTime from "src/utils/MsToStrTime"
 // components
@@ -7,6 +10,8 @@ import SecondaryCard from "../UI/SecondaryCard"
 import Text, { Typography } from "../UI/typography/Text"
 import EditIcon from "../UI/icons/EditIcon"
 import TrashIcon from "../UI/icons/TrashIcon"
+import Modal from "../UI/Modal"
+import Confirmation from "../UI/Confirmation"
 
 interface PlanCardProps {
   name: string
@@ -16,7 +21,6 @@ interface PlanCardProps {
   duration: number | null
   onEditClick: () => void
   onDeleteClick: () => void
-  onClickCard: React.MouseEventHandler<HTMLDivElement>
 }
 
 export default function PlanCard({
@@ -27,11 +31,24 @@ export default function PlanCard({
   duration,
   onEditClick,
   onDeleteClick,
-  onClickCard,
 }: PlanCardProps) {
+  const router = useRouter()
+
+  const { setCurrWorkoutPlanId, isCurrActiveSeshPresent } = useCurrActiveSesh()
+
+  const [isStartWorkout, setIsStartWorkout] = useState(false) // modal
+
   return (
     <SecondaryCard className="flex justify-between items-center">
-      <div className="w-full cursor-pointer" onClick={onClickCard}>
+      <div
+        className={`"w-full ${!isCurrActiveSeshPresent && "cursor-pointer"}"`}
+        onClick={(e) => {
+          e.stopPropagation()
+          if (!isCurrActiveSeshPresent) {
+            setIsStartWorkout(true)
+          }
+        }}
+      >
         <Text text={name} typography={Typography.p2} bold className="text-p2" />
         <div>
           <Text
@@ -68,6 +85,16 @@ export default function PlanCard({
         <EditIcon onClick={onEditClick} />
         <TrashIcon onClick={onDeleteClick} />
       </div>
+      <Modal isOpen={isStartWorkout} onClose={() => setIsStartWorkout(false)}>
+        <Confirmation
+          description={`You are about to start ${name} workout plan. Are you sure?`}
+          onClickConfirm={() => {
+            router.push("/workouts/curr-active-workout")
+            setCurrWorkoutPlanId(planId)
+          }}
+          onClickDecline={() => setIsStartWorkout(false)}
+        />
+      </Modal>
     </SecondaryCard>
   )
 }
