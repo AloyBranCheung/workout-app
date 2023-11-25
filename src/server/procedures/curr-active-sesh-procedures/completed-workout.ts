@@ -37,6 +37,8 @@ const completedWorkout = tProtectedProcedure
           userId: user.id,
         },
       })
+
+      return "OK"
     } catch (error) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
