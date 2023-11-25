@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useEffect } from "react"
 // hooks
 import useCurrActiveSeshIndexDb, {
   IndexedDBStore,
@@ -21,20 +21,20 @@ export default function SetGrid({ sets, currActiveExercise }: SetGridProps) {
   const { getAllFromDb } = useCurrActiveSeshIndexDb()
 
   const setRows = (() => {
-    const result = []
+    const results = []
     for (let i = 0; i < sets.length; i++) {
       const setNumber = i + 1
       const currSet = currSets[i]
       if (!currSet) {
-        result.push(sets[i])
+        results.push(sets[i])
       } else if (currSet.setNumber !== setNumber) {
-        result.push(sets[i])
+        results.push(sets[i])
       } else {
-        result.push(currSet)
+        results.push(currSet)
       }
     }
 
-    return result.map(
+    return results.map(
       ({
         exerciseId,
         weight,

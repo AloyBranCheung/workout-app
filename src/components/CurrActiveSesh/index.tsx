@@ -1,7 +1,16 @@
 import React, { useState, useMemo } from "react"
+import { useRouter } from "next/router"
+import Pino from "pino"
+// validators
+import { CompletedSetsSchema } from "src/validators/curr-active-exercises-schema"
 // hooks
 import useCurrActiveSesh from "src/hooks/useCurrActiveSesh"
 import useGetSessionById from "src/hooks/useGetSessionById"
+import useMutationCompletedWorkout from "src/hooks/useMutationCompletedWorkout"
+import useCurrActiveSeshIndexDb, {
+  IndexedDBStore,
+} from "src/hooks/useCurrActiveSeshIndexDb"
+import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
 // lodash
 import { capitalize } from "lodash"
 // components
@@ -11,6 +20,11 @@ import SecondaryCard from "../UI/SecondaryCard"
 import Text, { Typography } from "../UI/typography/Text"
 import ParentCard from "../UI/ParentCard"
 import SetGrid from "./SetGrid"
+import BottomButton from "../UI/BottomButton"
+import Modal from "../UI/Modal"
+import Confirmation from "../UI/Confirmation"
+
+const logger = Pino()
 
 export interface Exercise {
   userId: string
@@ -38,14 +52,21 @@ export interface ISet {
 }
 
 export default function CurrActiveSeshContainer() {
+  const { getAllFromDb } = useCurrActiveSeshIndexDb()
   const { currActiveSeshId, isLoading: isCurrActiveSeshLoading } =
     useCurrActiveSesh()
   const { data: sessionRes, isLoading: isSessionLoading } =
     useGetSessionById(currActiveSeshId)
+  const router = useRouter()
+  const toastMsg = useToastMessage()
+  const { mutate, isLoading: isMutating } = useMutationCompletedWorkout()
 
-  const isLoading = isCurrActiveSeshLoading || isSessionLoading
+  const isLoading = isCurrActiveSeshLoading || isSessionLoading || isMutating
 
   const [currActiveExercise, setCurrActiveExercise] = useState<Exercise>()
+  const [isCompleteWorkout, setIsCompleteWorkout] = useState(false)
+  const [isCompleteIncompleteWorkout, setIsCompleteIncompleteWorkout] =
+    useState(false)
 
   const exerciseHashmap = useMemo(() => {
     const exercisesArr = sessionRes?.workoutPlan?.exercises
@@ -105,6 +126,61 @@ export default function CurrActiveSeshContainer() {
     return sets
   }, [currActiveExercise, currActiveSeshId])
 
+  const handleCompleteWorkout = async () => {
+    // get saved things from db
+    const completedSets = (await getAllFromDb(
+      IndexedDBStore.CurrActiveSesh
+    )) as ISet[]
+
+    // calculate total sets to be completed
+    let targetTotalSets = 0
+    for (const exercise of Object.keys(exerciseHashmap)) {
+      const { targetSets } = exerciseHashmap[exercise]
+      if (targetSets) {
+        targetTotalSets += targetSets
+      }
+    }
+
+    // if not all set fields are touched
+    if (completedSets.length !== targetTotalSets) {
+      setIsCompleteIncompleteWorkout(true)
+    }
+    // modal for complete workout
+    else {
+      setIsCompleteWorkout(true)
+    }
+  }
+
+  const handleClickConfirm = async () => {
+    // get saved things from db
+    const completedSets = (await getAllFromDb(
+      IndexedDBStore.CurrActiveSesh
+    )) as ISet[]
+
+    // validate
+    try {
+      const validated = CompletedSetsSchema.parse(completedSets)
+      // mutate
+      mutate(validated, {
+        onSuccess: () => {
+          toastMsg("Congratulations, workout completed!", ToastMessage.Success)
+        },
+        onError: () => {
+          toastMsg("Error completed workout.", ToastMessage.Error)
+        },
+      })
+    } catch (error) {
+      toastMsg("Validation error.", ToastMessage.Error)
+      logger.error(error)
+      return
+    }
+    // reset
+    setIsCompleteIncompleteWorkout(false)
+    setIsCompleteWorkout(false)
+    // router navigate
+    router.push("/workouts/curr-active-workout/summary")
+  }
+
   return isLoading ? (
     <LoadingSpinner />
   ) : (
@@ -132,6 +208,31 @@ export default function CurrActiveSeshContainer() {
       <ParentCard>
         <SetGrid sets={sets} currActiveExercise={currActiveExercise} />
       </ParentCard>
+      <BottomButton onClick={handleCompleteWorkout} label="Complete Workout?" />
+      <Modal
+        isOpen={isCompleteIncompleteWorkout}
+        onClose={() => setIsCompleteIncompleteWorkout(false)}
+        cardTitle="Complete Workout?"
+      >
+        <Confirmation
+          onClickDecline={() => setIsCompleteIncompleteWorkout(false)}
+          description="Not all your sets are complete. Are you sure you want to finish your workout?"
+          onClickConfirm={handleClickConfirm}
+          isLoading={isLoading}
+        />
+      </Modal>
+      <Modal
+        isOpen={isCompleteWorkout}
+        onClose={() => setIsCompleteWorkout(false)}
+        cardTitle="Complete Workout?"
+      >
+        <Confirmation
+          onClickDecline={() => setIsCompleteWorkout(false)}
+          description="Are you sure you want to finish your workout?"
+          onClickConfirm={handleClickConfirm}
+          isLoading={isLoading}
+        />
+      </Modal>
     </div>
   )
 }
