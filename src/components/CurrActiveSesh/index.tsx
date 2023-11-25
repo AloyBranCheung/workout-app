@@ -178,7 +178,12 @@ export default function CurrActiveSeshContainer() {
     setIsCompleteIncompleteWorkout(false)
     setIsCompleteWorkout(false)
     // router navigate
-    router.push("/workouts/curr-active-workout/summary")
+    router.push({
+      pathname: "/workouts/curr-active-workout/summary",
+      query: {
+        data: JSON.stringify(completedSets),
+      },
+    })
   }
 
   return isLoading ? (
