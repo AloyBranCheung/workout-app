@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react"
 import { useRouter } from "next/router"
 import Pino from "pino"
+import { z } from "zod"
 // validators
 import { CompletedSetsSchema } from "src/validators/curr-active-exercises-schema"
 // hooks
@@ -170,7 +171,13 @@ export default function CurrActiveSeshContainer() {
         },
       })
     } catch (error) {
-      toastMsg("Validation error.", ToastMessage.Error)
+      if (error instanceof z.ZodError) {
+        for (const err of error.issues) {
+          toastMsg(err.message, ToastMessage.Error)
+        }
+      } else {
+        toastMsg("Error validating or updating.", ToastMessage.Error)
+      }
       logger.error(error)
       return
     }
