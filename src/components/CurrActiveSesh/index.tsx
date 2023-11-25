@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react"
 import { useRouter } from "next/router"
 import Pino from "pino"
 import { z } from "zod"
+// utils
+import { trpc } from "src/utils/trpc"
 // validators
 import { CompletedSetsSchema } from "src/validators/curr-active-exercises-schema"
 // hooks
@@ -53,9 +55,14 @@ export interface ISet {
 }
 
 export default function CurrActiveSeshContainer() {
+  const utils = trpc.useContext()
   const { getAllFromDb, clearDb } = useCurrActiveSeshIndexDb()
-  const { currActiveSeshId, isLoading: isCurrActiveSeshLoading } =
-    useCurrActiveSesh()
+  const {
+    currActiveSeshId,
+    isLoading: isCurrActiveSeshLoading,
+    setCurrWorkoutPlanId,
+    setCurrActiveSeshId,
+  } = useCurrActiveSesh()
   const { data: sessionRes, isLoading: isSessionLoading } =
     useGetSessionById(currActiveSeshId)
   const router = useRouter()
@@ -182,9 +189,13 @@ export default function CurrActiveSeshContainer() {
       return
     }
     // reset
+    setCurrWorkoutPlanId("")
+    setCurrActiveSeshId("")
     setIsCompleteIncompleteWorkout(false)
     setIsCompleteWorkout(false)
     clearDb(IndexedDBStore.CurrActiveSesh)
+    utils.currActiveSesh.invalidate()
+
     // router navigate
     router.push({
       pathname: "/workouts/curr-active-workout/summary",
