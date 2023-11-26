@@ -55,6 +55,9 @@ model Activity {
   // relations
   runExercise RunExercise?
 
+  session   Session? @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
+  sessionId String   @unique @db.Uuid
+
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId String
 }
@@ -95,8 +98,10 @@ model Session {
   planId      String?      @db.Uuid
 
   currActiveSesh CurrActiveSesh?
-  User           User?           @relation(fields: [userId], references: [id])
-  userId         Int?
+  user           User            @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId         String
+
+  activity Activity?
 }
 
 // Exercise History Table
@@ -110,7 +115,7 @@ model Set {
   note      String?
 
   // relations
-  session   Session @relation(fields: [sessionId], references: [sessionId])
+  session   Session @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
   sessionId String  @db.Uuid
 
   exercise   Exercise @relation(fields: [exerciseId], references: [exerciseId])
