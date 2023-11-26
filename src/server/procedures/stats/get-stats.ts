@@ -18,10 +18,53 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       take: 5,
     })
 
+    // hashmaps
+    const runIdsArr: string[] = []
+    const sessionIdsArr: string[] = []
+    for (const activity of activities) {
+      if (activity?.runId) {
+        runIdsArr.push(activity.runId)
+      }
+      if (activity?.sessionId) {
+        sessionIdsArr.push(activity.sessionId)
+      }
+    }
+    const runs = await prisma.run.findMany({
+      where: {
+        runId: {
+          in: runIdsArr,
+        },
+      },
+    })
+    const runsHash = (() => {
+      const hash: Record<
+        string,
+        {
+          runId: string
+          updatedAt: Date
+          createdAt: Date
+          duration: number
+          speed: number
+          speedUnits: string
+          speedPerTimeUnit: string
+          actualDistance: number
+          actualDistanceUnits: string
+          note: string | null
+          exerciseId: string
+        }
+      > = {}
+      for (const run of runs) {
+        if (!(run.runId in hash)) {
+          hash[run.runId] = run
+        }
+      }
+      return hash
+    })()
+
     const sessions = await prisma.session.findMany({
       where: {
         sessionId: {
-          in: activities.map((activity) => activity.sessionId),
+          in: sessionIdsArr,
         },
       },
     })
@@ -46,11 +89,17 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       return hash
     })()
 
+    const workoutPlanIdsArr = []
+    for (const session of sessions) {
+      if (session?.planId) {
+        workoutPlanIdsArr.push(session.planId)
+      }
+    }
+
     const workoutPlans = await prisma.workoutPlan.findMany({
       where: {
         planId: {
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          in: sessions.map((session) => session.planId!),
+          in: workoutPlanIdsArr,
         },
       },
     })
@@ -80,17 +129,32 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
     const recentActivity = (() => {
       const arr: IRecentActivity[] = []
       for (const activity of activities) {
-        const session = sessionsHash[activity.sessionId]
-        const duration =
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          session.endDuration!.getTime() - session.startDuration.getTime()
+        let session
+        let duration = 0
+        let workoutName = ""
+        if (activity?.sessionId) {
+          session = sessionsHash[activity.sessionId]
+          if (session?.endDuration) {
+            duration =
+              session.endDuration.getTime() - session.startDuration.getTime()
+          }
+          workoutName =
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            workoutPlansHash[sessionsHash[activity.sessionId].planId!].name
+        } else {
+          if (activity?.runId) {
+            session = runsHash[activity.runId]
+            duration = session.duration
+            workoutName = `Run ${
+              workoutPlansHash[runsHash[activity.runId].actualDistance]
+            }${workoutPlansHash[runsHash[activity.runId].actualDistanceUnits]}`
+          }
+        }
 
         arr.push({
           date: activity.createdAt.toISOString(),
           id: activity.activityId,
-          workoutName:
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            workoutPlansHash[sessionsHash[activity.sessionId].planId!].name,
+          workoutName,
           workoutDuration: duration,
         })
       }

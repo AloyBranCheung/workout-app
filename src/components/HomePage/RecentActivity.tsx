@@ -34,7 +34,11 @@ export default function RecentActivity({
 
   return (
     <ParentCard cardTitle="Recent Activity">
-      <div className="flex flex-col gap-7">{recentActivitiesCards}</div>
+      <div className="flex flex-col gap-7">
+        {recentActivitiesCards.length > 0
+          ? recentActivitiesCards
+          : "Start a workout to get started :)"}
+      </div>
     </ParentCard>
   )
 }

@@ -49,17 +49,19 @@ model Profile {
 
 // Activity Table 
 model Activity {
-  activityId  String       @id @unique @default(uuid()) @db.Uuid
-  updatedAt   DateTime     @default(now()) @updatedAt
-  createdAt   DateTime     @default(now())
+  activityId String   @id @unique @default(uuid()) @db.Uuid
+  updatedAt  DateTime @default(now()) @updatedAt
+  createdAt  DateTime @default(now())
   // relations
-  runExercise RunExercise?
+  run        Run?     @relation(fields: [runId], references: [runId], onDelete: Cascade)
+  runId      String?  @unique @db.Uuid
 
   session   Session? @relation(fields: [sessionId], references: [sessionId], onDelete: Cascade)
-  sessionId String   @unique @db.Uuid
+  sessionId String?  @unique @db.Uuid
 
-  user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  userId String
+  user        User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  userId      String
+  RunExercise RunExercise?
 }
 
 // Exercises Table
@@ -185,6 +187,7 @@ model Run {
   // relation
   runExercise RunExercise @relation(fields: [exerciseId], references: [exerciseId])
   exerciseId  String      @db.Uuid
+  Activity    Activity?
 }
 
 model GymLocation {
