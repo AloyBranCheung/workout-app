@@ -4,7 +4,8 @@ import prisma from "src/utils/prisma"
 import { z } from "zod"
 
 const getSetsByExerciseId = tProtectedProcedure
-  .input(z.string().uuid())
+  // uuid exerciseId
+  .input(z.string())
   .query(async ({ input }) => {
     try {
       const sets = await prisma.set.findMany({
