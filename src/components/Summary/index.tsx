@@ -32,9 +32,17 @@ export default function Summary({ completedSets }: SummaryProps) {
 
     completedSetsExerciseHash.forEach((completedExercisesArr, exerciseId) => {
       const exercises: React.ReactNode[] = []
-      for (const exercise of completedExercisesArr) {
+      for (const exercise of completedExercisesArr.sort((a, b) => {
+        if (a.setNumber > b.setNumber) {
+          return 1
+        }
+        if (a.setNumber < b.setNumber) {
+          return -1
+        }
+        return 0
+      })) {
         exercises.push(
-          <div className="grid grid-cols-12">
+          <div className="grid grid-cols-12" key={exercise.frontendSetId}>
             <div className="col-span-3 text-center font-bold">
               {exercise.setNumber}
             </div>

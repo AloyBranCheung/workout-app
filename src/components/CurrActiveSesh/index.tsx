@@ -111,7 +111,7 @@ export default function CurrActiveSeshContainer() {
     return list
   }, [exerciseHashmap, exercisesList])
 
-  const mostRecentWeight = exerciseSetList?.[0].weight.toString()
+  const mostRecentWeight = exerciseSetList?.[0]?.weight?.toString() ?? "0"
 
   const sets = useMemo(() => {
     if (!currActiveExercise?.targetSets) return []

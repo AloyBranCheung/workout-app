@@ -18,8 +18,18 @@ const completedWorkout = tProtectedProcedure
         },
       })
 
-      // update Set table
-      const setsToInput = input.map((obj) => ({
+      // update Set table, want to input in order for delay one at a time so that the latest set is the most recent weight
+      const sortedInput = input.sort((a, b) => {
+        if (a.setNumber > b.setNumber) {
+          return 1
+        }
+        if (a.setNumber < b.setNumber) {
+          return -1
+        }
+        return 0
+      })
+
+      const setsToInput = sortedInput.map((obj) => ({
         weight: Number(obj.weight),
         unit: obj.unit,
         reps: Number(obj.reps),
@@ -27,9 +37,21 @@ const completedWorkout = tProtectedProcedure
         exerciseId: obj.exerciseId,
       }))
 
-      await prisma.set.createMany({
-        data: setsToInput,
-      })
+      const createSet = async (data: {
+        weight: number
+        unit: string
+        reps: number
+        sessionId: string
+        exerciseId: string
+      }) => {
+        await prisma.set.create({
+          data,
+        })
+      }
+
+      for await (const set of setsToInput) {
+        await createSet(set)
+      }
 
       // close curractivesesh (delete by userid)
       await prisma.currActiveSesh.delete({
