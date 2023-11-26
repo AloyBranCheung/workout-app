@@ -136,6 +136,13 @@ export default function CurrActiveSeshContainer() {
     const completedSets = (await getAllFromDb(
       IndexedDBStore.CurrActiveSesh
     )) as ISet[]
+    const exerciseOrderArr = sessionRes?.workoutPlan?.exerciseOrder
+    if (!exerciseOrderArr) return
+    const sortedCompletedSets = completedSets.sort(
+      (a, b) =>
+        exerciseOrderArr.indexOf(a.exerciseId) -
+        exerciseOrderArr.indexOf(b.exerciseId)
+    )
 
     // calculate total sets to be completed
     let targetTotalSets = 0
@@ -147,7 +154,7 @@ export default function CurrActiveSeshContainer() {
     }
 
     // if not all set fields are touched
-    if (completedSets.length !== targetTotalSets) {
+    if (sortedCompletedSets.length !== targetTotalSets) {
       setIsCompleteIncompleteWorkout(true)
     }
     // modal for complete workout
@@ -161,10 +168,17 @@ export default function CurrActiveSeshContainer() {
     const completedSets = (await getAllFromDb(
       IndexedDBStore.CurrActiveSesh
     )) as ISet[]
+    const exerciseOrderArr = sessionRes?.workoutPlan?.exerciseOrder
+    if (!exerciseOrderArr) return
+    const sortedCompletedSets = completedSets.sort(
+      (a, b) =>
+        exerciseOrderArr.indexOf(a.exerciseId) -
+        exerciseOrderArr.indexOf(b.exerciseId)
+    )
 
     // validate
     try {
-      const validated = CompletedSetsSchema.parse(completedSets)
+      const validated = CompletedSetsSchema.parse(sortedCompletedSets)
       // mutate
       mutate(validated, {
         onSuccess: () => {
@@ -197,7 +211,7 @@ export default function CurrActiveSeshContainer() {
     router.push({
       pathname: "/workouts/curr-active-workout/summary",
       query: {
-        data: JSON.stringify(completedSets),
+        data: JSON.stringify(sortedCompletedSets),
       },
     })
   }
