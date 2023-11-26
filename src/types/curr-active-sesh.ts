@@ -9,4 +9,5 @@ export interface ISet {
   sessionId: string
   exerciseId: string
   setNumber: number
+  exerciseName: string
 }

@@ -55,6 +55,7 @@ export default function SetGrid({ sets, currActiveExercise }: SetGridProps) {
           unit={unit}
           frontendSetId={frontendSetId}
           isDone={isDone}
+          exerciseName={currActiveExercise?.name}
         />
       )
     )

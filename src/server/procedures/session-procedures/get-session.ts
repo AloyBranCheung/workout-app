@@ -24,6 +24,7 @@ const getSession = tProtectedProcedure
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Something went wrong",
+        cause: error,
       })
     }
   })

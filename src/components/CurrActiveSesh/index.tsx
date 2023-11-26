@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react"
 import { useRouter } from "next/router"
 import Pino from "pino"
 import { z } from "zod"
+// types
+import { ISet } from "src/types/curr-active-sesh"
 // utils
 import { trpc } from "src/utils/trpc"
 // validators
@@ -42,17 +44,6 @@ export interface Exercise {
   exerciseId: string
   targetReps: number | null
   targetSets: number | null
-}
-
-export interface ISet {
-  name: Exercise["name"]
-  weight: Exercise["unit"]
-  reps: Exercise["targetReps"]
-  setNumber: number
-  exerciseId: Exercise["exerciseId"]
-  sessionId: string
-  unit: Exercise["unit"]
-  isDone: boolean
 }
 
 export default function CurrActiveSeshContainer() {
@@ -128,7 +119,7 @@ export default function CurrActiveSeshContainer() {
     for (let i = 0; i < currActiveExercise.targetSets; i++) {
       sets.push({
         setNumber: i + 1,
-        name: currActiveExercise.name,
+        exerciseName: currActiveExercise.name,
         weight: mostRecentWeight ?? "0",
         reps: currActiveExercise.targetReps,
         unit: currActiveExercise.unit,
