@@ -25,6 +25,7 @@ const getCurrActiveSesh = tProtectedProcedure
         const newSession = await prisma.session.create({
           data: {
             planId: workoutPlanId,
+            userId: user.id,
           },
         })
 
@@ -40,6 +41,13 @@ const getCurrActiveSesh = tProtectedProcedure
                 sets: true,
               },
             },
+          },
+        })
+
+        await prisma.activity.create({
+          data: {
+            userId: user.id,
+            sessionId: newSession.sessionId,
           },
         })
       }

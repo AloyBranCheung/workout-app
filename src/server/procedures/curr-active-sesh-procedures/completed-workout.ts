@@ -7,16 +7,23 @@ const completedWorkout = tProtectedProcedure
   .input(CompletedSetsSchema)
   .mutation(async ({ input, ctx: { user } }) => {
     try {
+      const endDate = new Date()
+      const endDateISO = new Date().toISOString()
       const sessionId = input[0].sessionId
+
       // close session (add end duration)
-      await prisma.session.update({
+      const updatedSession = await prisma.session.update({
         where: {
           sessionId,
         },
         data: {
-          endDuration: new Date().toISOString(),
+          endDuration: endDateISO,
         },
       })
+
+      const workoutPlanId = updatedSession.planId
+      const duration =
+        endDate.getTime() - updatedSession.startDuration.getTime()
 
       // update Set table, want to input in order for delay one at a time so that the latest set is the most recent weight
       const sortedInput = input.sort((a, b) => {
@@ -59,6 +66,18 @@ const completedWorkout = tProtectedProcedure
           userId: user.id,
         },
       })
+
+      if (workoutPlanId) {
+        await prisma.workoutPlan.update({
+          where: {
+            planId: workoutPlanId,
+          },
+          data: {
+            lastWorkout: endDateISO,
+            duration,
+          },
+        })
+      }
 
       return "OK"
     } catch (error) {

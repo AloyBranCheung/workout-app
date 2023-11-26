@@ -1,16 +1,9 @@
-import { tProtectedProcedure, trouter } from "../trpc"
-import MOCK_RECENT_ACTIVITY, { MOCK_TOP_STATS } from "src/mocks/recent-activity"
+import { trouter } from "../trpc"
+// procedures
+import getStats from "../procedures/stats/get-stats"
 
 const statsRouter = trouter({
-  getStats: tProtectedProcedure.query(async () => {
-    // const {
-    //   ctx: { user },
-    // } = opts
-
-    // const userId = user.id
-    // TODO: setup postgres tables and finish backend
-    return { recentActivity: MOCK_RECENT_ACTIVITY, topStats: MOCK_TOP_STATS }
-  }),
+  getStats,
 })
 
 export default statsRouter

@@ -1,6 +1,6 @@
 export interface IRecentActivity {
-  id: number
-  date: number // unix seconds
+  id: string
+  date: string // unix seconds
   workoutName: string
   workoutDuration: number // unix seconds
 }
