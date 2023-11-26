@@ -14,6 +14,7 @@ import useCurrActiveSeshIndexDb, {
   IndexedDBStore,
 } from "src/hooks/useCurrActiveSeshIndexDb"
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
+import useGetSetsByExerciseId from "src/hooks/useGetSetsByExerciseId"
 // lodash
 import { capitalize } from "lodash"
 // components
@@ -75,6 +76,9 @@ export default function CurrActiveSeshContainer() {
   const [isCompleteWorkout, setIsCompleteWorkout] = useState(false)
   const [isCompleteIncompleteWorkout, setIsCompleteIncompleteWorkout] =
     useState(false)
+  const { data: exerciseSetList } = useGetSetsByExerciseId(
+    currActiveExercise?.exerciseId ?? ""
+  )
 
   const exerciseHashmap = useMemo(() => {
     const exercisesArr = sessionRes?.workoutPlan?.exercises
@@ -116,6 +120,8 @@ export default function CurrActiveSeshContainer() {
     return list
   }, [exerciseHashmap, exercisesList])
 
+  const mostRecentWeight = exerciseSetList?.[0].weight.toString()
+
   const sets = useMemo(() => {
     if (!currActiveExercise?.targetSets) return []
     const sets: ISet[] = []
@@ -123,7 +129,7 @@ export default function CurrActiveSeshContainer() {
       sets.push({
         setNumber: i + 1,
         name: currActiveExercise.name,
-        weight: "0", // TODO: add last weight exercise was completed in
+        weight: mostRecentWeight ?? "0",
         reps: currActiveExercise.targetReps,
         unit: currActiveExercise.unit,
         exerciseId: currActiveExercise.exerciseId,
@@ -132,7 +138,7 @@ export default function CurrActiveSeshContainer() {
       })
     }
     return sets
-  }, [currActiveExercise, currActiveSeshId])
+  }, [currActiveExercise, currActiveSeshId, mostRecentWeight])
 
   const handleCompleteWorkout = async () => {
     // get saved things from db
