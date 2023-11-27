@@ -179,9 +179,7 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
 
     /* -------------------------------- top stats ------------------------------- */
     // weight lifted total this week
-    const startOfThisWeek = new JsDateUtils(
-      new Date("2023-11-25")
-    ).getStartOfWeek()
+    const startOfThisWeek = new JsDateUtils(new Date()).getStartOfWeek()
     const setsThisWeek = await prisma.set.findMany({
       where: {
         AND: [
