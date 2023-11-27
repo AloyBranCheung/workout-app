@@ -7,8 +7,6 @@ import { lbsToKg } from "src/utils/unit-conversion"
 import unixToIsoDate from "src/utils/unix-to-ISO-date"
 // types
 import { IRecentActivity, ITopStats, RechartsData } from "src/types/home-page"
-// mocks
-import { MOCK_TOP_STATS } from "src/mocks/recent-activity"
 import Units from "src/constants/units"
 
 const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
@@ -207,14 +205,74 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       totalKgLiftedThisWeek += set.weight
     }
 
-    // TODO: top 3 lifts?
+    // top 3 lifts?
+    const allExercises = await prisma.exercise.findMany({
+      where: {
+        userId: user.id,
+      },
+    })
+    const exerciseHash = (() => {
+      const hash: Record<
+        string,
+        {
+          exerciseId: string
+          updatedAt: Date
+          createdAt: Date
+          name: string
+          description: string | null
+          url: string | null
+          unit: string
+          targetReps: number | null
+          targetSets: number | null
+          userId: string
+          gymId: string
+        }
+      > = {}
+      for (const exercise of allExercises) {
+        if (!(exercise.exerciseId in hash)) {
+          hash[exercise.exerciseId] = exercise
+        }
+      }
+      return hash
+    })()
+
     const allSets = await prisma.set.findMany({
       where: {
         unit: {
           in: [Units.KG, Units.LB],
         },
       },
+      orderBy: {
+        weight: "desc",
+      },
     })
+    const convertedToKg = allSets.map((set) => {
+      if (set.unit === Units.LB) {
+        set.unit = Units.KG
+        set.weight = lbsToKg(set.weight)
+      }
+      return set
+    })
+    const distinctExerciseId = new Set()
+    const top3Arr = convertedToKg
+      .filter((set) => {
+        if (!distinctExerciseId.has(set.exerciseId)) {
+          distinctExerciseId.add(set.exerciseId)
+          return true
+        }
+        return false
+      })
+      .slice(0, 3)
+
+    const big3: ITopStats["big3"] = {}
+    for (const set of top3Arr) {
+      if (set.exerciseId in exerciseHash) {
+        big3[exerciseHash[set.exerciseId].name] = {
+          weight: set.weight,
+          unit: set.unit as Units,
+        }
+      }
+    }
 
     // random graph for random lift
     const distinctSets = await prisma.set.findMany({
@@ -263,12 +321,12 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
 
     // response
     const topStatsRes: ITopStats = {
-      ...MOCK_TOP_STATS,
       weightLiftedTotal: {
         weight: Number(totalKgLiftedThisWeek.toFixed(2)),
         unit: Units.KG,
       },
       randomGraph: randomExercise(),
+      big3,
     }
 
     return { recentActivity: recentActivity, topStats: topStatsRes }

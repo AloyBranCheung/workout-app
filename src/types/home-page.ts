@@ -15,9 +15,7 @@ export interface WeightLifted {
 export type RechartsData = { [key: string]: string | number }
 export interface ITopStats {
   big3: {
-    squat: WeightLifted
-    bench: WeightLifted
-    deadlift: WeightLifted
+    [key: string]: WeightLifted
   }
   weightLiftedTotal: WeightLifted
   randomGraph: {
