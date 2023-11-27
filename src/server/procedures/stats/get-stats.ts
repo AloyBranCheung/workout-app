@@ -1,10 +1,14 @@
 import { TRPCError } from "@trpc/server"
 import { tProtectedProcedure } from "src/server/trpc"
 import prisma from "src/utils/prisma"
+// utils
+import JsDateUtils from "src/utils/js-date-utils"
+import { lbsToKg } from "src/utils/unit-conversion"
 // types
-import { IRecentActivity } from "src/types/home-page"
+import { IRecentActivity, ITopStats } from "src/types/home-page"
 // mocks
 import { MOCK_TOP_STATS } from "src/mocks/recent-activity"
+import Units from "src/constants/units"
 
 const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
   try {
@@ -15,13 +19,17 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       orderBy: {
         createdAt: "desc",
       },
-      take: 5,
     })
 
-    // hashmaps
+    /* -------------------------------------------------------------------------- */
+    /*                                 processing                                 */
+    /* -------------------------------------------------------------------------- */
+    const last5Activities = activities.slice(0, 5)
+
+    // idsArr
     const runIdsArr: string[] = []
     const sessionIdsArr: string[] = []
-    for (const activity of activities) {
+    for (const activity of last5Activities) {
       if (activity?.runId) {
         runIdsArr.push(activity.runId)
       }
@@ -29,6 +37,8 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
         sessionIdsArr.push(activity.sessionId)
       }
     }
+
+    // runs
     const runs = await prisma.run.findMany({
       where: {
         runId: {
@@ -61,6 +71,7 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       return hash
     })()
 
+    // sessions
     const sessions = await prisma.session.findMany({
       where: {
         sessionId: {
@@ -89,6 +100,7 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       return hash
     })()
 
+    // workout plans
     const workoutPlanIdsArr = []
     for (const session of sessions) {
       if (session?.planId) {
@@ -126,9 +138,13 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       return hash
     })()
 
+    /* -------------------------------------------------------------------------- */
+    /*                                   Output                                   */
+    /* -------------------------------------------------------------------------- */
+    /* ----------------------------- recent activity ---------------------------- */
     const recentActivity = (() => {
       const arr: IRecentActivity[] = []
-      for (const activity of activities) {
+      for (const activity of last5Activities) {
         let session
         let duration = 0
         let workoutName = ""
@@ -161,7 +177,53 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       return arr
     })()
 
-    return { recentActivity: recentActivity, topStats: MOCK_TOP_STATS }
+    /* -------------------------------- top stats ------------------------------- */
+    // weight lifted total this week
+    const startOfThisWeek = new JsDateUtils(
+      new Date("2023-11-25")
+    ).getStartOfWeek()
+    const setsThisWeek = await prisma.set.findMany({
+      where: {
+        AND: [
+          {
+            unit: {
+              in: ["kg", "lbs"],
+              mode: "insensitive",
+            },
+          },
+          {
+            createdAt: {
+              gte: startOfThisWeek.toISOString(),
+            },
+          },
+        ],
+      },
+    })
+
+    let totalKgLiftedThisWeek = 0
+    for (const set of setsThisWeek) {
+      if (set.unit === Units.LB) {
+        set.unit = Units.KG
+        set.weight = lbsToKg(set.weight)
+      }
+      totalKgLiftedThisWeek += set.weight
+    }
+
+    // TODO: top 3 lifts?
+
+    // TODO: random graph for random lift
+
+    const topStatsRes: ITopStats = {
+      ...MOCK_TOP_STATS,
+      weightLiftedTotal: {
+        weight: totalKgLiftedThisWeek,
+        unit: Units.KG,
+      },
+    }
+
+    console.log(topStatsRes)
+
+    return { recentActivity: recentActivity, topStats: topStatsRes }
   } catch (error) {
     throw new TRPCError({
       code: "NOT_FOUND",
