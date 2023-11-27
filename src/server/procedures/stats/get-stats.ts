@@ -298,8 +298,10 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
     const randomExercise = (): ITopStats["randomGraph"] => {
       if (exercises.length < 1)
         return { data: [], exerciseName: "", unit: Units.KG }
+
       const ranSelected =
         exercises[Math.floor(Math.random() * exercises.length)]
+
       const randExerciseSets = distinctSets.filter(
         (set) => set.exerciseId === ranSelected.exerciseId
       )
@@ -307,13 +309,14 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
         const data = randExerciseSets.map(
           (obj): RechartsData => ({
             name: unixToIsoDate(obj.createdAt.getTime()),
-            weight: obj.weight,
+            weight:
+              ranSelected.unit === Units.KG ? obj.weight : lbsToKg(obj.weight),
           })
         )
         return {
           data,
           exerciseName: ranSelected.name,
-          unit: ranSelected.unit as Units,
+          unit: Units.KG,
         }
       }
       return randomExercise()
