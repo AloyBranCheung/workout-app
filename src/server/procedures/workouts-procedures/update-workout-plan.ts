@@ -26,6 +26,11 @@ const updateWorkoutPlan = tProtectedProcedure
         data: {
           targetReps: Number(exercise.reps),
           targetSets: Number(exercise.sets),
+          workoutPlans: {
+            connect: {
+              planId,
+            },
+          },
         },
       })
     }

@@ -3,30 +3,27 @@ import { tProtectedProcedure } from "src/server/trpc"
 import prisma from "src/utils/prisma"
 import { z } from "zod"
 
-const getSession = tProtectedProcedure
+const getSetsByExerciseId = tProtectedProcedure
+  // uuid exerciseId
   .input(z.string())
   .query(async ({ input }) => {
     try {
-      const session = await prisma.session.findUnique({
+      const sets = await prisma.set.findMany({
         where: {
-          sessionId: input,
+          exerciseId: input,
         },
-        include: {
-          workoutPlan: {
-            include: {
-              exercises: true,
-            },
-          },
+        orderBy: {
+          createdAt: "desc",
         },
       })
-      return session
+      return sets
     } catch (error) {
       throw new TRPCError({
-        code: "INTERNAL_SERVER_ERROR",
+        code: "NOT_FOUND",
         message: "Something went wrong",
         cause: error,
       })
     }
   })
 
-export default getSession
+export default getSetsByExerciseId

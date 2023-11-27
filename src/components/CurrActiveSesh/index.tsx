@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react"
 import { useRouter } from "next/router"
 import Pino from "pino"
 import { z } from "zod"
+// types
+import { ISet } from "src/types/curr-active-sesh"
 // utils
 import { trpc } from "src/utils/trpc"
 // validators
@@ -14,6 +16,7 @@ import useCurrActiveSeshIndexDb, {
   IndexedDBStore,
 } from "src/hooks/useCurrActiveSeshIndexDb"
 import useToastMessage, { ToastMessage } from "src/hooks/useToastMessage"
+import useGetSetsByExerciseId from "src/hooks/useGetSetsByExerciseId"
 // lodash
 import { capitalize } from "lodash"
 // components
@@ -43,17 +46,6 @@ export interface Exercise {
   targetSets: number | null
 }
 
-export interface ISet {
-  name: Exercise["name"]
-  weight: Exercise["unit"]
-  reps: Exercise["targetReps"]
-  setNumber: number
-  exerciseId: Exercise["exerciseId"]
-  sessionId: string
-  unit: Exercise["unit"]
-  isDone: boolean
-}
-
 export default function CurrActiveSeshContainer() {
   const utils = trpc.useContext()
   const { getAllFromDb, clearDb } = useCurrActiveSeshIndexDb()
@@ -75,6 +67,9 @@ export default function CurrActiveSeshContainer() {
   const [isCompleteWorkout, setIsCompleteWorkout] = useState(false)
   const [isCompleteIncompleteWorkout, setIsCompleteIncompleteWorkout] =
     useState(false)
+  const { data: exerciseSetList } = useGetSetsByExerciseId(
+    currActiveExercise?.exerciseId ?? ""
+  )
 
   const exerciseHashmap = useMemo(() => {
     const exercisesArr = sessionRes?.workoutPlan?.exercises
@@ -116,14 +111,16 @@ export default function CurrActiveSeshContainer() {
     return list
   }, [exerciseHashmap, exercisesList])
 
+  const mostRecentWeight = exerciseSetList?.[0]?.weight?.toString() ?? "0"
+
   const sets = useMemo(() => {
     if (!currActiveExercise?.targetSets) return []
     const sets: ISet[] = []
     for (let i = 0; i < currActiveExercise.targetSets; i++) {
       sets.push({
         setNumber: i + 1,
-        name: currActiveExercise.name,
-        weight: "0", // TODO: add last weight exercise was completed in
+        exerciseName: currActiveExercise.name,
+        weight: mostRecentWeight ?? "0",
         reps: currActiveExercise.targetReps,
         unit: currActiveExercise.unit,
         exerciseId: currActiveExercise.exerciseId,
@@ -132,13 +129,20 @@ export default function CurrActiveSeshContainer() {
       })
     }
     return sets
-  }, [currActiveExercise, currActiveSeshId])
+  }, [currActiveExercise, currActiveSeshId, mostRecentWeight])
 
   const handleCompleteWorkout = async () => {
     // get saved things from db
     const completedSets = (await getAllFromDb(
       IndexedDBStore.CurrActiveSesh
     )) as ISet[]
+    const exerciseOrderArr = sessionRes?.workoutPlan?.exerciseOrder
+    if (!exerciseOrderArr) return
+    const sortedCompletedSets = completedSets.sort(
+      (a, b) =>
+        exerciseOrderArr.indexOf(a.exerciseId) -
+        exerciseOrderArr.indexOf(b.exerciseId)
+    )
 
     // calculate total sets to be completed
     let targetTotalSets = 0
@@ -150,7 +154,7 @@ export default function CurrActiveSeshContainer() {
     }
 
     // if not all set fields are touched
-    if (completedSets.length !== targetTotalSets) {
+    if (sortedCompletedSets.length !== targetTotalSets) {
       setIsCompleteIncompleteWorkout(true)
     }
     // modal for complete workout
@@ -164,10 +168,17 @@ export default function CurrActiveSeshContainer() {
     const completedSets = (await getAllFromDb(
       IndexedDBStore.CurrActiveSesh
     )) as ISet[]
+    const exerciseOrderArr = sessionRes?.workoutPlan?.exerciseOrder
+    if (!exerciseOrderArr) return
+    const sortedCompletedSets = completedSets.sort(
+      (a, b) =>
+        exerciseOrderArr.indexOf(a.exerciseId) -
+        exerciseOrderArr.indexOf(b.exerciseId)
+    )
 
     // validate
     try {
-      const validated = CompletedSetsSchema.parse(completedSets)
+      const validated = CompletedSetsSchema.parse(sortedCompletedSets)
       // mutate
       mutate(validated, {
         onSuccess: () => {
@@ -200,7 +211,7 @@ export default function CurrActiveSeshContainer() {
     router.push({
       pathname: "/workouts/curr-active-workout/summary",
       query: {
-        data: JSON.stringify(completedSets),
+        data: JSON.stringify(sortedCompletedSets),
       },
     })
   }

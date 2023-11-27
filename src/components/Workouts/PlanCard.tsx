@@ -41,7 +41,7 @@ export default function PlanCard({
   return (
     <SecondaryCard className="flex justify-between items-center">
       <div
-        className={`"w-full ${!isCurrActiveSeshPresent && "cursor-pointer"}"`}
+        className={`w-full ${!isCurrActiveSeshPresent && "cursor-pointer"}`}
         onClick={(e) => {
           e.stopPropagation()
           if (!isCurrActiveSeshPresent) {

@@ -61,6 +61,15 @@ export default function Workouts({ plans, gymLocations }: WorkoutsProps) {
       plans.length > 0 &&
       plans
         .filter((plan) => plan.gymId === selectedGymLocation)
+        .sort((a, b) => {
+          if (a.name < b.name) {
+            return -1
+          }
+          if (a.name > b.name) {
+            return 1
+          }
+          return 0
+        })
         .map(({ planId, name, lastWorkout, duration, gymLocation }) => (
           <div key={planId}>
             <PlanCard

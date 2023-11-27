@@ -8,6 +8,7 @@ import SecondaryButton from "../UI/SecondaryButton"
 // types
 import { StatsOutput, UserAttributesOutput } from "src/types/trpc/router-types"
 import { ITopStats, WeightLifted } from "src/types/home-page"
+import Units from "src/constants/units"
 
 const defaultWeight: WeightLifted = {
   weight: 0,
@@ -21,7 +22,11 @@ const defaultTopStats: ITopStats = {
     deadlift: defaultWeight,
   },
   weightLiftedTotal: defaultWeight,
-  randomGraph: {},
+  randomGraph: {
+    exerciseName: "",
+    data: [],
+    unit: Units.KG,
+  },
 }
 interface HomePageProps {
   userAttributes: UserAttributesOutput | undefined

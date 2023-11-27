@@ -19,6 +19,7 @@ interface SetProps {
   sessionId: string
   unit: string
   isDone?: boolean
+  exerciseName: string | undefined
 }
 
 export default function Set({
@@ -30,6 +31,7 @@ export default function Set({
   sessionId,
   unit,
   isDone,
+  exerciseName,
 }: SetProps) {
   const { addToDb } = useCurrActiveSeshIndexDb()
 
@@ -42,6 +44,7 @@ export default function Set({
     sessionId,
     exerciseId,
     setNumber,
+    exerciseName: exerciseName ?? "",
   })
 
   return (

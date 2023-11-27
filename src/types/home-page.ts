@@ -1,6 +1,8 @@
+import Units from "src/constants/units"
+
 export interface IRecentActivity {
-  id: number
-  date: number // unix seconds
+  id: string
+  date: string // unix seconds
   workoutName: string
   workoutDuration: number // unix seconds
 }
@@ -10,12 +12,15 @@ export interface WeightLifted {
   unit: string
 }
 
+export type RechartsData = { [key: string]: string | number }
 export interface ITopStats {
   big3: {
-    squat: WeightLifted
-    bench: WeightLifted
-    deadlift: WeightLifted
+    [key: string]: WeightLifted
   }
   weightLiftedTotal: WeightLifted
-  randomGraph: object // TODO: pending
+  randomGraph: {
+    exerciseName: string
+    unit: Units
+    data: RechartsData[]
+  }
 }
