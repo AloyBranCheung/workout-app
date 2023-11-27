@@ -5,7 +5,7 @@ import prisma from "src/utils/prisma"
 import JsDateUtils from "src/utils/js-date-utils"
 import { lbsToKg } from "src/utils/unit-conversion"
 // types
-import { IRecentActivity, ITopStats } from "src/types/home-page"
+import { IRecentActivity, ITopStats, RechartsData } from "src/types/home-page"
 // mocks
 import { MOCK_TOP_STATS } from "src/mocks/recent-activity"
 import Units from "src/constants/units"
@@ -185,8 +185,7 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
         AND: [
           {
             unit: {
-              in: ["kg", "lbs"],
-              mode: "insensitive",
+              in: [Units.KG, Units.LB],
             },
           },
           {
@@ -208,18 +207,59 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
     }
 
     // TODO: top 3 lifts?
+    const allSets = await prisma.set.findMany({
+      where: {
+        unit: {
+          in: [Units.KG, Units.LB],
+        },
+      },
+    })
 
     // TODO: random graph for random lift
+    const exercises = await prisma.exercise.findMany({
+      where: {
+        userId: user.id,
+      },
+      select: {
+        exerciseId: true,
+        name: true,
+        unit: true,
+      },
+    })
 
+    const randomExercise = (): ITopStats["randomGraph"] => {
+      if (exercises.length < 1)
+        return { data: [], exerciseName: "", unit: Units.KG }
+      const ranSelected =
+        exercises[Math.floor(Math.random() * exercises.length)]
+      const randExerciseSets = allSets.filter(
+        (set) => set.exerciseId === ranSelected.exerciseId
+      )
+      if (randExerciseSets.length > 0) {
+        const data = randExerciseSets.map(
+          (obj): RechartsData => ({
+            name: obj.createdAt.toISOString(),
+            weight: obj.weight,
+          })
+        )
+        return {
+          data,
+          exerciseName: ranSelected.name,
+          unit: ranSelected.unit as Units,
+        }
+      }
+      return randomExercise()
+    }
+
+    // response
     const topStatsRes: ITopStats = {
       ...MOCK_TOP_STATS,
       weightLiftedTotal: {
         weight: totalKgLiftedThisWeek,
         unit: Units.KG,
       },
+      randomGraph: randomExercise(),
     }
-
-    console.log(topStatsRes)
 
     return { recentActivity: recentActivity, topStats: topStatsRes }
   } catch (error) {

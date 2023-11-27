@@ -1,4 +1,5 @@
 import { IRecentActivity, ITopStats, WeightLifted } from "src/types/home-page"
+import Units from "src/constants/units"
 
 const MOCK_RECENT_ACTIVITY: IRecentActivity[] = new Array(5)
   .fill(0)
@@ -25,5 +26,9 @@ export const MOCK_TOP_STATS: ITopStats = {
     deadlift: defaultWeight,
   },
   weightLiftedTotal: defaultWeight,
-  randomGraph: {},
+  randomGraph: {
+    data: [],
+    exerciseName: "",
+    unit: Units.KG,
+  },
 }
