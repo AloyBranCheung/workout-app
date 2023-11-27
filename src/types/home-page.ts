@@ -12,9 +12,7 @@ export interface WeightLifted {
   unit: string
 }
 
-type RechartsDataX = { name: string }
-type RechartsDataY = { [value: string]: number | string }
-export type RechartsData = RechartsDataX & RechartsDataY
+export type RechartsData = { [key: string]: string | number }
 export interface ITopStats {
   big3: {
     squat: WeightLifted

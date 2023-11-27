@@ -4,6 +4,7 @@ import prisma from "src/utils/prisma"
 // utils
 import JsDateUtils from "src/utils/js-date-utils"
 import { lbsToKg } from "src/utils/unit-conversion"
+import unixToIsoDate from "src/utils/unix-to-ISO-date"
 // types
 import { IRecentActivity, ITopStats, RechartsData } from "src/types/home-page"
 // mocks
@@ -215,7 +216,16 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
       },
     })
 
-    // TODO: random graph for random lift
+    // random graph for random lift
+    const distinctSets = await prisma.set.findMany({
+      where: {
+        unit: {
+          in: [Units.KG, Units.LB],
+        },
+      },
+      distinct: ["weight"],
+    })
+
     const exercises = await prisma.exercise.findMany({
       where: {
         userId: user.id,
@@ -232,13 +242,13 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
         return { data: [], exerciseName: "", unit: Units.KG }
       const ranSelected =
         exercises[Math.floor(Math.random() * exercises.length)]
-      const randExerciseSets = allSets.filter(
+      const randExerciseSets = distinctSets.filter(
         (set) => set.exerciseId === ranSelected.exerciseId
       )
       if (randExerciseSets.length > 0) {
         const data = randExerciseSets.map(
           (obj): RechartsData => ({
-            name: obj.createdAt.toISOString(),
+            name: unixToIsoDate(obj.createdAt.getTime()),
             weight: obj.weight,
           })
         )
@@ -255,7 +265,7 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
     const topStatsRes: ITopStats = {
       ...MOCK_TOP_STATS,
       weightLiftedTotal: {
-        weight: totalKgLiftedThisWeek,
+        weight: Number(totalKgLiftedThisWeek.toFixed(2)),
         unit: Units.KG,
       },
       randomGraph: randomExercise(),
