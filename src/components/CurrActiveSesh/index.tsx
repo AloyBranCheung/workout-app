@@ -244,7 +244,9 @@ export default function CurrActiveSeshContainer() {
       <ParentCard>
         <SetGrid sets={sets} currActiveExercise={currActiveExercise} />
       </ParentCard>
-      <Timer />
+      <ParentCard>
+        <Timer />
+      </ParentCard>
       <BottomButton onClick={handleCompleteWorkout} label="Complete Workout?" />
       <Modal
         isOpen={isCompleteIncompleteWorkout}

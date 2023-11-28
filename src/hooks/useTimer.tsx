@@ -10,9 +10,14 @@ export default function useTimer(
   const [isDone, setIsDone] = useState(false)
   const [countdown, setCountdown] = useState(countdownTime) // milliseconds, default 1min. 30 sec.
 
-  const addTime = (time: number) => setCountdown(countdown + time)
+  const addTime = (time: number) => {
+    setCountdown(countdown + time)
+  }
 
-  const subtractTime = (time: number) => setCountdown(countdown - time)
+  const subtractTime = (time: number) => {
+    if (countdown - time <= 0) return
+    setCountdown(countdown - time)
+  }
 
   const startTimer = () => setIsStart(true)
 
@@ -49,5 +54,6 @@ export default function useTimer(
     stopTimer,
     isDone,
     resetTimer,
+    isStart,
   }
 }
