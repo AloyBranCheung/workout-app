@@ -189,6 +189,21 @@ export default function CurrActiveSeshContainer() {
           toastMsg("Error completed workout.", ToastMessage.Error)
         },
       })
+      // reset
+      setCurrWorkoutPlanId("")
+      setCurrActiveSeshId("")
+      setIsCompleteIncompleteWorkout(false)
+      setIsCompleteWorkout(false)
+      clearDb(IndexedDBStore.CurrActiveSesh)
+      utils.currActiveSesh.invalidate()
+
+      // router navigate
+      router.push({
+        pathname: "/workouts/curr-active-workout/summary",
+        query: {
+          data: JSON.stringify(sortedCompletedSets),
+        },
+      })
     } catch (error) {
       if (error instanceof z.ZodError) {
         for (const err of error.issues) {
@@ -200,21 +215,6 @@ export default function CurrActiveSeshContainer() {
       logger.error(error)
       return
     }
-    // reset
-    setCurrWorkoutPlanId("")
-    setCurrActiveSeshId("")
-    setIsCompleteIncompleteWorkout(false)
-    setIsCompleteWorkout(false)
-    clearDb(IndexedDBStore.CurrActiveSesh)
-    utils.currActiveSesh.invalidate()
-
-    // router navigate
-    router.push({
-      pathname: "/workouts/curr-active-workout/summary",
-      query: {
-        data: JSON.stringify(sortedCompletedSets),
-      },
-    })
   }
 
   return isLoading ? (
