@@ -296,7 +296,7 @@ const getStats = tProtectedProcedure.query(async ({ ctx: { user } }) => {
     })
 
     const randomExercise = (): ITopStats["randomGraph"] => {
-      if (exercises.length < 1)
+      if (exercises.length < 1 || distinctSets.length < 1)
         return { data: [], exerciseName: "", unit: Units.KG }
 
       const ranSelected =

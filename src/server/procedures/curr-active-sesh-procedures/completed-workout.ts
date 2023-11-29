@@ -42,6 +42,7 @@ const completedWorkout = tProtectedProcedure
         reps: Number(obj.reps),
         sessionId,
         exerciseId: obj.exerciseId,
+        setNumber: obj.setNumber,
       }))
 
       const createSet = async (data: {
