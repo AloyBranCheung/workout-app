@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import dayjs from "dayjs"
+// hooks
+import useMutationUpdateUserProfile from "./useMutationUpdateUserProfile"
 
 interface TimeObject {
   sec: string
@@ -13,6 +15,8 @@ export default function useTimer(
   formatCountdown = "mm:ss",
   decrement = 1000
 ) {
+  const { mutate } = useMutationUpdateUserProfile()
+
   const [isStart, setIsStart] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
   const [isDone, setIsDone] = useState(false)
@@ -29,6 +33,7 @@ export default function useTimer(
 
   const startTimer = (timeObj: TimeObject) => {
     const milli = toMilliseconds(Number(timeObj.min), Number(timeObj.sec))
+    mutate({ restTimer: milli })
     setCountdown(milli)
     setIsStart(true)
   }
