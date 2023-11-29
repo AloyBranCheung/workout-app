@@ -13,7 +13,8 @@ const toMilliseconds = (min: number, sec: number) => (min * 60 + sec) * 1000
 export default function useTimer(
   countdownTime = 90000,
   formatCountdown = "mm:ss",
-  decrement = 1000
+  decrement = 1000,
+  onDone?: () => void
 ) {
   const { mutate } = useMutationUpdateUserProfile()
 
@@ -31,11 +32,16 @@ export default function useTimer(
     setCountdown(countdown - time)
   }
 
-  const startTimer = (timeObj: TimeObject) => {
-    const milli = toMilliseconds(Number(timeObj.min), Number(timeObj.sec))
-    mutate({ restTimer: milli })
-    setCountdown(milli)
-    setIsStart(true)
+  const startTimer = (timeObj?: TimeObject) => {
+    if (timeObj) {
+      const milli = toMilliseconds(Number(timeObj.min), Number(timeObj.sec))
+      mutate({ restTimer: milli })
+      setCountdown(milli)
+      setIsStart(true)
+    } else {
+      setCountdown(countdownTime)
+      setIsStart(true)
+    }
   }
 
   const togglePause = () => setIsPaused(!isPaused)
@@ -61,13 +67,14 @@ export default function useTimer(
         if (countdown <= 0) {
           setIsStart(false)
           setIsDone(true)
+          onDone && onDone()
         } else {
           setCountdown(countdown - decrement)
         }
       }, 1000)
     }
     return () => clearInterval(interval)
-  }, [countdown, countdownTime, decrement, isPaused, isStart])
+  }, [countdown, countdownTime, decrement, isPaused, isStart, onDone])
 
   return {
     countdown: milliToMinSec(countdown),
@@ -80,5 +87,6 @@ export default function useTimer(
     togglePause,
     isPaused,
     stopTimer,
+    milliToMinSec,
   }
 }
