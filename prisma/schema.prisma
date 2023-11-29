@@ -42,6 +42,7 @@ model Profile {
   weightUnits String?  @default("kg")
   BMI         Int?
   avatar      String?
+  restTimer   Int? // milliseconds 
 
   user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
   userId String @unique
