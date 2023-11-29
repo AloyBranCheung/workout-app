@@ -7,6 +7,7 @@ import Text, { Typography } from "./typography/Text"
 import IconBase from "./icons/IconBase"
 import PrimaryButton from "./PrimaryButton"
 import AudioPlayer from "./AudioPlayer"
+import SecondaryButton from "./SecondaryButton"
 
 export default function Timer() {
   const { data: profilePrefrences, isLoading } = useUserAttributes()
@@ -21,6 +22,7 @@ export default function Timer() {
     isPaused,
     isStart,
     togglePause,
+    stopTimer,
   } = useTimer(profilePrefrences?.profile?.restTimer ?? 90000)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,12 +53,20 @@ export default function Timer() {
     }
     if (!isDone && isStart && isPaused) {
       return (
-        <PrimaryButton
-          label="Resume"
-          type="button"
-          onClick={() => togglePause()}
-          className="w-full"
-        />
+        <div className="flex justify-between gap-2">
+          <SecondaryButton
+            label="Stop"
+            type="button"
+            onClick={() => stopTimer()}
+            className="w-full px-2"
+          />
+          <PrimaryButton
+            label="Resume"
+            type="button"
+            onClick={() => togglePause()}
+            className="w-full px-2"
+          />
+        </div>
       )
     }
     if (!isDone && !isStart) {
@@ -103,7 +113,19 @@ export default function Timer() {
       )
     }
     return (
-      <Text text={countdown} typography={Typography.h3} className="text-h3" />
+      <>
+        <IconBase src={""} alt={""}>
+          <div onClick={() => subtractTime(5000)}>
+            <Text text="-5" typography={Typography.h3} className="text-h3" />
+          </div>
+        </IconBase>
+        <Text text={countdown} typography={Typography.h3} className="text-h3" />
+        <IconBase src={""} alt={""}>
+          <div onClick={() => addTime(5000)}>
+            <Text text="+5" typography={Typography.h3} className="text-h3" />
+          </div>
+        </IconBase>
+      </>
     )
   }
 
@@ -112,17 +134,7 @@ export default function Timer() {
   ) : (
     <div className="w-full flex flex-col gap-2">
       <div className="flex items-center justify-between pl-5 pr-5">
-        <IconBase src={""} alt={""}>
-          <div onClick={() => subtractTime(5000)}>
-            <Text text="-5" typography={Typography.h3} className="text-h3" />
-          </div>
-        </IconBase>
         {timerDisplay()}
-        <IconBase src={""} alt={""}>
-          <div onClick={() => addTime(5000)}>
-            <Text text="+5" typography={Typography.h3} className="text-h3" />
-          </div>
-        </IconBase>
       </div>
       {buttonState()}
       {isDone && !isStart && !isPaused && (

@@ -43,6 +43,12 @@ export default function useTimer(
     setIsDone(false)
   }
 
+  const stopTimer = () => {
+    setIsDone(false)
+    setIsStart(false)
+    setIsPaused(false)
+  }
+
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>
     if (isStart && !isPaused) {
@@ -68,5 +74,6 @@ export default function useTimer(
     isStart,
     togglePause,
     isPaused,
+    stopTimer,
   }
 }
