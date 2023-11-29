@@ -29,6 +29,7 @@ import SetGrid from "./SetGrid"
 import BottomButton from "../UI/BottomButton"
 import Modal from "../UI/Modal"
 import Confirmation from "../UI/Confirmation"
+import Timer from "../UI/Timer"
 
 const logger = Pino()
 
@@ -242,6 +243,9 @@ export default function CurrActiveSeshContainer() {
       />
       <ParentCard>
         <SetGrid sets={sets} currActiveExercise={currActiveExercise} />
+      </ParentCard>
+      <ParentCard>
+        <Timer />
       </ParentCard>
       <BottomButton onClick={handleCompleteWorkout} label="Complete Workout?" />
       <Modal

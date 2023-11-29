@@ -13,6 +13,9 @@ const getUserAttributes = tProtectedProcedure.query(async (opts) => {
       where: {
         userId: userUid,
       },
+      include: {
+        profile: true,
+      },
     })
 
     if (!userAttributes)
