@@ -6,6 +6,7 @@ import useUserAttributes from "src/hooks/useUserAttributes"
 import Text, { Typography } from "./typography/Text"
 import IconBase from "./icons/IconBase"
 import PrimaryButton from "./PrimaryButton"
+import AudioPlayer from "./AudioPlayer"
 
 export default function Timer() {
   const { data: profilePrefrences, isLoading } = useUserAttributes()
@@ -124,6 +125,9 @@ export default function Timer() {
         </IconBase>
       </div>
       {buttonState()}
+      {isDone && !isStart && !isPaused && (
+        <AudioPlayer isPlay src="/assets/sounds/goat-sound.wav" />
+      )}
     </div>
   )
 }
