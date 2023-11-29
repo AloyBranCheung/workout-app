@@ -18,6 +18,8 @@ const getSetsByExerciseId = tProtectedProcedure
       })
       return sets
     } catch (error) {
+      console.error(error)
+
       throw new TRPCError({
         code: "NOT_FOUND",
         message: "Something went wrong",

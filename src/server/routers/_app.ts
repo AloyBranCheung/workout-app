@@ -7,6 +7,7 @@ import gymLocationRouter from "./gym-location-router"
 import currActiveSeshRouter from "./curr-active-sesh-router"
 import sessionRouter from "./session-router"
 import setsRouter from "./sets-router"
+import activityRouter from "./activity-router"
 
 export const appRouter = trouter({
   health: tprocedure.query(() => "healthy"),
@@ -17,6 +18,7 @@ export const appRouter = trouter({
   currActiveSesh: currActiveSeshRouter,
   session: sessionRouter,
   sets: setsRouter,
+  activity: activityRouter,
 })
 
 // export type definition of API
