@@ -1,6 +1,6 @@
 import React from "react"
 import { useUser } from "@supabase/auth-helpers-react"
-import Page404 from "src/pages/404"
+import Page403 from "src/pages/403"
 
 interface PageGuardProps {
   children: React.ReactNode
@@ -9,7 +9,7 @@ interface PageGuardProps {
 export default function PageGuard({ children }: PageGuardProps) {
   const user = useUser()
   if (!user) {
-    return <Page404 />
+    return <Page403 />
   }
 
   return <>{children}</>

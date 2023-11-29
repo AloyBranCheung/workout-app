@@ -181,9 +181,23 @@ export default function CurrActiveSeshContainer() {
     try {
       const validated = CompletedSetsSchema.parse(sortedCompletedSets)
       // mutate
-      mutate(validated, {
+      await mutate(validated, {
         onSuccess: () => {
           toastMsg("Congratulations, workout completed!", ToastMessage.Success)
+          // reset
+          setCurrWorkoutPlanId("")
+          setCurrActiveSeshId("")
+          setIsCompleteIncompleteWorkout(false)
+          setIsCompleteWorkout(false)
+          clearDb(IndexedDBStore.CurrActiveSesh)
+          utils.currActiveSesh.invalidate()
+          // router navigate
+          router.push({
+            pathname: "/workouts/curr-active-workout/summary",
+            query: {
+              data: JSON.stringify(sortedCompletedSets),
+            },
+          })
         },
         onError: () => {
           toastMsg("Error completed workout.", ToastMessage.Error)
@@ -200,21 +214,6 @@ export default function CurrActiveSeshContainer() {
       logger.error(error)
       return
     }
-    // reset
-    setCurrWorkoutPlanId("")
-    setCurrActiveSeshId("")
-    setIsCompleteIncompleteWorkout(false)
-    setIsCompleteWorkout(false)
-    clearDb(IndexedDBStore.CurrActiveSesh)
-    utils.currActiveSesh.invalidate()
-
-    // router navigate
-    router.push({
-      pathname: "/workouts/curr-active-workout/summary",
-      query: {
-        data: JSON.stringify(sortedCompletedSets),
-      },
-    })
   }
 
   return isLoading ? (

@@ -115,6 +115,7 @@ model Set {
   weight    Int
   unit      String   @default("kg")
   reps      Int
+  setNumber Int
   note      String?
 
   // relations

@@ -21,6 +21,8 @@ const getSession = tProtectedProcedure
       })
       return session
     } catch (error) {
+      console.error(error)
+
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Something went wrong",
