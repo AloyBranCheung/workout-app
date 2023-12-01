@@ -113,6 +113,7 @@ export default function CurrActiveSeshContainer() {
   }, [exerciseHashmap, exercisesList])
 
   const mostRecentWeight = exerciseSetList?.[0]?.weight?.toString() ?? "0"
+  const mostRecentReps = exerciseSetList?.[0]?.reps?.toString() ?? "0"
 
   const sets = useMemo(() => {
     if (!currActiveExercise?.targetSets) return []
@@ -122,7 +123,7 @@ export default function CurrActiveSeshContainer() {
         setNumber: i + 1,
         exerciseName: currActiveExercise.name,
         weight: mostRecentWeight ?? "0",
-        reps: currActiveExercise.targetReps,
+        reps: Number(mostRecentReps) ?? currActiveExercise.targetReps,
         unit: currActiveExercise.unit,
         exerciseId: currActiveExercise.exerciseId,
         sessionId: currActiveSeshId,
@@ -130,7 +131,7 @@ export default function CurrActiveSeshContainer() {
       })
     }
     return sets
-  }, [currActiveExercise, currActiveSeshId, mostRecentWeight])
+  }, [currActiveExercise, currActiveSeshId, mostRecentWeight, mostRecentReps])
 
   const handleCompleteWorkout = async () => {
     // get saved things from db

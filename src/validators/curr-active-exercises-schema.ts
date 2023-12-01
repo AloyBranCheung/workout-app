@@ -6,7 +6,7 @@ export const CompletedSetsSchema = z
       exerciseId: z.string().uuid(),
       frontendSetId: z.string().uuid(),
       isDone: z.boolean(),
-      reps: z.string(),
+      reps: z.number(),
       sessionId: z.string().uuid(),
       setNumber: z.number(),
       unit: z.string(),
