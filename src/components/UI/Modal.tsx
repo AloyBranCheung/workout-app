@@ -58,7 +58,7 @@ export default function Modal({
                 >
                   <ParentCard
                     cardTitle={cardTitle}
-                    className="h-max max-h-[80vh] overflow-auto"
+                    className="h-max max-h-[80vh] overflow-auto max-w-3xl"
                     onClick={(e) => e.stopPropagation()}
                   >
                     {children}
