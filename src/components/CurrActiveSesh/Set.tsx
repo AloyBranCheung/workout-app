@@ -40,7 +40,7 @@ export default function Set({
     isDone: isDone ?? false,
     weight,
     unit,
-    reps,
+    reps: reps ?? 0,
     sessionId,
     exerciseId,
     setNumber,
@@ -48,11 +48,11 @@ export default function Set({
   })
 
   return (
-    <form className="grid grid-cols-12 col-span-12">
+    <form className="grid grid-cols-12 col-span-12 gap-2">
       <div className="col-span-3 text-center font-bold">{setNumber}</div>
-      <div className="col-span-3 items-center justify-center w-full h-full">
+      <div className="col-span-3 items-center justify-center w-full h-full border-solid border-black border-2 rounded-xl flex pr-2">
         <Input
-          inputClassName="basis-full text-center"
+          inputClassName="basis-10/12 text-center border-none outline-none focus:border-none focus:outline-none"
           value={setValues.weight}
           onChange={(e) => {
             const newValues = { ...setValues, weight: e.target.value }
@@ -60,8 +60,22 @@ export default function Set({
             addToDb(IndexedDBStore.CurrActiveSesh, newValues)
           }}
         />
+        <div>
+          <b>{unit}</b>
+        </div>
       </div>
-      <div className="col-span-3 text-center font-bold">{unit}</div>
+      <div className="col-span-3 text-center font-bold">
+        <Input
+          inputClassName="basis-full text-center"
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          value={setValues.reps!}
+          onChange={(e) => {
+            const newValues = { ...setValues, reps: Number(e.target.value) }
+            setSetValues(newValues)
+            addToDb(IndexedDBStore.CurrActiveSesh, newValues)
+          }}
+        />
+      </div>
       <div className="col-span-3 text-center">
         <input
           type="checkbox"
