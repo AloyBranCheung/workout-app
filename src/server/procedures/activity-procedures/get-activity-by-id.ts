@@ -13,6 +13,8 @@ const getActivityById = tProtectedProcedure
       .optional()
   )
   .query(async ({ input, ctx }) => {
+    if (!input?.activityId) return { exerciseOrder: [], exerciseHash: {} }
+
     try {
       const activity = await prisma.activity.findUnique({
         where: {
